@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "energizedpower:basic_circuit"
+    },
+    "E": {
+      "item": "energizedpowerfd:electric_stove"
+    },
+    "H": {
+      "item": "energizedpower:hardened_machine_frame"
+    },
+    "S": {
+      "tag": "c:ingots/steel"
+    }
+  },
+  "pattern": [
+    "SES",
+    "BHB",
+    "SES"
+  ],
+  "result": {
+    "count": 1,
+    "id": "energizedpowerfd:induction_stove"
+  }
+}

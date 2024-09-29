@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "farmersdelight"
+    }
+  ],
+  "type": "energizedpower:plant_growth_chamber",
+  "ingredient": {
+    "item": "farmersdelight:cabbage_seeds"
+  },
+  "outputs": [
+    {
+      "output": {
+        "item": "farmersdelight:cabbage_seeds"
+      },
+      "percentages": [
+        1.0,
+        0.33,
+        0.33
+      ]
+    },
+    {
+      "output": {
+        "item": "farmersdelight:cabbage"
+      },
+      "percentages": [
+        1.0,
+        0.75,
+        0.25,
+        0.25
+      ]
+    }
+  ],
+  "ticks": 16000
+}

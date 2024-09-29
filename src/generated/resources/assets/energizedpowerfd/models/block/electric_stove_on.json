@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "bottom": "energizedpowerfd:block/electric_stove_bottom",
+    "front": "energizedpowerfd:block/electric_stove_front_on",
+    "particle": "#top",
+    "side": "energizedpowerfd:block/electric_stove_side",
+    "top": "energizedpowerfd:block/electric_stove_top_on"
+  }
+}

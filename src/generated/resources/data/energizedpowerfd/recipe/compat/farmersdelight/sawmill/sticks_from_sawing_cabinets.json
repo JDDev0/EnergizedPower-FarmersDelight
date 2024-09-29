@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "farmersdelight"
+    }
+  ],
+  "type": "energizedpower:sawmill",
+  "ingredient": {
+    "tag": "farmersdelight:cabinets/wooden"
+  },
+  "output": {
+    "count": 10,
+    "item": "minecraft:stick"
+  },
+  "sawdustAmount": 3
+}

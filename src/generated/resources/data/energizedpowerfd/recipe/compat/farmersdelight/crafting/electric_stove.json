@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "energizedpower:basic_machine_frame"
+    },
+    "I": {
+      "tag": "c:plates/iron"
+    },
+    "R": {
+      "tag": "c:dusts/redstone"
+    },
+    "S": {
+      "item": "farmersdelight:stove"
+    }
+  },
+  "pattern": [
+    "ISI",
+    "RBR",
+    "ISI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "energizedpowerfd:electric_stove"
+  }
+}

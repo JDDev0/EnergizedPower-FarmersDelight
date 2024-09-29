@@ -1,0 +1,11 @@
+{
+  "block.energizedpowerfd.electric_stove": "E-Herd",
+  "item.energizedpowerfd.electric_stove": "E-Herd",
+  "container.energizedpowerfd.electric_stove": "E-Herd",
+
+  "block.energizedpowerfd.induction_stove": "Induktionsherd",
+  "item.energizedpowerfd.induction_stove": "Induktionsherd",
+  "container.energizedpowerfd.induction_stove": "Induktionsherd",
+
+  "tooltip.energizedpowerfd.stoves.txt.shift.1": "Der %s ist %d Mal schneller als der Herd von Farmer's Delight."
+}

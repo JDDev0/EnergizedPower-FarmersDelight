@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "me.jddev0.epfd.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "SkilletBlockEntityMixin",
+    "CookingPotBlockEntityMixin",
+    "CommonModBusEventsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "block.energizedpowerfd.electric_stove": "Electric Stove",
+  "item.energizedpowerfd.electric_stove": "Electric Stove",
+  "container.energizedpowerfd.electric_stove": "Electric Stove",
+
+  "block.energizedpowerfd.induction_stove": "Induction Stove",
+  "item.energizedpowerfd.induction_stove": "Induction Stove",
+  "container.energizedpowerfd.induction_stove": "Induction Stove",
+
+  "tooltip.energizedpowerfd.stoves.txt.shift.1": "The %s is %d times faster than the Stove from Farmer's Delight."
+}

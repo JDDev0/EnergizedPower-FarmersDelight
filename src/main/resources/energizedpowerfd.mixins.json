@@ -4,8 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "SkilletBlockEntityMixin",
-    "CookingPotBlockEntityMixin",
-    "CommonModBusEventsMixin"
+    "CookingPotBlockEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

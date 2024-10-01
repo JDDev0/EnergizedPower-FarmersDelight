@@ -153,14 +153,14 @@ dependencies {
     localRuntime "curse.maven:energized-power-782147:5746805"
 
     // Farmer's Delight integration
-    compileOnly "curse.maven:farmers-delight-398521:5566383"
+    compileOnly "curse.maven:farmers-delight-398521:5772720"
 
-    localRuntime "curse.maven:farmers-delight-398521:5566383"
+    localRuntime "curse.maven:farmers-delight-398521:5772720"
 
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    localRuntime "mezz.jei:jei-1.21.1-neoforge:19.19.0.220"
+    localRuntime "mezz.jei:jei-1.21.1-neoforge:19.19.3.226"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

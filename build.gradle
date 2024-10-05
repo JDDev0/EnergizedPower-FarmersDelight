@@ -160,7 +160,7 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    localRuntime "mezz.jei:jei-1.21.1-neoforge:19.19.6.233"
+    localRuntime "mezz.jei:jei-1.21.1-neoforge:19.19.6.236"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -1,7 +1,7 @@
 package me.jddev0.epfd.screen;
 
 import me.jddev0.ep.inventory.upgrade.UpgradeModuleInventory;
-import me.jddev0.epfd.block.ModBlocks;
+import me.jddev0.epfd.block.EPFDBlocks;
 import me.jddev0.epfd.block.entity.InductionStoveBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,8 +13,8 @@ public class InductionStoveMenu extends AbstractStoveMenu<InductionStoveBlockEnt
         super(
                 id, inv, buffer,
 
-                ModMenuTypes.INDUCTION_STOVE_MENU.get(),
-                ModBlocks.INDUCTION_STOVE.get()
+                EPFDMenuTypes.INDUCTION_STOVE_MENU.get(),
+                EPFDBlocks.INDUCTION_STOVE.get()
         );
     }
 
@@ -23,9 +23,9 @@ public class InductionStoveMenu extends AbstractStoveMenu<InductionStoveBlockEnt
         super(
                 id, inv, blockEntity,
 
-                ModMenuTypes.INDUCTION_STOVE_MENU.get(),
+                EPFDMenuTypes.INDUCTION_STOVE_MENU.get(),
 
-                ModBlocks.INDUCTION_STOVE.get(),
+                EPFDBlocks.INDUCTION_STOVE.get(),
 
                 upgradeModuleInventory, data
         );

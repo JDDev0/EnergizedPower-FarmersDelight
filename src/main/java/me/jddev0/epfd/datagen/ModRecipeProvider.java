@@ -3,6 +3,7 @@ package me.jddev0.epfd.datagen;
 import me.jddev0.ep.registry.tags.CommonItemTags;
 import me.jddev0.epfd.EnergizedPowerFDMod;
 import me.jddev0.ep.recipe.*;
+import me.jddev0.epfd.block.EPFDBlocks;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
@@ -58,18 +59,18 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 "ISI",
                 "RBR",
                 "ISI"
-        }, new ItemStack(me.jddev0.epfd.block.ModBlocks.ELECTRIC_STOVE_ITEM.get()), CraftingBookCategory.MISC);
+        }, new ItemStack(EPFDBlocks.ELECTRIC_STOVE_ITEM.get()), CraftingBookCategory.MISC);
 
         addShapedCraftingRecipe(output, has(me.jddev0.ep.block.ModBlocks.HARDENED_MACHINE_FRAME_ITEM), Map.of(
                 'S', Ingredient.of(CommonItemTags.INGOTS_STEEL),
                 'B', Ingredient.of(me.jddev0.ep.item.ModItems.BASIC_CIRCUIT),
                 'H', Ingredient.of(me.jddev0.ep.block.ModBlocks.HARDENED_MACHINE_FRAME_ITEM),
-                'E', Ingredient.of(me.jddev0.epfd.block.ModBlocks.ELECTRIC_STOVE_ITEM)
+                'E', Ingredient.of(EPFDBlocks.ELECTRIC_STOVE_ITEM)
         ), new String[] {
                 "SES",
                 "BHB",
                 "SES"
-        }, new ItemStack(me.jddev0.epfd.block.ModBlocks.INDUCTION_STOVE_ITEM.get()), CraftingBookCategory.MISC);
+        }, new ItemStack(EPFDBlocks.INDUCTION_STOVE_ITEM.get()), CraftingBookCategory.MISC);
     }
 
     private void buildSawmillRecipes(RecipeOutput output) {

@@ -16,7 +16,7 @@ public class ElectricStoveBlockEntity extends AbstractStoveBlockEntity {
 
     public ElectricStoveBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(
-                ModBlockEntities.ELECTRIC_STOVE_ENTITY.get(), blockPos, blockState,
+                EPFDBlockEntities.ELECTRIC_STOVE_ENTITY.get(), blockPos, blockState,
 
                 "electric_stove",
 

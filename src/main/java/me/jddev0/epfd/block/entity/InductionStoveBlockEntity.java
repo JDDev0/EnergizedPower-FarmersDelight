@@ -16,7 +16,7 @@ public class InductionStoveBlockEntity extends AbstractStoveBlockEntity {
 
     public InductionStoveBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(
-                ModBlockEntities.INDUCTION_STOVE_ENTITY.get(), blockPos, blockState,
+                EPFDBlockEntities.INDUCTION_STOVE_ENTITY.get(), blockPos, blockState,
 
                 "induction_stove",
 

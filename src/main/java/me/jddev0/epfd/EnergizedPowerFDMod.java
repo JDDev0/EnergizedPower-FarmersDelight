@@ -2,13 +2,13 @@ package me.jddev0.epfd;
 
 import com.mojang.logging.LogUtils;
 import me.jddev0.ep.item.ModCreativeModeTab;
-import me.jddev0.epfd.block.ModBlocks;
-import me.jddev0.epfd.block.entity.ModBlockEntities;
+import me.jddev0.epfd.block.EPFDBlocks;
+import me.jddev0.epfd.block.entity.EPFDBlockEntities;
 import me.jddev0.epfd.config.ModConfigs;
-import me.jddev0.epfd.item.ModItems;
+import me.jddev0.epfd.item.EPFDItems;
 import me.jddev0.epfd.screen.ElectricStoveScreen;
 import me.jddev0.epfd.screen.InductionStoveScreen;
-import me.jddev0.epfd.screen.ModMenuTypes;
+import me.jddev0.epfd.screen.EPFDMenuTypes;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.bus.api.IEventBus;
@@ -28,10 +28,10 @@ public class EnergizedPowerFDMod {
     public EnergizedPowerFDMod(IEventBus modEventBus) {
         ModConfigs.registerConfigs(true);
 
-        ModItems.register(modEventBus);
-        ModBlocks.register(modEventBus);
-        ModBlockEntities.register(modEventBus);
-        ModMenuTypes.register(modEventBus);
+        EPFDItems.register(modEventBus);
+        EPFDBlocks.register(modEventBus);
+        EPFDBlockEntities.register(modEventBus);
+        EPFDMenuTypes.register(modEventBus);
 
         modEventBus.addListener(this::addCreativeTab);
         modEventBus.addListener(this::registerCapabilities);
@@ -39,14 +39,14 @@ public class EnergizedPowerFDMod {
 
     private void addCreativeTab(BuildCreativeModeTabContentsEvent event) {
         if(event.getTab() == ModCreativeModeTab.ENERGIZED_POWER_TAB.get()) {
-            event.accept(ModBlocks.ELECTRIC_STOVE_ITEM);
-            event.accept(ModBlocks.INDUCTION_STOVE_ITEM);
+            event.accept(EPFDBlocks.ELECTRIC_STOVE_ITEM);
+            event.accept(EPFDBlocks.INDUCTION_STOVE_ITEM);
         }
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         //Block Entities
-        ModBlockEntities.registerCapabilities(event);
+        EPFDBlockEntities.registerCapabilities(event);
     }
 
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -59,8 +59,8 @@ public class EnergizedPowerFDMod {
         
         @SubscribeEvent
         public static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
-            event.register(ModMenuTypes.ELECTRIC_STOVE_MENU.get(), ElectricStoveScreen::new);
-            event.register(ModMenuTypes.INDUCTION_STOVE_MENU.get(), InductionStoveScreen::new);
+            event.register(EPFDMenuTypes.ELECTRIC_STOVE_MENU.get(), ElectricStoveScreen::new);
+            event.register(EPFDMenuTypes.INDUCTION_STOVE_MENU.get(), InductionStoveScreen::new);
         }
     }
 }

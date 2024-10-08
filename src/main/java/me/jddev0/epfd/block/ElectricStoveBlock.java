@@ -2,7 +2,7 @@ package me.jddev0.epfd.block;
 
 import com.mojang.serialization.MapCodec;
 import me.jddev0.epfd.block.entity.ElectricStoveBlockEntity;
-import me.jddev0.epfd.block.entity.ModBlockEntities;
+import me.jddev0.epfd.block.entity.EPFDBlockEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -42,7 +42,7 @@ public class ElectricStoveBlock extends AbstractStoveBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return createTickerHelper(type, ModBlockEntities.ELECTRIC_STOVE_ENTITY.get(), ElectricStoveBlockEntity::tick);
+        return createTickerHelper(type, EPFDBlockEntities.ELECTRIC_STOVE_ENTITY.get(), ElectricStoveBlockEntity::tick);
     }
 
     public static class Item extends BlockItem {

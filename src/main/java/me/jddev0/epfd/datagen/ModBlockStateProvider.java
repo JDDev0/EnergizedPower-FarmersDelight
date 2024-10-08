@@ -2,7 +2,7 @@ package me.jddev0.epfd.datagen;
 
 import me.jddev0.epfd.EnergizedPowerFDMod;
 import me.jddev0.epfd.block.ElectricStoveBlock;
-import me.jddev0.epfd.block.ModBlocks;
+import me.jddev0.epfd.block.EPFDBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
@@ -26,15 +26,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     private void registerBlocks() {
-        activatableOrientableBlockWithItem(ModBlocks.ELECTRIC_STOVE,
-                orientableBlockModel(ModBlocks.ELECTRIC_STOVE, true),
-                orientableBlockModel(ModBlocks.ELECTRIC_STOVE, "_on", "_top_on", "_bottom",
+        activatableOrientableBlockWithItem(EPFDBlocks.ELECTRIC_STOVE,
+                orientableBlockModel(EPFDBlocks.ELECTRIC_STOVE, true),
+                orientableBlockModel(EPFDBlocks.ELECTRIC_STOVE, "_on", "_top_on", "_bottom",
                         "_front_on", "_side"),
                 ElectricStoveBlock.LIT);
 
-        activatableOrientableBlockWithItem(ModBlocks.INDUCTION_STOVE,
-                orientableBlockModel(ModBlocks.INDUCTION_STOVE, true),
-                orientableBlockModel(ModBlocks.INDUCTION_STOVE, "_on", "_top_on", "_bottom",
+        activatableOrientableBlockWithItem(EPFDBlocks.INDUCTION_STOVE,
+                orientableBlockModel(EPFDBlocks.INDUCTION_STOVE, true),
+                orientableBlockModel(EPFDBlocks.INDUCTION_STOVE, "_on", "_top_on", "_bottom",
                         "_front_on", "_side"),
                 ElectricStoveBlock.LIT);
     }

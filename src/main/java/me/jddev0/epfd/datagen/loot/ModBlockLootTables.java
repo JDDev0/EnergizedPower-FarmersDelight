@@ -1,6 +1,6 @@
 package me.jddev0.epfd.datagen.loot;
 
-import me.jddev0.epfd.block.ModBlocks;
+import me.jddev0.epfd.block.EPFDBlocks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
@@ -17,13 +17,13 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return ModBlocks.BLOCKS.getEntries().stream().map(Holder::value)::iterator;
+        return EPFDBlocks.BLOCKS.getEntries().stream().map(Holder::value)::iterator;
     }
 
     @Override
     protected void generate() {
-        dropSelf(ModBlocks.ELECTRIC_STOVE);
-        dropSelf(ModBlocks.INDUCTION_STOVE);
+        dropSelf(EPFDBlocks.ELECTRIC_STOVE);
+        dropSelf(EPFDBlocks.INDUCTION_STOVE);
     }
 
     private void dropSelf(DeferredHolder<Block, ? extends Block> block) {

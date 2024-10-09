@@ -148,9 +148,9 @@ dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
     // Energized Power dependency
-    compileOnly "curse.maven:energized-power-782147:5746805"
+    compileOnly "curse.maven:energized-power-782147:5797585"
 
-    localRuntime "curse.maven:energized-power-782147:5746805"
+    localRuntime "curse.maven:energized-power-782147:5797585"
 
     // Farmer's Delight integration
     compileOnly "curse.maven:farmers-delight-398521:5772720"

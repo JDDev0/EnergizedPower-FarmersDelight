@@ -1,5 +1,7 @@
 package me.jddev0.epfd.datagen;
 
+import me.jddev0.ep.block.EPBlocks;
+import me.jddev0.ep.item.EPItems;
 import me.jddev0.ep.registry.tags.CommonItemTags;
 import me.jddev0.epfd.EnergizedPowerFDMod;
 import me.jddev0.ep.recipe.*;
@@ -50,10 +52,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildMachineCraftingRecipes(output);
     }
     private void buildMachineCraftingRecipes(RecipeOutput output) {
-        addShapedCraftingRecipe(output, has(me.jddev0.ep.block.ModBlocks.BASIC_MACHINE_FRAME_ITEM), Map.of(
+        addShapedCraftingRecipe(output, has(EPBlocks.BASIC_MACHINE_FRAME_ITEM), Map.of(
                 'I', Ingredient.of(CommonItemTags.PLATES_IRON),
                 'R', Ingredient.of(Tags.Items.DUSTS_REDSTONE),
-                'B', Ingredient.of(me.jddev0.ep.block.ModBlocks.BASIC_MACHINE_FRAME_ITEM),
+                'B', Ingredient.of(EPBlocks.BASIC_MACHINE_FRAME_ITEM),
                 'S', Ingredient.of(ModBlocks.STOVE.get())
         ), new String[] {
                 "ISI",
@@ -61,10 +63,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 "ISI"
         }, new ItemStack(EPFDBlocks.ELECTRIC_STOVE_ITEM.get()), CraftingBookCategory.MISC);
 
-        addShapedCraftingRecipe(output, has(me.jddev0.ep.block.ModBlocks.HARDENED_MACHINE_FRAME_ITEM), Map.of(
+        addShapedCraftingRecipe(output, has(EPBlocks.HARDENED_MACHINE_FRAME_ITEM), Map.of(
                 'S', Ingredient.of(CommonItemTags.INGOTS_STEEL),
-                'B', Ingredient.of(me.jddev0.ep.item.ModItems.BASIC_CIRCUIT),
-                'H', Ingredient.of(me.jddev0.ep.block.ModBlocks.HARDENED_MACHINE_FRAME_ITEM),
+                'B', Ingredient.of(EPItems.BASIC_CIRCUIT),
+                'H', Ingredient.of(EPBlocks.HARDENED_MACHINE_FRAME_ITEM),
                 'E', Ingredient.of(EPFDBlocks.ELECTRIC_STOVE_ITEM)
         ), new String[] {
                 "SES",

@@ -1,7 +1,7 @@
 package me.jddev0.epfd;
 
 import com.mojang.logging.LogUtils;
-import me.jddev0.ep.item.ModCreativeModeTab;
+import me.jddev0.ep.item.EPCreativeModeTab;
 import me.jddev0.epfd.block.EPFDBlocks;
 import me.jddev0.epfd.block.entity.EPFDBlockEntities;
 import me.jddev0.epfd.config.ModConfigs;
@@ -38,7 +38,7 @@ public class EnergizedPowerFDMod {
     }
 
     private void addCreativeTab(BuildCreativeModeTabContentsEvent event) {
-        if(event.getTab() == ModCreativeModeTab.ENERGIZED_POWER_TAB.get()) {
+        if(event.getTab() == EPCreativeModeTab.ENERGIZED_POWER_TAB.get()) {
             event.accept(EPFDBlocks.ELECTRIC_STOVE_ITEM);
             event.accept(EPFDBlocks.INDUCTION_STOVE_ITEM);
         }

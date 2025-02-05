@@ -153,9 +153,9 @@ dependencies {
     localRuntime "curse.maven:energized-power-782147:5797585"
 
     // Farmer's Delight integration
-    compileOnly "curse.maven:farmers-delight-398521:5878217"
+    compileOnly "curse.maven:farmers-delight-398521:6154807"
 
-    localRuntime "curse.maven:farmers-delight-398521:5878217"
+    localRuntime "curse.maven:farmers-delight-398521:6154807"
 
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html

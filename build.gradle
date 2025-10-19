@@ -148,14 +148,14 @@ dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
     // Energized Power dependency
-    compileOnly "curse.maven:energized-power-782147:5797585"
+    compileOnly "curse.maven:energized-power-782147:7046217"
 
-    localRuntime "curse.maven:energized-power-782147:5797585"
+    localRuntime "curse.maven:energized-power-782147:7046217"
 
     // Farmer's Delight integration
-    compileOnly "curse.maven:farmers-delight-398521:6154807"
+    compileOnly "curse.maven:farmers-delight-398521:6917256"
 
-    localRuntime "curse.maven:farmers-delight-398521:6154807"
+    localRuntime "curse.maven:farmers-delight-398521:6917256"
 
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html

@@ -1,5 +1,6 @@
 package me.jddev0.epfd.block.entity;
 
+import me.jddev0.ep.config.ModConfigs;
 import me.jddev0.ep.energy.ReceiveOnlyEnergyStorage;
 import me.jddev0.ep.machine.configuration.RedstoneMode;
 import me.jddev0.ep.machine.upgrade.UpgradeModuleModifier;
@@ -18,6 +19,8 @@ import vectorwing.farmersdelight.common.tag.ModTags;
 public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEnergyStorageBlockEntity<ReceiveOnlyEnergyStorage> {
     protected final int baseEnergyConsumptionPerTick;
     protected boolean hasEnoughEnergy;
+
+    protected int timeoutOffState;
 
     public AbstractStoveBlockEntity(BlockEntityType<?> type, BlockPos blockPos, BlockState blockState,
                                     String machineName,
@@ -109,6 +112,15 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
         if(level.isClientSide)
             return;
 
+        if(blockEntity.timeoutOffState > 0) {
+            blockEntity.timeoutOffState--;
+
+            if(blockEntity.timeoutOffState == 0) {
+                blockEntity.unlitBlock();
+                setChanged(level, blockPos, state);
+            }
+        }
+
         if(!blockEntity.redstoneMode.isActive(state.getValue(BlockStateProperties.POWERED))) {
             blockEntity.unlitBlock();
 
@@ -121,6 +133,7 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
 
             if(energyConsumptionPerTick <= blockEntity.energyStorage.getEnergy()) {
                 blockEntity.hasEnoughEnergy = true;
+                blockEntity.timeoutOffState = 0;
                 blockEntity.litBlock();
 
                 blockEntity.energyStorage.setEnergy(blockEntity.energyStorage.getEnergy() - energyConsumptionPerTick);
@@ -128,11 +141,15 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
                 setChanged(level, blockPos, state);
             }else {
                 blockEntity.hasEnoughEnergy = false;
-                blockEntity.unlitBlock();
+                if(blockEntity.timeoutOffState == 0) {
+                    blockEntity.timeoutOffState = ModConfigs.COMMON_OFF_STATE_TIMEOUT.getValue();
+                }
                 setChanged(level, blockPos, state);
             }
         }else {
-            blockEntity.unlitBlock();
+            if(blockEntity.timeoutOffState == 0) {
+                blockEntity.timeoutOffState = ModConfigs.COMMON_OFF_STATE_TIMEOUT.getValue();
+            }
             setChanged(level, blockPos, state);
         }
     }

@@ -1,5 +1,8 @@
 # EnergizedPower-FarmersDelight
-Compatibility between Energized Power and Farmer's Delight
+Compatibility between Energized Power and Farmer's Delight<br>
+Download on CurseForge: [Energized Power - Farmer's Delight](https://www.curseforge.com/minecraft/mc-mods/energized-power-farmers-delight)<br>
+Download on Modrinth: [Energized Power - Farmer's Delight](https://modrinth.com/mod/energized-power-fd)
+
 
 ## Information
 

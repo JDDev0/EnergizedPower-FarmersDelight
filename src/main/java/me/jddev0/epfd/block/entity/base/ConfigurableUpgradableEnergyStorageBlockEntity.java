@@ -6,11 +6,11 @@ import me.jddev0.ep.machine.configuration.IRedstoneModeHandler;
 import me.jddev0.ep.machine.configuration.RedstoneMode;
 import me.jddev0.ep.machine.configuration.RedstoneModeUpdate;
 import me.jddev0.ep.machine.upgrade.UpgradeModuleModifier;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ConfigurableUpgradableEnergyStorageBlockEntity
@@ -21,22 +21,22 @@ public abstract class ConfigurableUpgradableEnergyStorageBlockEntity
 
     public ConfigurableUpgradableEnergyStorageBlockEntity(BlockEntityType<?> type, BlockPos blockPos, BlockState blockState,
                                                           String machineName,
-                                                          int baseEnergyCapacity, int baseEnergyTransferRate,
+                                                          long baseEnergyCapacity, long baseEnergyTransferRate,
                                                           UpgradeModuleModifier... upgradeModifierSlots) {
         super(type, blockPos, blockState, machineName, baseEnergyCapacity, baseEnergyTransferRate,
                 upgradeModifierSlots);
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag nbt, @NotNull HolderLookup.Provider registries) {
-        super.saveAdditional(nbt, registries);
+    protected void writeNbt(@NotNull NbtCompound nbt, @NotNull RegistryWrapper.WrapperLookup registries) {
+        super.writeNbt(nbt, registries);
 
         nbt.putInt("configuration.redstone_mode", redstoneMode.ordinal());
     }
 
     @Override
-    protected void loadAdditional(@NotNull CompoundTag nbt, @NotNull HolderLookup.Provider registries) {
-        super.loadAdditional(nbt, registries);
+    protected void readNbt(@NotNull NbtCompound nbt, @NotNull RegistryWrapper.WrapperLookup registries) {
+        super.readNbt(nbt, registries);
 
         redstoneMode = RedstoneMode.fromIndex(nbt.getInt("configuration.redstone_mode"));
     }
@@ -44,7 +44,7 @@ public abstract class ConfigurableUpgradableEnergyStorageBlockEntity
     @Override
     public void setNextRedstoneMode() {
         redstoneMode = RedstoneMode.fromIndex(redstoneMode.ordinal() + 1);
-        setChanged();
+        markDirty();
     }
 
     @Override
@@ -62,7 +62,7 @@ public abstract class ConfigurableUpgradableEnergyStorageBlockEntity
     @Override
     public boolean setRedstoneMode(@NotNull RedstoneMode redstoneMode) {
         this.redstoneMode = redstoneMode;
-        setChanged();
+        markDirty();
 
         return true;
     }

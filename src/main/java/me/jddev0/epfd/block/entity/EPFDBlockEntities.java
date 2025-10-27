@@ -2,38 +2,45 @@ package me.jddev0.epfd.block.entity;
 
 import me.jddev0.epfd.EnergizedPowerFDMod;
 import me.jddev0.epfd.block.EPFDBlocks;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
+import team.reborn.energy.api.EnergyStorage;
 
-import java.util.function.Supplier;
+import java.util.function.BiFunction;
 
 public final class EPFDBlockEntities {
     private EPFDBlockEntities() {}
 
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
-            DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, EnergizedPowerFDMod.MODID);
+    public static final BlockEntityType<ElectricStoveBlockEntity> ELECTRIC_STOVE_ENTITY = registerEnergyStorage(
+            createBlockEntity("electric_stove", EPFDBlocks.ELECTRIC_STOVE, ElectricStoveBlockEntity::new),
+            (blockEntity, direction) -> blockEntity.limitingEnergyStorage
+    );
 
-    public static final Supplier<BlockEntityType<ElectricStoveBlockEntity>> ELECTRIC_STOVE_ENTITY =
-            BLOCK_ENTITIES.register("electric_stove", () -> BlockEntityType.Builder.of(ElectricStoveBlockEntity::new,
-                    EPFDBlocks.ELECTRIC_STOVE.get()).build(null));
+    public static final BlockEntityType<InductionStoveBlockEntity> INDUCTION_STOVE_ENTITY = registerEnergyStorage(
+            createBlockEntity("induction_stove", EPFDBlocks.INDUCTION_STOVE, InductionStoveBlockEntity::new),
+            (blockEntity, direction) -> blockEntity.limitingEnergyStorage
+    );
 
-    public static final Supplier<BlockEntityType<InductionStoveBlockEntity>> INDUCTION_STOVE_ENTITY =
-            BLOCK_ENTITIES.register("induction_stove", () -> BlockEntityType.Builder.of(InductionStoveBlockEntity::new,
-                    EPFDBlocks.INDUCTION_STOVE.get()).build(null));
-
-    public static void register(IEventBus modEventBus) {
-        BLOCK_ENTITIES.register(modEventBus);
+    @SuppressWarnings("unchecked")
+    private static <T extends BlockEntity> BlockEntityType<T> createBlockEntity(String name, Block block,
+                                                                                BlockEntityType.BlockEntityFactory<? extends T> factory) {
+        return (BlockEntityType<T>)Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(EnergizedPowerFDMod.MODID, name),
+                BlockEntityType.Builder.create(factory, block).build(null));
     }
 
-    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK,
-                ELECTRIC_STOVE_ENTITY.get(), ElectricStoveBlockEntity::getEnergyStorageCapability);
+    private static <T extends BlockEntity> BlockEntityType<T> registerEnergyStorage(BlockEntityType<T> blockEntityType,
+                                                                                    BiFunction<? super T, Direction, @Nullable EnergyStorage> provider) {
+        EnergyStorage.SIDED.registerForBlockEntity(provider, blockEntityType);
+        return blockEntityType;
+    }
 
-        event.registerBlockEntity(Capabilities.EnergyStorage.BLOCK,
-                INDUCTION_STOVE_ENTITY.get(), InductionStoveBlockEntity::getEnergyStorageCapability);
+    public static void register() {
+
     }
 }

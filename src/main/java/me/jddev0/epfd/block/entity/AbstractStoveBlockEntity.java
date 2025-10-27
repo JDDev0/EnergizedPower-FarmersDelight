@@ -1,31 +1,33 @@
 package me.jddev0.epfd.block.entity;
 
 import me.jddev0.ep.config.ModConfigs;
-import me.jddev0.ep.energy.ReceiveOnlyEnergyStorage;
+import me.jddev0.ep.energy.EnergizedPowerEnergyStorage;
+import me.jddev0.ep.energy.EnergizedPowerLimitingEnergyStorage;
 import me.jddev0.ep.machine.configuration.RedstoneMode;
 import me.jddev0.ep.machine.upgrade.UpgradeModuleModifier;
 import me.jddev0.ep.util.EnergyUtils;
 import me.jddev0.epfd.block.entity.base.ConfigurableUpgradableEnergyStorageBlockEntity;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import vectorwing.farmersdelight.common.registry.ModBlocks;
 import vectorwing.farmersdelight.common.tag.ModTags;
 
-public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEnergyStorageBlockEntity<ReceiveOnlyEnergyStorage> {
-    protected final int baseEnergyConsumptionPerTick;
+public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEnergyStorageBlockEntity<EnergizedPowerEnergyStorage> {
+    protected final long baseEnergyConsumptionPerTick;
     protected boolean hasEnoughEnergy;
 
     protected int timeoutOffState;
 
     public AbstractStoveBlockEntity(BlockEntityType<?> type, BlockPos blockPos, BlockState blockState,
                                     String machineName,
-                                    int baseEnergyCapacity, int baseEnergyTransferRate,
-                                    int baseEnergyConsumptionPerTick) {
+                                    long baseEnergyCapacity, long baseEnergyTransferRate,
+                                    long baseEnergyConsumptionPerTick) {
         super(
                 type, blockPos, blockState,
 
@@ -39,31 +41,36 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
     }
 
     @Override
-    protected ReceiveOnlyEnergyStorage initEnergyStorage() {
-        return new ReceiveOnlyEnergyStorage(0, baseEnergyCapacity, baseEnergyTransferRate) {
+    protected EnergizedPowerEnergyStorage initEnergyStorage() {
+        return new EnergizedPowerEnergyStorage(baseEnergyCapacity, baseEnergyCapacity, baseEnergyCapacity) {
             @Override
-            public int getCapacity() {
-                return Math.max(1, (int)Math.ceil(capacity * upgradeModuleInventory.getModifierEffectProduct(
+            public long getCapacity() {
+                return Math.max(1, (long)Math.ceil(capacity * upgradeModuleInventory.getModifierEffectProduct(
                         UpgradeModuleModifier.ENERGY_CAPACITY)));
             }
 
             @Override
-            public int getMaxReceive() {
-                return Math.max(1, (int)Math.ceil(maxReceive * upgradeModuleInventory.getModifierEffectProduct(
-                        UpgradeModuleModifier.ENERGY_TRANSFER_RATE)));
-            }
-
-            @Override
-            protected void onChange() {
-                setChanged();
+            protected void onFinalCommit() {
+                markDirty();
                 syncEnergyToPlayers(32);
             }
         };
     }
 
     @Override
-    protected ContainerData initContainerData() {
-        return new ContainerData() {
+    protected EnergizedPowerLimitingEnergyStorage initLimitingEnergyStorage() {
+        return new EnergizedPowerLimitingEnergyStorage(energyStorage, baseEnergyTransferRate, 0) {
+            @Override
+            public long getMaxInsert() {
+                return Math.max(1, (long)Math.ceil(maxInsert * upgradeModuleInventory.getModifierEffectProduct(
+                        UpgradeModuleModifier.ENERGY_TRANSFER_RATE)));
+            }
+        };
+    }
+
+    @Override
+    protected PropertyDelegate initContainerData() {
+        return new PropertyDelegate() {
             @Override
             public int get(int index) {
                 return switch(index) {
@@ -80,14 +87,14 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
             }
 
             @Override
-            public int getCount() {
+            public int size() {
                 return 1;
             }
         };
     }
 
-    public Component getDisplayName() {
-        return Component.translatable("container.energizedpowerfd." + this.machineName);
+    public Text getDisplayName() {
+        return Text.translatable("container.energizedpowerfd." + this.machineName);
     }
 
     public int getRedstoneOutput() {
@@ -95,21 +102,21 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
     }
 
     protected void litBlock() {
-        if(level.getBlockState(getBlockPos()).hasProperty(BlockStateProperties.LIT) &&
-                !level.getBlockState(getBlockPos()).getValue(BlockStateProperties.LIT)) {
-            level.setBlock(getBlockPos(), getBlockState().setValue(BlockStateProperties.LIT, true), 3);
+        if(world.getBlockState(getPos()).contains(Properties.LIT) &&
+                !world.getBlockState(getPos()).get(Properties.LIT)) {
+            world.setBlockState(getPos(), getCachedState().with(Properties.LIT, true), 3);
         }
     }
 
     protected void unlitBlock() {
-        if(level.getBlockState(getBlockPos()).hasProperty(BlockStateProperties.LIT) &&
-                level.getBlockState(getBlockPos()).getValue(BlockStateProperties.LIT)) {
-            level.setBlock(getBlockPos(), getBlockState().setValue(BlockStateProperties.LIT, false), 3);
+        if(world.getBlockState(getPos()).contains(Properties.LIT) &&
+                world.getBlockState(getPos()).get(Properties.LIT)) {
+            world.setBlockState(getPos(), getCachedState().with(Properties.LIT, false), 3);
         }
     }
 
-    public static void tick(Level level, BlockPos blockPos, BlockState state, AbstractStoveBlockEntity blockEntity) {
-        if(level.isClientSide)
+    public static void tick(World level, BlockPos blockPos, BlockState state, AbstractStoveBlockEntity blockEntity) {
+        if(level.isClient)
             return;
 
         if(blockEntity.timeoutOffState > 0) {
@@ -117,11 +124,11 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
 
             if(blockEntity.timeoutOffState == 0) {
                 blockEntity.unlitBlock();
-                setChanged(level, blockPos, state);
+                markDirty(level, blockPos, state);
             }
         }
 
-        if(!blockEntity.redstoneMode.isActive(state.getValue(BlockStateProperties.POWERED))) {
+        if(!blockEntity.redstoneMode.isActive(state.get(Properties.POWERED))) {
             blockEntity.unlitBlock();
 
             return;
@@ -131,38 +138,41 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
             int energyConsumptionPerTick = Math.max(1, (int)Math.ceil(blockEntity.baseEnergyConsumptionPerTick *
                     blockEntity.upgradeModuleInventory.getModifierEffectProduct(UpgradeModuleModifier.ENERGY_CONSUMPTION)));
 
-            if(energyConsumptionPerTick <= blockEntity.energyStorage.getEnergy()) {
+            if(energyConsumptionPerTick <= blockEntity.energyStorage.getAmount()) {
                 blockEntity.hasEnoughEnergy = true;
                 blockEntity.timeoutOffState = 0;
                 blockEntity.litBlock();
 
-                blockEntity.energyStorage.setEnergy(blockEntity.energyStorage.getEnergy() - energyConsumptionPerTick);
+                try(Transaction transaction = Transaction.openOuter()) {
+                    blockEntity.energyStorage.extract(energyConsumptionPerTick, transaction);
+                    transaction.commit();
+                }
 
-                setChanged(level, blockPos, state);
+                markDirty(level, blockPos, state);
             }else {
                 blockEntity.hasEnoughEnergy = false;
                 if(blockEntity.timeoutOffState == 0) {
                     blockEntity.timeoutOffState = ModConfigs.COMMON_OFF_STATE_TIMEOUT.getValue();
                 }
-                setChanged(level, blockPos, state);
+                markDirty(level, blockPos, state);
             }
         }else {
             if(blockEntity.timeoutOffState == 0) {
                 blockEntity.timeoutOffState = ModConfigs.COMMON_OFF_STATE_TIMEOUT.getValue();
             }
-            setChanged(level, blockPos, state);
+            markDirty(level, blockPos, state);
         }
     }
 
     private boolean hasSkilletOrCookingPot() {
-        BlockPos testPos = worldPosition.above();
-        BlockState testState = level.getBlockState(testPos);
+        BlockPos testPos = pos.up();
+        BlockState testState = world.getBlockState(testPos);
 
-        if(testState.is(ModTags.HEAT_CONDUCTORS)) {
-            testPos = testPos.above();
-            testState = level.getBlockState(testPos);
+        if(testState.isIn(ModTags.HEAT_CONDUCTORS)) {
+            testPos = testPos.up();
+            testState = world.getBlockState(testPos);
         }
 
-        return testState.is(ModBlocks.SKILLET.get()) || testState.is(ModBlocks.COOKING_POT.get());
+        return testState.isOf(ModBlocks.SKILLET.get()) || testState.isOf(ModBlocks.COOKING_POT.get());
     }
 }

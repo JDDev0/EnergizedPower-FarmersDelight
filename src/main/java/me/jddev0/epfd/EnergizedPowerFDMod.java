@@ -1,66 +1,47 @@
 package me.jddev0.epfd;
 
 import com.mojang.logging.LogUtils;
+import me.jddev0.ep.item.CreativeTabEntriesHelper;
 import me.jddev0.ep.item.EPCreativeModeTab;
 import me.jddev0.epfd.block.EPFDBlocks;
 import me.jddev0.epfd.block.entity.EPFDBlockEntities;
 import me.jddev0.epfd.config.ModConfigs;
 import me.jddev0.epfd.item.EPFDItems;
-import me.jddev0.epfd.screen.ElectricStoveScreen;
-import me.jddev0.epfd.screen.InductionStoveScreen;
 import me.jddev0.epfd.screen.EPFDMenuTypes;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.registry.RegistryKey;
 import org.slf4j.Logger;
 
-@Mod(EnergizedPowerFDMod.MODID)
-public class EnergizedPowerFDMod {
-    public static final String MODID = "energizedpowerfd";
-    private static final Logger LOGGER = LogUtils.getLogger();
+import java.util.function.Consumer;
 
-    public EnergizedPowerFDMod(IEventBus modEventBus) {
+public class EnergizedPowerFDMod implements ModInitializer {
+    public static final String MODID = "energizedpowerfd";
+    public static final Logger LOGGER = LogUtils.getLogger();
+
+    @Override
+    public void onInitialize() {
         ModConfigs.registerConfigs(true);
 
-        EPFDItems.register(modEventBus);
-        EPFDBlocks.register(modEventBus);
-        EPFDBlockEntities.register(modEventBus);
-        EPFDMenuTypes.register(modEventBus);
+        EPFDItems.register();
+        EPFDBlocks.register();
+        EPFDBlockEntities.register();
+        EPFDMenuTypes.register();
 
-        modEventBus.addListener(this::addCreativeTab);
-        modEventBus.addListener(this::registerCapabilities);
+        addCreativeTab();
     }
 
-    private void addCreativeTab(BuildCreativeModeTabContentsEvent event) {
-        if(event.getTab() == EPCreativeModeTab.ENERGIZED_POWER_TAB.get()) {
+    private void addCreativeTab() {
+        addCreativeTabFor(EPCreativeModeTab.ENERGIZED_POWER_TAB_REG_KEY, event -> {
             event.accept(EPFDBlocks.ELECTRIC_STOVE_ITEM);
             event.accept(EPFDBlocks.INDUCTION_STOVE_ITEM);
-        }
+        });
     }
 
-    public void registerCapabilities(RegisterCapabilitiesEvent event) {
-        //Block Entities
-        EPFDBlockEntities.registerCapabilities(event);
-    }
-
-    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-            ModConfigs.registerConfigs(false);
-        }
-        
-        
-        @SubscribeEvent
-        public static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
-            event.register(EPFDMenuTypes.ELECTRIC_STOVE_MENU.get(), ElectricStoveScreen::new);
-            event.register(EPFDMenuTypes.INDUCTION_STOVE_MENU.get(), InductionStoveScreen::new);
-        }
+    private void addCreativeTabFor(RegistryKey<ItemGroup> groupKey,
+                                   Consumer<CreativeTabEntriesHelper> consumer) {
+        ItemGroupEvents.modifyEntriesEvent(groupKey).
+                register(entries -> consumer.accept(new CreativeTabEntriesHelper(entries)));
     }
 }

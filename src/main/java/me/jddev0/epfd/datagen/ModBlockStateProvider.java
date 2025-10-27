@@ -1,31 +1,22 @@
 package me.jddev0.epfd.datagen;
 
-import me.jddev0.epfd.EnergizedPowerFDMod;
 import me.jddev0.epfd.block.ElectricStoveBlock;
 import me.jddev0.epfd.block.EPFDBlocks;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.neoforged.neoforge.client.model.generators.*;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.block.Block;
+import net.minecraft.data.client.*;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 
-import java.util.Objects;
+class ModBlockStateProvider {
+    private final BlockStateModelGenerator generator;
 
-public class ModBlockStateProvider extends BlockStateProvider {
-    public ModBlockStateProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
-        super(output, EnergizedPowerFDMod.MODID, existingFileHelper);
+    ModBlockStateProvider(BlockStateModelGenerator generator) {
+        this.generator = generator;
     }
 
-    @Override
-    protected void registerStatesAndModels() {
-        registerBlocks();
-    }
-
-    private void registerBlocks() {
+    void registerBlocks() {
         activatableOrientableBlockWithItem(EPFDBlocks.ELECTRIC_STOVE,
                 orientableBlockModel(EPFDBlocks.ELECTRIC_STOVE, true),
                 orientableBlockModel(EPFDBlocks.ELECTRIC_STOVE, "_on", "_top_on", "_bottom",
@@ -39,51 +30,50 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 ElectricStoveBlock.LIT);
     }
 
-    private ModelFile orientableBlockModel(Holder<? extends Block> block, boolean uniqueBottomTexture) {
+    private Identifier orientableBlockModel(Block block, boolean uniqueBottomTexture) {
         return orientableBlockModel(block, "", "_top", uniqueBottomTexture?"_bottom":"_top",
                 "_front", "_side");
     }
 
-    private ModelFile orientableBlockModel(Holder<? extends Block> block, String fileSuffix, String topSuffix,
-                                           String bottomSuffix, String frontSuffix, String sideSuffix) {
-        ResourceLocation blockId = Objects.requireNonNull(block.getKey()).location();
-
-        return models().
-                withExistingParent(blockId.getPath() + fileSuffix, ModelProvider.BLOCK_FOLDER + "/orientable").
-                texture("particle", "#top").
-                texture("top", getBlockTexture(block, topSuffix)).
-                texture("bottom", getBlockTexture(block, bottomSuffix)).
-                texture("front", getBlockTexture(block, frontSuffix)).
-                texture("side", getBlockTexture(block, sideSuffix));
+    private Identifier orientableBlockModel(Block block, String fileSuffix, String topSuffix,
+                                            String bottomSuffix, String frontSuffix, String sideSuffix) {
+        return TexturedModel.makeFactory(unused -> new TextureMap().
+                        put(TextureKey.TOP, TextureMap.getSubId(block, topSuffix)).
+                        put(TextureKey.BOTTOM, TextureMap.getSubId(block, bottomSuffix)).
+                        put(TextureKey.FRONT, TextureMap.getSubId(block, frontSuffix)).
+                        put(TextureKey.SIDE, TextureMap.getSubId(block, sideSuffix)).
+                        copy(TextureKey.TOP, TextureKey.PARTICLE),
+                Models.ORIENTABLE_WITH_BOTTOM).get(block).upload(block, fileSuffix, generator.modelCollector);
     }
 
-    private void activatableOrientableBlockWithItem(Holder<? extends Block> block, ModelFile modelNormal,
-                                                    ModelFile modelActive, BooleanProperty isActiveProperty) {
-        getVariantBuilder(block.value()).partialState().
-                with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH).with(isActiveProperty, false).modelForState().
-                modelFile(modelNormal).addModel().partialState().
-                with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH).with(isActiveProperty, true).modelForState().
-                modelFile(modelActive).addModel().partialState().
-                with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH).with(isActiveProperty, false).modelForState().
-                rotationY(180).modelFile(modelNormal).addModel().partialState().
-                with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH).with(isActiveProperty, true).modelForState().
-                rotationY(180).modelFile(modelActive).addModel().partialState().
-                with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST).with(isActiveProperty, false).modelForState().
-                rotationY(90).modelFile(modelNormal).addModel().partialState().
-                with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST).with(isActiveProperty, true).modelForState().
-                rotationY(90).modelFile(modelActive).addModel().partialState().
-                with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST).with(isActiveProperty, false).modelForState().
-                rotationY(270).modelFile(modelNormal).addModel().partialState().
-                with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST).with(isActiveProperty, true).modelForState().
-                rotationY(270).modelFile(modelActive).addModel().partialState();
+    private void activatableOrientableBlockWithItem(Block block, Identifier modelNormal,
+                                                    Identifier modelActive, BooleanProperty isActiveProperty) {
+        generator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block).
+                coordinate(BlockStateVariantMap.create(Properties.HORIZONTAL_FACING, isActiveProperty).
+                        register(Direction.NORTH, false, BlockStateVariant.create().
+                                put(VariantSettings.MODEL, modelNormal)).
+                        register(Direction.NORTH, true, BlockStateVariant.create().
+                                put(VariantSettings.MODEL, modelActive)).
+                        register(Direction.SOUTH, false, BlockStateVariant.create().
+                                put(VariantSettings.MODEL, modelNormal).
+                                put(VariantSettings.Y, VariantSettings.Rotation.R180)).
+                        register(Direction.SOUTH, true, BlockStateVariant.create().
+                                put(VariantSettings.MODEL, modelActive).
+                                put(VariantSettings.Y, VariantSettings.Rotation.R180)).
+                        register(Direction.EAST, false, BlockStateVariant.create().
+                                put(VariantSettings.MODEL, modelNormal).
+                                put(VariantSettings.Y, VariantSettings.Rotation.R90)).
+                        register(Direction.EAST, true, BlockStateVariant.create().
+                                put(VariantSettings.MODEL, modelActive).
+                                put(VariantSettings.Y, VariantSettings.Rotation.R90)).
+                        register(Direction.WEST, false, BlockStateVariant.create().
+                                put(VariantSettings.MODEL, modelNormal).
+                                put(VariantSettings.Y, VariantSettings.Rotation.R270)).
+                        register(Direction.WEST, true, BlockStateVariant.create().
+                                put(VariantSettings.MODEL, modelActive).
+                                put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                ));
 
-        simpleBlockItem(block.value(), modelNormal);
-    }
-
-    private ResourceLocation getBlockTexture(Holder<? extends Block> block, String pathSuffix) {
-        ResourceLocation blockId = Objects.requireNonNull(block.getKey()).location();
-
-        return ResourceLocation.fromNamespaceAndPath(blockId.getNamespace(),
-                ModelProvider.BLOCK_FOLDER + "/" + blockId.getPath() + pathSuffix);
+        generator.registerParentedItemModel(block.asItem(), modelNormal);
     }
 }

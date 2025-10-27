@@ -1,0 +1,4 @@
+// 1.21.1	2025-10-27T16:59:16.664820306	Energized Power - Farmer's Delight/Tags for minecraft:block
+0c6e633a52edf3b3ab712a8e5fd864a2a27786f1 data/minecraft/tags/block/needs_stone_tool.json
+0c6e633a52edf3b3ab712a8e5fd864a2a27786f1 data/farmersdelight/tags/block/heat_sources.json
+0c6e633a52edf3b3ab712a8e5fd864a2a27786f1 data/minecraft/tags/block/mineable/pickaxe.json

@@ -1,13 +1,13 @@
 package me.jddev0.epfd.screen;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.text.Text;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ElectricStoveScreen extends AbstractStoveScreen<ElectricStoveMenu> {
-    public ElectricStoveScreen(ElectricStoveMenu menu, Inventory inventory, Component component) {
+    public ElectricStoveScreen(ElectricStoveMenu menu, PlayerInventory inventory, Text component) {
         super(menu, inventory, component);
     }
 }

@@ -1,10 +1,10 @@
 package me.jddev0.epfd.mixin;
 
 import me.jddev0.epfd.utils.CookingUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,18 +26,18 @@ public abstract class CookingPotBlockEntityMixin extends SyncedBlockEntity imple
     }
 
     @Inject(method = "processCooking", at = @At("HEAD"))
-    private void processCooking(RecipeHolder<CookingPotRecipe> recipe, CookingPotBlockEntity cookingPot,
+    private void processCooking(RecipeEntry<CookingPotRecipe> recipe, CookingPotBlockEntity cookingPot,
                                 CallbackInfoReturnable<Boolean> cir) {
-        if(level == null)
+        if(world == null)
             return;
 
-        BlockPos heatSourcePos = worldPosition.below();
-        BlockState heatSourceState = level.getBlockState(heatSourcePos);
+        BlockPos heatSourcePos = pos.down();
+        BlockState heatSourceState = world.getBlockState(heatSourcePos);
 
-        if(requiresDirectHeat() && !heatSourceState.is(ModTags.HEAT_SOURCES) &&
-                heatSourceState.is(ModTags.HEAT_CONDUCTORS)) {
-            heatSourcePos = heatSourcePos.below();
-            heatSourceState = level.getBlockState(heatSourcePos);
+        if(requiresDirectHeat() && !heatSourceState.isIn(ModTags.HEAT_SOURCES) &&
+                heatSourceState.isIn(ModTags.HEAT_CONDUCTORS)) {
+            heatSourcePos = heatSourcePos.down();
+            heatSourceState = world.getBlockState(heatSourcePos);
         }
 
         int speedMultiplier = CookingUtils.getSpeedMultiplierForHeatSource(heatSourceState);

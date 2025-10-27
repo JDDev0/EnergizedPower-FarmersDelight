@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "energizedpowerfd",
+  "version": "${version}",
+  "name": "Energized Power - Farmer's Delight",
+  "description": "Compatibility between Energized Power and Farmer's Delight",
+  "authors": [
+    "JDDev0"
+  ],
+  "contact": {
+    "homepage": "https://github.com/JDDev0/EnergizedPower-FarmersDelight",
+    "sources": "https://github.com/JDDev0/EnergizedPower-FarmersDelight",
+    "issues": "https://github.com/JDDev0/EnergizedPower-FarmersDelight/issues",
+    "email": "jddev0@dorneger.at"
+  },
+  "license": "MIT",
+  "icon": "assets/energizedpowerfd/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "me.jddev0.epfd.datagen.EnergizedPowerFDDataGenerators"
+    ],
+    "main": [
+      "me.jddev0.epfd.EnergizedPowerFDMod"
+    ],
+    "client": [
+      "me.jddev0.epfd.EnergizedPowerFDModClient"
+    ]
+  },
+  "mixins": [
+    "energizedpowerfd.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*",
+
+    "energizedpower": "*",
+
+    "farmersdelight": "*"
+  },
+  "suggests": {
+    "emi": "*",
+    "jei": "*",
+    "rei": "*"
+  }
+}

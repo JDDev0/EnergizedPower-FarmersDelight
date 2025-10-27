@@ -1,15 +1,19 @@
 package me.jddev0.epfd.item;
 
 import me.jddev0.epfd.EnergizedPowerFDMod;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
 
 public final class EPFDItems {
     private EPFDItems() {}
-    
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(EnergizedPowerFDMod.MODID);
 
-    public static void register(IEventBus modEventBus) {
-        ITEMS.register(modEventBus);
+    public static Item registerItem(String name, Item item) {
+        return Registry.register(Registries.ITEM, Identifier.of(EnergizedPowerFDMod.MODID, name), item);
+    }
+
+    public static void register() {
+
     }
 }

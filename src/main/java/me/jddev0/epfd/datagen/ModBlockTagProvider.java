@@ -1,41 +1,36 @@
 package me.jddev0.epfd.datagen;
 
-import me.jddev0.epfd.EnergizedPowerFDMod;
 import me.jddev0.epfd.block.EPFDBlocks;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
-import net.minecraft.tags.BlockTags;
-import net.neoforged.neoforge.common.data.BlockTagsProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.BlockTags;
 import vectorwing.farmersdelight.common.tag.ModTags;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModBlockTagProvider extends BlockTagsProvider {
-    public ModBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
-                               @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, EnergizedPowerFDMod.MODID, existingFileHelper);
+public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
+    public ModBlockTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> lookupProvider) {
+        super(output, lookupProvider);
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider lookupProvider) {
-        
-        tag(BlockTags.MINEABLE_WITH_PICKAXE).
+    protected void configure(RegistryWrapper.WrapperLookup lookupProvider) {
+        getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE).
                 add(
-                        EPFDBlocks.ELECTRIC_STOVE.get(),
-                        EPFDBlocks.INDUCTION_STOVE.get()
+                        EPFDBlocks.ELECTRIC_STOVE,
+                        EPFDBlocks.INDUCTION_STOVE
                 );
 
-        tag(BlockTags.NEEDS_STONE_TOOL).
+        getOrCreateTagBuilder(BlockTags.NEEDS_STONE_TOOL).
                 add(
-                        EPFDBlocks.ELECTRIC_STOVE.get(),
-                        EPFDBlocks.INDUCTION_STOVE.get()
+                        EPFDBlocks.ELECTRIC_STOVE,
+                        EPFDBlocks.INDUCTION_STOVE
                 );
 
-        
-        tag(ModTags.HEAT_SOURCES).
-                add(EPFDBlocks.ELECTRIC_STOVE.get(),
-                        EPFDBlocks.INDUCTION_STOVE.get());
+
+        getOrCreateTagBuilder(ModTags.HEAT_SOURCES).
+                add(EPFDBlocks.ELECTRIC_STOVE,
+                        EPFDBlocks.INDUCTION_STOVE);
     }
 }

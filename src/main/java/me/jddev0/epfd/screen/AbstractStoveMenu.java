@@ -8,51 +8,51 @@ import me.jddev0.ep.machine.upgrade.UpgradeModuleModifier;
 import me.jddev0.ep.screen.base.IConfigurableMenu;
 import me.jddev0.ep.screen.base.UpgradableEnergyStorageMenu;
 import me.jddev0.epfd.block.entity.AbstractStoveBlockEntity;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.inventory.SimpleContainerData;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.ArrayPropertyDelegate;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.util.math.BlockPos;
 
 public abstract class AbstractStoveMenu<T extends AbstractStoveBlockEntity> extends UpgradableEnergyStorageMenu<T>
         implements IConfigurableMenu {
-    protected final ContainerData data;
+    protected final PropertyDelegate data;
 
-    public AbstractStoveMenu(int id, Inventory inv, FriendlyByteBuf buffer,
-                             MenuType<?> menuType, Block block) {
+    public AbstractStoveMenu(int id, PlayerInventory inv, BlockPos pos,
+                             ScreenHandlerType<?> menuType, Block block) {
         this(
-                id, inv, inv.player.level().getBlockEntity(buffer.readBlockPos()),
+                id, inv.player.getWorld().getBlockEntity(pos), inv,
                 menuType, block, new UpgradeModuleInventory(
                         UpgradeModuleModifier.ENERGY_CONSUMPTION,
                         UpgradeModuleModifier.ENERGY_CAPACITY
-                ), new SimpleContainerData(1)
+                ), new ArrayPropertyDelegate(1)
         );
     }
 
-    public AbstractStoveMenu(int id, Inventory inv, BlockEntity blockEntity,
-                             MenuType<?> menuType, Block block,
-                             UpgradeModuleInventory upgradeModuleInventory, ContainerData data) {
+    public AbstractStoveMenu(int id, BlockEntity blockEntity, PlayerInventory playerInventory,
+                             ScreenHandlerType<?> menuType, Block block,
+                             UpgradeModuleInventory upgradeModuleInventory, PropertyDelegate data) {
         super(
                 menuType, id,
 
-                inv, blockEntity,
+                playerInventory, blockEntity,
                 block,
 
                 upgradeModuleInventory, 2
         );
 
-        checkContainerDataCount(data, 1);
+        checkDataCount(data, 1);
         this.data = data;
 
-        for(int i = 0;i < upgradeModuleInventory.getContainerSize();i++)
+        for(int i = 0;i < upgradeModuleInventory.size();i++)
             addSlot(new UpgradeModuleSlot(upgradeModuleInventory, i, 71 + i * 18, 35, this::isInUpgradeModuleView));
 
-        addDataSlots(this.data);
+        addProperties(this.data);
     }
 
     @Override
@@ -66,22 +66,22 @@ public abstract class AbstractStoveMenu<T extends AbstractStoveBlockEntity> exte
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int index) {
+    public ItemStack quickMove(PlayerEntity player, int index) {
         Slot sourceSlot = slots.get(index);
-        if(sourceSlot == null || !sourceSlot.hasItem())
+        if(sourceSlot == null || !sourceSlot.hasStack())
             return ItemStack.EMPTY;
 
-        ItemStack sourceItem = sourceSlot.getItem();
+        ItemStack sourceItem = sourceSlot.getStack();
         ItemStack sourceItemCopy = sourceItem.copy();
 
         if(index < 4 * 9) {
             //Player inventory slot -> Merge into upgrade module inventory
-            if(!moveItemStackTo(sourceItem, 4 * 9, 4 * 9 + 2, false)) {
+            if(!insertItem(sourceItem, 4 * 9, 4 * 9 + 2, false)) {
                 return ItemStack.EMPTY;
             }
         }else if(index < 4 * 9 + 2) {
             //Tile inventory and upgrade module slot -> Merge into player inventory
-            if(!moveItemStackTo(sourceItem, 0, 4 * 9, false)) {
+            if(!insertItem(sourceItem, 0, 4 * 9, false)) {
                 return ItemStack.EMPTY;
             }
         }else {
@@ -89,11 +89,11 @@ public abstract class AbstractStoveMenu<T extends AbstractStoveBlockEntity> exte
         }
 
         if(sourceItem.getCount() == 0)
-            sourceSlot.set(ItemStack.EMPTY);
+            sourceSlot.setStack(ItemStack.EMPTY);
         else
-            sourceSlot.setChanged();
+            sourceSlot.markDirty();
 
-        sourceSlot.onTake(player, sourceItem);
+        sourceSlot.onTakeItem(player, sourceItem);
 
         return sourceItemCopy;
     }

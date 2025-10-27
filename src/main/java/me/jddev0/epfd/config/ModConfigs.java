@@ -5,7 +5,7 @@ import me.jddev0.ep.config.Config;
 import me.jddev0.ep.config.ConfigValidationException;
 import me.jddev0.ep.config.ConfigValue;
 import me.jddev0.ep.config.value.*;
-import net.neoforged.fml.loading.FMLPaths;
+import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -20,26 +20,26 @@ public final class ModConfigs {
             "Energized Power - Farmer's Delight Common Config (IMPORTANT: Not all values are synced from the server to the client.)");
 
     //Blocks
-    public static final ConfigValue<Integer> COMMON_ELECTRIC_STOVE_CAPACITY = registerEnergyCapacityConfigValue(
+    public static final ConfigValue<Long> COMMON_ELECTRIC_STOVE_CAPACITY = registerEnergyCapacityConfigValue(
             "block.electric_stove", "Electric Stove", 1024
     );
-    public static final ConfigValue<Integer> COMMON_ELECTRIC_STOVE_TRANSFER_RATE = registerEnergyTransferRateConfigValue(
+    public static final ConfigValue<Long> COMMON_ELECTRIC_STOVE_TRANSFER_RATE = registerEnergyTransferRateConfigValue(
             "block.electric_stove", "Electric Stove", 32
     );
-    public static final ConfigValue<Integer> COMMON_ELECTRIC_STOVE_ENERGY_CONSUMPTION_PER_TICK = registerEnergyConsumptionPerTickConfigValue(
+    public static final ConfigValue<Long> COMMON_ELECTRIC_STOVE_ENERGY_CONSUMPTION_PER_TICK = registerEnergyConsumptionPerTickConfigValue(
             "block.electric_stove", "Electric Stove", 8
     );
     public static final ConfigValue<Integer> COMMON_ELECTRIC_STOVE_RECIPE_DURATION_MULTIPLIER = registerCookingDurationMultiplierConfigValue(
             "block.electric_stove", "Electric Stove", 2
     );
 
-    public static final ConfigValue<Integer> COMMON_INDUCTION_STOVE_CAPACITY = registerEnergyCapacityConfigValue(
+    public static final ConfigValue<Long> COMMON_INDUCTION_STOVE_CAPACITY = registerEnergyCapacityConfigValue(
             "block.induction_stove", "Induction Stove", 2048
     );
-    public static final ConfigValue<Integer> COMMON_INDUCTION_STOVE_TRANSFER_RATE = registerEnergyTransferRateConfigValue(
+    public static final ConfigValue<Long> COMMON_INDUCTION_STOVE_TRANSFER_RATE = registerEnergyTransferRateConfigValue(
             "block.induction_stove", "Induction Stove", 64
     );
-    public static final ConfigValue<Integer> COMMON_INDUCTION_STOVE_ENERGY_CONSUMPTION_PER_TICK = registerEnergyConsumptionPerTickConfigValue(
+    public static final ConfigValue<Long> COMMON_INDUCTION_STOVE_ENERGY_CONSUMPTION_PER_TICK = registerEnergyConsumptionPerTickConfigValue(
             "block.induction_stove", "Induction Stove", 16
     );
     public static final ConfigValue<Integer> COMMON_INDUCTION_STOVE_RECIPE_DURATION_MULTIPLIER = registerCookingDurationMultiplierConfigValue(
@@ -47,31 +47,31 @@ public final class ModConfigs {
     );
 
     private static File getRelativeConfigFile(String fileName) {
-        return FMLPaths.CONFIGDIR.get().resolve("energizedpower/" + fileName).toFile();
+        return FabricLoader.getInstance().getConfigDir().resolve("energizedpower/" + fileName).toFile();
     }
 
-    private static ConfigValue<Integer> registerEnergyCapacityConfigValue(String baseConfigKey, String itemName, int defaultValue) {
-        return COMMON_CONFIG.register(new IntegerConfigValue(
+    private static ConfigValue<Long> registerEnergyCapacityConfigValue(String baseConfigKey, String itemName, long defaultValue) {
+        return COMMON_CONFIG.register(new LongConfigValue(
                 baseConfigKey + ".capacity",
-                "The energy capacity of the " + itemName + " in FE",
+                "The energy capacity of the " + itemName + " in E",
                 defaultValue,
-                1, null
+                1L, null
         ));
     }
-    private static ConfigValue<Integer> registerEnergyTransferRateConfigValue(String baseConfigKey, String itemName, int defaultValue) {
-        return COMMON_CONFIG.register(new IntegerConfigValue(
+    private static ConfigValue<Long> registerEnergyTransferRateConfigValue(String baseConfigKey, String itemName, long defaultValue) {
+        return COMMON_CONFIG.register(new LongConfigValue(
                 baseConfigKey + ".transfer_rate",
-                "The energy transfer rate of the " + itemName + " in FE per tick",
+                "The energy transfer rate of the " + itemName + " in E per tick",
                 defaultValue,
-                1, null
+                1L, null
         ));
     }
-    private static ConfigValue<Integer> registerEnergyConsumptionPerTickConfigValue(String baseConfigKey, String itemName, int defaultValue) {
-        return COMMON_CONFIG.register(new IntegerConfigValue(
+    private static ConfigValue<Long> registerEnergyConsumptionPerTickConfigValue(String baseConfigKey, String itemName, long defaultValue) {
+        return COMMON_CONFIG.register(new LongConfigValue(
                 baseConfigKey + ".energy_consumption_per_tick",
-                "The energy consumption of the " + itemName + " if active in FE per tick",
+                "The energy consumption of the " + itemName + " if active in E per tick",
                 defaultValue,
-                1, null
+                1L, null
         ));
     }
     private static ConfigValue<Integer> registerCookingDurationMultiplierConfigValue(String baseConfigKey, String itemName, int defaultValue) {

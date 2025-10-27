@@ -2,78 +2,87 @@ package me.jddev0.epfd.datagen.advancement;
 
 import me.jddev0.ep.api.EPAPI;
 import me.jddev0.epfd.block.EPFDBlocks;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.advancements.AdvancementSubProvider;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.common.data.AdvancementProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
+import net.minecraft.advancement.Advancement;
+import net.minecraft.advancement.AdvancementCriterion;
+import net.minecraft.advancement.AdvancementEntry;
+import net.minecraft.advancement.AdvancementFrame;
+import net.minecraft.advancement.criterion.InventoryChangedCriterion;
+import net.minecraft.data.server.advancement.AdvancementTabGenerator;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.ItemStack;
+import net.minecraft.predicate.item.ItemPredicate;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public class ModBasicsAdvancements implements AdvancementProvider.AdvancementGenerator {
+public class ModBasicsAdvancements extends FabricAdvancementProvider {
+    public ModBasicsAdvancements(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> lookupProvider) {
+        super(dataOutput, lookupProvider);
+    }
+
     @Override
-    public void generate(HolderLookup.Provider lookupProvider, Consumer<AdvancementHolder> advancementOutput,
-                         ExistingFileHelper existingFileHelper) {
-        AdvancementHolder electric_stove = addAdvancement(
-                advancementOutput, existingFileHelper, EPAPI.id("main/basics/basic_machine_frame"),
-                EPFDBlocks.ELECTRIC_STOVE, "electric_stove", AdvancementType.TASK
+    public void generateAdvancement(RegistryWrapper.WrapperLookup lookupProvider, Consumer<AdvancementEntry> advancementOutput) {
+        AdvancementEntry electric_stove = addAdvancement(
+                advancementOutput, EPAPI.id("main/basics/basic_machine_frame"),
+                EPFDBlocks.ELECTRIC_STOVE, "electric_stove", AdvancementFrame.TASK
         );
 
-        AdvancementHolder induction_stove = addAdvancement(
-                advancementOutput, existingFileHelper, EPAPI.id("main/basics/hardened_machine_frame"),
-                EPFDBlocks.INDUCTION_STOVE, "induction_stove", AdvancementType.TASK
+        AdvancementEntry induction_stove = addAdvancement(
+                advancementOutput, EPAPI.id("main/basics/hardened_machine_frame"),
+                EPFDBlocks.INDUCTION_STOVE, "induction_stove", AdvancementFrame.TASK
         );
     }
 
-    private AdvancementHolder addAdvancement(Consumer<AdvancementHolder> advancementOutput, ExistingFileHelper existingFileHelper,
-                                             ResourceLocation parent, ItemLike icon, String advancementId, AdvancementType type) {
-        return addAdvancement(advancementOutput, existingFileHelper, parent, icon, advancementId, type, icon);
+    private AdvancementEntry addAdvancement(Consumer<AdvancementEntry> advancementOutput, Identifier parent,
+                                            ItemConvertible icon, String advancementId, AdvancementFrame type) {
+        return addAdvancement(advancementOutput, parent, icon, advancementId, type, icon);
     }
-    private AdvancementHolder addAdvancement(Consumer<AdvancementHolder> advancementOutput, ExistingFileHelper existingFileHelper,
-                                             ResourceLocation parent, ItemLike icon, String advancementId, AdvancementType type,
-                                             ItemLike trigger) {
-        return addAdvancement(advancementOutput, existingFileHelper, parent, new ItemStack(icon), advancementId, type,
-                InventoryChangeTrigger.TriggerInstance.hasItems(trigger));
+    private AdvancementEntry addAdvancement(Consumer<AdvancementEntry> advancementOutput, Identifier parent,
+                                            ItemConvertible icon, String advancementId, AdvancementFrame type,
+                                            ItemConvertible trigger) {
+        return addAdvancement(advancementOutput, parent, new ItemStack(icon), advancementId, type,
+                InventoryChangedCriterion.Conditions.items(trigger));
     }
-    private AdvancementHolder addAdvancement(Consumer<AdvancementHolder> advancementOutput, ExistingFileHelper existingFileHelper,
-                                             ResourceLocation parent, ItemLike icon, String advancementId, AdvancementType type,
-                                             TagKey<Item> trigger) {
-        return addAdvancement(advancementOutput, existingFileHelper, parent, new ItemStack(icon), advancementId, type,
-                InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(
+    private AdvancementEntry addAdvancement(Consumer<AdvancementEntry> advancementOutput, Identifier parent,
+                                            ItemConvertible icon, String advancementId, AdvancementFrame type,
+                                            TagKey<Item> trigger) {
+        return addAdvancement(advancementOutput, parent, new ItemStack(icon), advancementId, type,
+                InventoryChangedCriterion.Conditions.items(ItemPredicate.Builder.create().tag(
                         trigger
                 )));
     }
-    private AdvancementHolder addAdvancement(Consumer<AdvancementHolder> advancementOutput, ExistingFileHelper existingFileHelper,
-                                             ResourceLocation parent, ItemLike icon, String advancementId, AdvancementType type,
-                                             Criterion<?> trigger) {
-        return addAdvancement(advancementOutput, existingFileHelper, parent, new ItemStack(icon), advancementId, type, trigger);
+    private AdvancementEntry addAdvancement(Consumer<AdvancementEntry> advancementOutput, Identifier parent,
+                                            ItemConvertible icon, String advancementId, AdvancementFrame type,
+                                            AdvancementCriterion<?> trigger) {
+        return addAdvancement(advancementOutput, parent, new ItemStack(icon), advancementId, type, trigger);
     }
-    private AdvancementHolder addAdvancement(Consumer<AdvancementHolder> advancementOutput, ExistingFileHelper existingFileHelper,
-                                             ResourceLocation parent, ItemStack icon, String advancementId, AdvancementType type,
-                                             Criterion<?> trigger) {
-        return Advancement.Builder.advancement().parent(AdvancementSubProvider.createPlaceholder(parent.toString())).
+    private AdvancementEntry addAdvancement(Consumer<AdvancementEntry> advancementOutput, Identifier parent,
+                                            ItemStack icon, String advancementId, AdvancementFrame type,
+                                            AdvancementCriterion<?> trigger) {
+        return Advancement.Builder.create().parent(AdvancementTabGenerator.reference(parent.toString())).
                 display(
                         icon,
-                        Component.translatable("advancements.energizedpowerfd." + advancementId + ".title"),
-                        Component.translatable("advancements.energizedpowerfd." + advancementId + ".description"),
+                        Text.translatable("advancements.energizedpowerfd." + advancementId + ".title"),
+                        Text.translatable("advancements.energizedpowerfd." + advancementId + ".description"),
                         null,
                         type,
                         true,
                         true,
                         false
                 ).
-                addCriterion("has_the_item", trigger).
-                save(advancementOutput, "energizedpowerfd:main/basics/" + advancementId);
+                criterion("has_the_item", trigger).
+                build(advancementOutput, "energizedpowerfd:main/basics/" + advancementId);
+    }
+
+    @Override
+    public String getName() {
+        return "Advancements (Basics)";
     }
 }

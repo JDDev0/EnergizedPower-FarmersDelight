@@ -3,29 +3,29 @@ package me.jddev0.epfd.screen;
 import me.jddev0.ep.inventory.upgrade.UpgradeModuleInventory;
 import me.jddev0.epfd.block.EPFDBlocks;
 import me.jddev0.epfd.block.entity.InductionStoveBlockEntity;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.util.math.BlockPos;
 
 public class InductionStoveMenu extends AbstractStoveMenu<InductionStoveBlockEntity> {
-    public InductionStoveMenu(int id, Inventory inv, FriendlyByteBuf buffer) {
+    public InductionStoveMenu(int id, PlayerInventory inv, BlockPos pos) {
         super(
-                id, inv, buffer,
+                id, inv, pos,
 
-                EPFDMenuTypes.INDUCTION_STOVE_MENU.get(),
-                EPFDBlocks.INDUCTION_STOVE.get()
+                EPFDMenuTypes.INDUCTION_STOVE_MENU,
+                EPFDBlocks.INDUCTION_STOVE
         );
     }
 
-    public InductionStoveMenu(int id, Inventory inv, BlockEntity blockEntity, UpgradeModuleInventory upgradeModuleInventory,
-                             ContainerData data) {
+    public InductionStoveMenu(int id, BlockEntity blockEntity, PlayerInventory playerInventory, UpgradeModuleInventory upgradeModuleInventory,
+                              PropertyDelegate data) {
         super(
-                id, inv, blockEntity,
+                id, blockEntity, playerInventory,
 
-                EPFDMenuTypes.INDUCTION_STOVE_MENU.get(),
+                EPFDMenuTypes.INDUCTION_STOVE_MENU,
 
-                EPFDBlocks.INDUCTION_STOVE.get(),
+                EPFDBlocks.INDUCTION_STOVE,
 
                 upgradeModuleInventory, data
         );

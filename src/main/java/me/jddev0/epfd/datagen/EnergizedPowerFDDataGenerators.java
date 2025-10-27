@@ -22,7 +22,7 @@ public class EnergizedPowerFDDataGenerators {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
         generator.addProvider(event.includeClient(), new ModBlockStateProvider(output, existingFileHelper));
-        //TODO add book page for Electric Stove and induction stove
+        generator.addProvider(event.includeClient(), new ModBookPageContentProvider(output, lookupProvider, existingFileHelper));
 
         generator.addProvider(event.includeServer(), new ModRecipeProvider(output, lookupProvider));
         generator.addProvider(event.includeServer(), ModLootTableProvider.create(output, lookupProvider));

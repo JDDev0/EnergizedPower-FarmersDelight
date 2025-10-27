@@ -14,5 +14,10 @@
   "advancements.energizedpowerfd.electric_stove.description": "Schnelleres Kochen durch Strom.",
 
   "advancements.energizedpowerfd.induction_stove.title": "Induktionsherd",
-  "advancements.energizedpowerfd.induction_stove.description": "Noch schnelleres Kochen durch Induktion."
+  "advancements.energizedpowerfd.induction_stove.description": "Noch schnelleres Kochen durch Induktion.",
+
+
+  "book.energizedpowerfd.page.electric_stoves.1": "Elektrische Herde sind schneller als der Herd von Farmer's Delight.",
+  "book.energizedpowerfd.page.electric_stoves.2": "E-Herd (2x schneller)",
+  "book.energizedpowerfd.page.electric_stoves.3": "Induktionsherd (3x schneller)"
 }

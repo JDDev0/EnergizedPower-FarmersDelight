@@ -1,0 +1,45 @@
+{
+  "block": [
+    "energizedpowerfd:electric_stove",
+    "energizedpowerfd:induction_stove"
+  ],
+  "content": {
+    "extra": [
+      {
+        "bold": true,
+        "color": "black",
+        "font": "minecraft:uniform",
+        "translate": "book.energizedpowerfd.page.electric_stoves.1"
+      },
+      {
+        "bold": true,
+        "color": "black",
+        "extra": [
+          {
+            "bold": true,
+            "color": "black",
+            "font": "minecraft:uniform",
+            "translate": "book.energizedpowerfd.page.electric_stoves.2"
+          }
+        ],
+        "font": "minecraft:uniform",
+        "text": "\n• "
+      },
+      {
+        "bold": true,
+        "color": "black",
+        "extra": [
+          {
+            "bold": true,
+            "color": "black",
+            "font": "minecraft:uniform",
+            "translate": "book.energizedpowerfd.page.electric_stoves.3"
+          }
+        ],
+        "font": "minecraft:uniform",
+        "text": "\n• "
+      }
+    ],
+    "text": ""
+  }
+}

@@ -14,5 +14,10 @@
   "advancements.energizedpowerfd.electric_stove.description": "Faster cooking with electricity.",
 
   "advancements.energizedpowerfd.induction_stove.title": "Induction Stove",
-  "advancements.energizedpowerfd.induction_stove.description": "Even faster cooking with induction."
+  "advancements.energizedpowerfd.induction_stove.description": "Even faster cooking with induction.",
+
+
+  "book.energizedpowerfd.page.electric_stoves.1": "Electric Stoves are faster than the Stove from Farmer's Delight.",
+  "book.energizedpowerfd.page.electric_stoves.2": "Electric Stove (2x faster)",
+  "book.energizedpowerfd.page.electric_stoves.3": "Induction Stove (3x faster)"
 }

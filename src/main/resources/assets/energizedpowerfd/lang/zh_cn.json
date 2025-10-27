@@ -7,5 +7,12 @@
   "item.energizedpowerfd.induction_stove": "Induction Stove",
   "container.energizedpowerfd.induction_stove": "Induction Stove",
 
-  "tooltip.energizedpowerfd.stoves.txt.shift.1": "The %s is %d times faster than the Stove from Farmer's Delight."
+  "tooltip.energizedpowerfd.stoves.txt.shift.1": "The %s is %d times faster than the Stove from Farmer's Delight.",
+
+
+  "advancements.energizedpowerfd.electric_stove.title": "Electric Stove",
+  "advancements.energizedpowerfd.electric_stove.description": "Faster cooking with electricity.",
+
+  "advancements.energizedpowerfd.induction_stove.title": "Induction Stove",
+  "advancements.energizedpowerfd.induction_stove.description": "Even faster cooking with induction."
 }

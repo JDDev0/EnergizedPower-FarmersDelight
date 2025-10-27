@@ -7,5 +7,12 @@
   "item.energizedpowerfd.induction_stove": "Induktionsherd",
   "container.energizedpowerfd.induction_stove": "Induktionsherd",
 
-  "tooltip.energizedpowerfd.stoves.txt.shift.1": "Der %s ist %d Mal schneller als der Herd von Farmer's Delight."
+  "tooltip.energizedpowerfd.stoves.txt.shift.1": "Der %s ist %d Mal schneller als der Herd von Farmer's Delight.",
+
+
+  "advancements.energizedpowerfd.electric_stove.title": "E-Herd",
+  "advancements.energizedpowerfd.electric_stove.description": "Schnelleres Kochen durch Strom.",
+
+  "advancements.energizedpowerfd.induction_stove.title": "Induktionsherd",
+  "advancements.energizedpowerfd.induction_stove.description": "Noch schnelleres Kochen durch Induktion."
 }

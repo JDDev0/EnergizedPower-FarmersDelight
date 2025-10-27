@@ -1,0 +1,33 @@
+{
+  "parent": "energizedpower:main/basics/basic_machine_frame",
+  "criteria": {
+    "has_the_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "energizedpowerfd:electric_stove"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.energizedpowerfd.electric_stove.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "energizedpowerfd:electric_stove"
+    },
+    "title": {
+      "translate": "advancements.energizedpowerfd.electric_stove.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

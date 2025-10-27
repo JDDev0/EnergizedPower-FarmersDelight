@@ -1,0 +1,33 @@
+{
+  "parent": "energizedpower:main/basics/hardened_machine_frame",
+  "criteria": {
+    "has_the_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "energizedpowerfd:induction_stove"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.energizedpowerfd.induction_stove.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "energizedpowerfd:induction_stove"
+    },
+    "title": {
+      "translate": "advancements.energizedpowerfd.induction_stove.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

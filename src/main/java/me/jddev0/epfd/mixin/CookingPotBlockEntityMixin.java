@@ -2,7 +2,6 @@ package me.jddev0.epfd.mixin;
 
 import me.jddev0.epfd.utils.CookingUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,8 +24,8 @@ public abstract class CookingPotBlockEntityMixin extends SyncedBlockEntity imple
         super(tileEntityTypeIn, pos, state);
     }
 
-    @Inject(method = "processCooking", at = @At("HEAD"))
-    private void processCooking(RecipeHolder<CookingPotRecipe> recipe, CookingPotBlockEntity cookingPot,
+    @Inject(method = "processCooking", at = @At("HEAD"), remap = false)
+    private void processCooking(CookingPotRecipe recipe, CookingPotBlockEntity cookingPot,
                                 CallbackInfoReturnable<Boolean> cir) {
         if(level == null)
             return;

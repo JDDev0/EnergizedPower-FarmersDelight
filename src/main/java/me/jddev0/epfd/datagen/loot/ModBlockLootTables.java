@@ -1,23 +1,21 @@
 package me.jddev0.epfd.datagen.loot;
 
 import me.jddev0.epfd.block.EPFDBlocks;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Set;
 
 public class ModBlockLootTables extends BlockLootSubProvider {
-    public ModBlockLootTables(HolderLookup.Provider lookupProvider) {
-        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), lookupProvider);
+    public ModBlockLootTables() {
+        super(Set.of(), FeatureFlags.REGISTRY.allFlags());
     }
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return EPFDBlocks.BLOCKS.getEntries().stream().map(Holder::value)::iterator;
+        return EPFDBlocks.BLOCKS.getEntries().stream().map(RegistryObject::get)::iterator;
     }
 
     @Override
@@ -26,7 +24,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         dropSelf(EPFDBlocks.INDUCTION_STOVE);
     }
 
-    private void dropSelf(DeferredHolder<Block, ? extends Block> block) {
+    private void dropSelf(RegistryObject<? extends Block> block) {
         dropSelf(block.get());
     }
 }

@@ -9,10 +9,10 @@ public final class CookingUtils {
     private CookingUtils() {}
 
     public static int getSpeedMultiplierForHeatSource(BlockState state) {
-        if(state.is(EPFDBlocks.ELECTRIC_STOVE))
+        if(state.is(EPFDBlocks.ELECTRIC_STOVE.get()))
             return ElectricStoveBlockEntity.RECIPE_DURATION_MULTIPLIER;
 
-        if(state.is(EPFDBlocks.INDUCTION_STOVE))
+        if(state.is(EPFDBlocks.INDUCTION_STOVE.get()))
             return InductionStoveBlockEntity.RECIPE_DURATION_MULTIPLIER;
 
         return -1;

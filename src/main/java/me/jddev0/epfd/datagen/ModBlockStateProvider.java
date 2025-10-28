@@ -4,14 +4,16 @@ import me.jddev0.epfd.EnergizedPowerFDMod;
 import me.jddev0.epfd.block.ElectricStoveBlock;
 import me.jddev0.epfd.block.EPFDBlocks;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.neoforged.neoforge.client.model.generators.*;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.ModelProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Objects;
 
@@ -39,12 +41,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 ElectricStoveBlock.LIT);
     }
 
-    private ModelFile orientableBlockModel(Holder<? extends Block> block, boolean uniqueBottomTexture) {
+    private ModelFile orientableBlockModel(RegistryObject<? extends Block> block, boolean uniqueBottomTexture) {
         return orientableBlockModel(block, "", "_top", uniqueBottomTexture?"_bottom":"_top",
                 "_front", "_side");
     }
 
-    private ModelFile orientableBlockModel(Holder<? extends Block> block, String fileSuffix, String topSuffix,
+    private ModelFile orientableBlockModel(RegistryObject<? extends Block> block, String fileSuffix, String topSuffix,
                                            String bottomSuffix, String frontSuffix, String sideSuffix) {
         ResourceLocation blockId = Objects.requireNonNull(block.getKey()).location();
 
@@ -57,9 +59,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 texture("side", getBlockTexture(block, sideSuffix));
     }
 
-    private void activatableOrientableBlockWithItem(Holder<? extends Block> block, ModelFile modelNormal,
+    private void activatableOrientableBlockWithItem(RegistryObject<? extends Block> block, ModelFile modelNormal,
                                                     ModelFile modelActive, BooleanProperty isActiveProperty) {
-        getVariantBuilder(block.value()).partialState().
+        getVariantBuilder(block.get()).partialState().
                 with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH).with(isActiveProperty, false).modelForState().
                 modelFile(modelNormal).addModel().partialState().
                 with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH).with(isActiveProperty, true).modelForState().
@@ -77,13 +79,13 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST).with(isActiveProperty, true).modelForState().
                 rotationY(270).modelFile(modelActive).addModel().partialState();
 
-        simpleBlockItem(block.value(), modelNormal);
+        simpleBlockItem(block.get(), modelNormal);
     }
 
-    private ResourceLocation getBlockTexture(Holder<? extends Block> block, String pathSuffix) {
-        ResourceLocation blockId = Objects.requireNonNull(block.getKey()).location();
+    private ResourceLocation getBlockTexture(RegistryObject<? extends Block> block, String pathSuffix) {
+        ResourceLocation blockId = block.getId();
 
-        return ResourceLocation.fromNamespaceAndPath(blockId.getNamespace(),
+        return new ResourceLocation(blockId.getNamespace(),
                 ModelProvider.BLOCK_FOLDER + "/" + blockId.getPath() + pathSuffix);
     }
 }

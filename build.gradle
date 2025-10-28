@@ -1,14 +1,144 @@
 plugins {
-    id 'java-library'
     id 'eclipse'
-    id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.180'
+    id 'net.minecraftforge.gradle' version '6.0.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
     id "me.shedaniel.unified-publishing" version "0.1.+"
 }
 
-version = mod_version
-group = mod_group_id
+version = '1.20.1-1.0.1-forge'
+group = 'me.jddev0.energizedpowerfd' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'energizedpowerfd'
+
+// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
+minecraft {
+    // The mappings can be changed at any time and must be in the following format.
+    // Channel:   Version:
+    // official   MCVersion             Official field/method names from Mojang mapping files
+    // parchment  YYYY.MM.DD-MCVersion  Open community-sourced parameter names and javadocs layered on top of official
+    //
+    // You must be aware of the Mojang license when using the 'official' or 'parchment' mappings.
+    // See more information here: https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md
+    //
+    // Parchment is an unofficial project maintained by ParchmentMC, separate from MinecraftForge
+    // Additional setup is needed to use their mappings: https://github.com/ParchmentMC/Parchment/wiki/Getting-Started
+    //
+    // Use non-default mappings at your own risk. They may not always work.
+    // Simply re-run your setup task after changing the mappings to update your workspace.
+    mappings channel: 'official', version: '1.20.1'
+
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+            property 'forge.logging.console.level', 'debug'
+
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'energizedpowerfd'
+
+            // Fix mixin dependencies
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
+            mods {
+                energizedpowerfd {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+
+            property 'forge.enabledGameTestNamespaces', 'energizedpowerfd'
+
+            // Fix mixin dependencies
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
+            // Disable Server GUI
+            arg '--nogui'
+
+            mods {
+                energizedpowerfd {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+
+            property 'forge.enabledGameTestNamespaces', 'energizedpowerfd'
+
+            // Fix mixin dependencies
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
+            mods {
+                energizedpowerfd {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            args '--mod', 'energizedpowerfd', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+            // Fix mixin dependencies
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
+            mods {
+                energizedpowerfd {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+// Include resources generated by data generators.
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+mixin {
+    // MixinGradle Settings
+    add sourceSets.main, "${project.archivesBaseName}.mixins.refmap.json"
+    config "${project.archivesBaseName}.mixins.json"
+}
 
 repositories {
     maven { url "https://maven.shedaniel.me" }
@@ -39,98 +169,6 @@ repositories {
     }
 }
 
-base {
-    archivesName = mod_id
-}
-
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-
-// Default run configurations.
-// These can be tweaked, removed, or duplicated as needed.
-runs {
-    // applies to all the run configs below
-    configureEach {
-        // Recommended logging data for a userdev environment
-        // The markers can be added/remove as needed separated by commas.
-        // "SCAN": For mods scan.
-        // "REGISTRIES": For firing of registry events.
-        // "REGISTRYDUMP": For getting the contents of all registries.
-        systemProperty 'forge.logging.markers', 'REGISTRIES'
-
-        // Recommended logging level for the console
-        // You can set various levels here.
-        // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-        systemProperty 'forge.logging.console.level', 'debug'
-
-        modSource project.sourceSets.main
-    }
-
-    client {
-        // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-
-        // Change run folder location
-        workingDirectory project.file('run')
-
-        // Fix mixin dependencies
-        systemProperty 'mixin.env.remapRefMap', 'true'
-        systemProperty 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-    }
-
-    server {
-        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-        arguments '--nogui'
-
-        // Change run folder location
-        workingDirectory project.file('run')
-
-        // Fix mixin dependencies
-        systemProperty 'mixin.env.remapRefMap', 'true'
-        systemProperty 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-    }
-
-    gameTestServer {
-        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-        arguments '--nogui'
-
-        // Change run folder location
-        workingDirectory project.file('run')
-
-        // Fix mixin dependencies
-        systemProperty 'mixin.env.remapRefMap', 'true'
-        systemProperty 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-    }
-
-    junit {
-        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-
-        // Change run folder location
-        workingDirectory project.file('run')
-
-        // Fix mixin dependencies
-        systemProperty 'mixin.env.remapRefMap', 'true'
-        systemProperty 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-    }
-
-    data {
-        // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
-        // workingDirectory project.file('run-data')
-
-        // Change run folder location
-        workingDirectory project.file('run')
-
-        // Fix mixin dependencies
-        systemProperty 'mixin.env.remapRefMap', 'true'
-        systemProperty 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-
-        // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-        arguments '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-    }
-}
-
-// Include resources generated by data generators.
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
 // Sets up a dependency configuration called 'localRuntime'.
 // This configuration should be used instead of 'runtimeOnly' to declare
 // a dependency that will be present for runtime testing but that is
@@ -140,47 +178,28 @@ configurations {
 }
 
 dependencies {
-    // Specify the version of Minecraft to use.
-    // Depending on the plugin applied there are several options. We will assume you applied the userdev plugin as shown above.
-    // The group for userdev is net.neoforged, the module name is neoforge, and the version is the same as the neoforge version.
-    // You can however also use the vanilla plugin (net.neoforged.gradle.vanilla) to use a version of Minecraft without the neoforge loader.
-    // And its provides the option to then use net.minecraft as the group, and one of; client, server or joined as the module name, plus the game version as version.
-    // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
-    implementation "net.neoforged:neoforge:${neo_version}"
+    // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
+    // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
+    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
+    minecraft 'net.minecraftforge:forge:1.20.1-47.3.0'
+
+    // Apply Mixin AP
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // Energized Power dependency
-    compileOnly "curse.maven:energized-power-782147:7046217"
+    compileOnly fg.deobf("curse.maven:energized-power-782147:7046211")
 
-    localRuntime "curse.maven:energized-power-782147:7046217"
+    localRuntime fg.deobf("curse.maven:energized-power-782147:7046211")
 
     // Farmer's Delight integration
-    compileOnly "curse.maven:farmers-delight-398521:6917256"
+    compileOnly fg.deobf("curse.maven:farmers-delight-398521:6917255")
 
-    localRuntime "curse.maven:farmers-delight-398521:6917256"
+    localRuntime fg.deobf("curse.maven:farmers-delight-398521:6917255")
 
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    localRuntime "mezz.jei:jei-1.21.1-neoforge:19.21.0.247"
-}
-
-// This block of code expands all declared replace properties in the specified resource targets.
-// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
-// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
-// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
-tasks.withType(ProcessResources).configureEach {
-    var replaceProperties = [
-            minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
-            neo_version         : neo_version, neo_version_range: neo_version_range,
-            loader_version_range: loader_version_range,
-            mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-            mod_authors         : mod_authors, mod_description: mod_description,
-    ]
-    inputs.properties replaceProperties
-
-    filesMatching(['META-INF/neoforge.mods.toml']) {
-        expand replaceProperties + [project: project]
-    }
+    localRuntime fg.deobf("mezz.jei:jei-1.20.1-forge:15.20.0.116")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
@@ -193,10 +212,17 @@ jar {
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "JDDev0",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                'MixinConfigs'            : "${project.archivesBaseName}.mixins.json"
         ])
     }
 }
+
+// Example configuration to allow publishing using the maven-publish plugin
+// This is the preferred method to reobfuscate your jar file
+jar.finalizedBy('reobfJar')
+// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
+// publish.dependsOn('reobfJar')
 
 publishing {
     publications {
@@ -221,14 +247,14 @@ tasks.publishUnified {
 
 unifiedPublishing {
     project {
-        displayName = "Energized Power - FD - " + project.minecraft_version + " - v" + project.mod_version.split("-")[1] + " [NeoForge]"
-        version = project.mod_version
+        displayName = "Energized Power - FD - " + "1.20.1" + " - v" + project.version.split("-")[1] + " [Forge/NeoForge]"
+        version = project.version
         changelog = new File("CHANGELOG.md").exists()?new File("CHANGELOG.md").getText("UTF-8"):""
         releaseType = "release"
-        gameVersions = [project.minecraft_version]
-        gameLoaders = ["neoforge"]
+        gameVersions = ["1.20.1"]
+        gameLoaders = ["forge", "neoforge"]
 
-        mainPublication.set(project.rootDir.toPath().resolve("build/libs").resolve(project.mod_id + "-" + project.version + ".jar").toFile())
+        mainPublication.set(project.rootDir.toPath().resolve("build/libs").resolve(project.archivesBaseName + "-" + project.version + ".jar").toFile())
 
         relations {
             depends {
@@ -258,10 +284,7 @@ unifiedPublishing {
     }
 }
 
-// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
-idea {
-    module {
-        downloadSources = true
-        downloadJavadoc = true
-    }
+//Dummy task to fix post sync error caused by NeoGradle
+tasks.register("idePostSync") {
+
 }

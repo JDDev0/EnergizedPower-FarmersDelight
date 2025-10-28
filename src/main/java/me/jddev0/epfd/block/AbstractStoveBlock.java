@@ -3,6 +3,8 @@ package me.jddev0.epfd.block;
 import me.jddev0.epfd.block.entity.AbstractStoveBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -15,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.function.ToIntFunction;
 
@@ -66,7 +69,7 @@ public abstract class AbstractStoveBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos blockPos, Player player, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level level, BlockPos blockPos, Player player, InteractionHand handItem, BlockHitResult hit) {
         if(level.isClientSide())
             return InteractionResult.sidedSuccess(level.isClientSide());
 
@@ -74,7 +77,7 @@ public abstract class AbstractStoveBlock extends BaseEntityBlock {
         if(!(blockEntity instanceof AbstractStoveBlockEntity))
             throw new IllegalStateException("Container is invalid");
 
-        player.openMenu((AbstractStoveBlockEntity)blockEntity, blockPos);
+        NetworkHooks.openScreen((ServerPlayer)player, (AbstractStoveBlockEntity)blockEntity, blockPos);
 
         return InteractionResult.sidedSuccess(level.isClientSide());
     }

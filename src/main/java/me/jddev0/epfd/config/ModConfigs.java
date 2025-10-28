@@ -5,7 +5,7 @@ import me.jddev0.ep.config.Config;
 import me.jddev0.ep.config.ConfigValidationException;
 import me.jddev0.ep.config.ConfigValue;
 import me.jddev0.ep.config.value.*;
-import net.neoforged.fml.loading.FMLPaths;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.slf4j.Logger;
 
 import java.io.File;

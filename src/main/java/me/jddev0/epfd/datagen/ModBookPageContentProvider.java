@@ -3,22 +3,18 @@ package me.jddev0.epfd.datagen;
 import me.jddev0.ep.datagen.generators.PageContentProvider;
 import me.jddev0.epfd.block.EPFDBlocks;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-
-import java.util.concurrent.CompletableFuture;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModBookPageContentProvider extends PageContentProvider {
-    private static final Style UNIFORM = Style.EMPTY.withFont(ResourceLocation.withDefaultNamespace("uniform"));
+    private static final Style UNIFORM = Style.EMPTY.withFont(new ResourceLocation("uniform"));
     private static final Style DEFAULT_FONT = Style.EMPTY.withFont(Style.DEFAULT_FONT);
 
-    public ModBookPageContentProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
-                                      ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, "energizedpowerfd", existingFileHelper);
+    public ModBookPageContentProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
+        super(output, "energizedpowerfd", existingFileHelper);
     }
 
     @Override

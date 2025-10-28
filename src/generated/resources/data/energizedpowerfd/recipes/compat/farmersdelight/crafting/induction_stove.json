@@ -12,7 +12,7 @@
       "item": "energizedpower:hardened_machine_frame"
     },
     "S": {
-      "tag": "c:ingots/steel"
+      "tag": "forge:ingots/steel"
     }
   },
   "pattern": [
@@ -21,7 +21,6 @@
     "SES"
   ],
   "result": {
-    "count": 1,
-    "id": "energizedpowerfd:induction_stove"
+    "item": "energizedpowerfd:induction_stove"
   }
 }

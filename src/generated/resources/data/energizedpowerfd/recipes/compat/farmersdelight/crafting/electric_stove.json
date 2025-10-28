@@ -6,10 +6,10 @@
       "item": "energizedpower:basic_machine_frame"
     },
     "I": {
-      "tag": "c:plates/iron"
+      "tag": "forge:plates/iron"
     },
     "R": {
-      "tag": "c:dusts/redstone"
+      "tag": "forge:dusts/redstone"
     },
     "S": {
       "item": "farmersdelight:stove"
@@ -21,7 +21,6 @@
     "ISI"
   ],
   "result": {
-    "count": 1,
-    "id": "energizedpowerfd:electric_stove"
+    "item": "energizedpowerfd:electric_stove"
   }
 }

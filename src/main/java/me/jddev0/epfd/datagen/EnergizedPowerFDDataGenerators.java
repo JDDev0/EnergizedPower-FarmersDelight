@@ -4,14 +4,14 @@ import me.jddev0.epfd.EnergizedPowerFDMod;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(modid = EnergizedPowerFDMod.MODID, bus = EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = EnergizedPowerFDMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EnergizedPowerFDDataGenerators {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
@@ -22,10 +22,10 @@ public class EnergizedPowerFDDataGenerators {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
         generator.addProvider(event.includeClient(), new ModBlockStateProvider(output, existingFileHelper));
-        generator.addProvider(event.includeClient(), new ModBookPageContentProvider(output, lookupProvider, existingFileHelper));
+        generator.addProvider(event.includeClient(), new ModBookPageContentProvider(output, existingFileHelper));
 
-        generator.addProvider(event.includeServer(), new ModRecipeProvider(output, lookupProvider));
-        generator.addProvider(event.includeServer(), ModLootTableProvider.create(output, lookupProvider));
+        generator.addProvider(event.includeServer(), new ModRecipeProvider(output));
+        generator.addProvider(event.includeServer(), ModLootTableProvider.create(output));
         generator.addProvider(event.includeServer(), ModAdvancementProvider.create(output, lookupProvider, existingFileHelper));
 
         generator.addProvider(event.includeServer(),

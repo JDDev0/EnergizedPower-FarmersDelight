@@ -1,4 +1,4 @@
-// 1.21.1	2024-10-09T19:06:44.666790428	Tags for minecraft:block mod id energizedpowerfd
-0c6e633a52edf3b3ab712a8e5fd864a2a27786f1 data/farmersdelight/tags/block/heat_sources.json
-0c6e633a52edf3b3ab712a8e5fd864a2a27786f1 data/minecraft/tags/block/mineable/pickaxe.json
-0c6e633a52edf3b3ab712a8e5fd864a2a27786f1 data/minecraft/tags/block/needs_stone_tool.json
+// 1.20.1	2025-10-28T16:01:52.955652591	Tags for minecraft:block mod id energizedpowerfd
+0c6e633a52edf3b3ab712a8e5fd864a2a27786f1 data/farmersdelight/tags/blocks/heat_sources.json
+0c6e633a52edf3b3ab712a8e5fd864a2a27786f1 data/minecraft/tags/blocks/mineable/pickaxe.json
+0c6e633a52edf3b3ab712a8e5fd864a2a27786f1 data/minecraft/tags/blocks/needs_stone_tool.json

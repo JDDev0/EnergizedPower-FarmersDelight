@@ -7,7 +7,6 @@ import me.jddev0.ep.machine.configuration.RedstoneMode;
 import me.jddev0.ep.machine.configuration.RedstoneModeUpdate;
 import me.jddev0.ep.machine.upgrade.UpgradeModuleModifier;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,15 +27,15 @@ public abstract class ConfigurableUpgradableEnergyStorageBlockEntity
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag nbt, @NotNull HolderLookup.Provider registries) {
-        super.saveAdditional(nbt, registries);
+    protected void saveAdditional(@NotNull CompoundTag nbt) {
+        super.saveAdditional(nbt);
 
         nbt.putInt("configuration.redstone_mode", redstoneMode.ordinal());
     }
 
     @Override
-    protected void loadAdditional(@NotNull CompoundTag nbt, @NotNull HolderLookup.Provider registries) {
-        super.loadAdditional(nbt, registries);
+    public void load(@NotNull CompoundTag nbt) {
+        super.load(nbt);
 
         redstoneMode = RedstoneMode.fromIndex(nbt.getInt("configuration.redstone_mode"));
     }

@@ -1,11 +1,12 @@
 {
-  "parent": "minecraft:recipes/root",
   "criteria": {
     "has_the_ingredient": {
       "conditions": {
         "items": [
           {
-            "items": "energizedpower:basic_machine_frame"
+            "items": [
+              "energizedpower:hardened_machine_frame"
+            ]
           }
         ]
       },
@@ -13,7 +14,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "energizedpowerfd:compat/farmersdelight/crafting/electric_stove"
+        "recipe": "energizedpowerfd:compat/farmersdelight/crafting/induction_stove"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +27,8 @@
   ],
   "rewards": {
     "recipes": [
-      "energizedpowerfd:compat/farmersdelight/crafting/electric_stove"
+      "energizedpowerfd:compat/farmersdelight/crafting/induction_stove"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

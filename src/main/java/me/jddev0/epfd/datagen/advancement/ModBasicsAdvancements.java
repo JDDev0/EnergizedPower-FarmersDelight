@@ -3,9 +3,8 @@ package me.jddev0.epfd.datagen.advancement;
 import me.jddev0.ep.api.EPAPI;
 import me.jddev0.epfd.block.EPFDBlocks;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.HolderLookup;
@@ -16,52 +15,72 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.common.data.AdvancementProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.data.ForgeAdvancementProvider;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Consumer;
 
-public class ModBasicsAdvancements implements AdvancementProvider.AdvancementGenerator {
+public class ModBasicsAdvancements implements ForgeAdvancementProvider.AdvancementGenerator {
     @Override
-    public void generate(HolderLookup.Provider lookupProvider, Consumer<AdvancementHolder> advancementOutput,
+    public void generate(HolderLookup.Provider lookupProvider, Consumer<Advancement> advancementOutput,
                          ExistingFileHelper existingFileHelper) {
-        AdvancementHolder electric_stove = addAdvancement(
+        Advancement electric_stove = addAdvancement(
                 advancementOutput, existingFileHelper, EPAPI.id("main/basics/basic_machine_frame"),
-                EPFDBlocks.ELECTRIC_STOVE, "electric_stove", AdvancementType.TASK
+                EPFDBlocks.ELECTRIC_STOVE_ITEM, "electric_stove", FrameType.TASK
         );
 
-        AdvancementHolder induction_stove = addAdvancement(
+        Advancement induction_stove = addAdvancement(
                 advancementOutput, existingFileHelper, EPAPI.id("main/basics/hardened_machine_frame"),
-                EPFDBlocks.INDUCTION_STOVE, "induction_stove", AdvancementType.TASK
+                EPFDBlocks.INDUCTION_STOVE_ITEM, "induction_stove", FrameType.TASK
         );
     }
 
-    private AdvancementHolder addAdvancement(Consumer<AdvancementHolder> advancementOutput, ExistingFileHelper existingFileHelper,
-                                             ResourceLocation parent, ItemLike icon, String advancementId, AdvancementType type) {
+    private Advancement addAdvancement(Consumer<Advancement> advancementOutput, ExistingFileHelper existingFileHelper,
+                                       ResourceLocation parent, RegistryObject<Item> icon, String advancementId, FrameType type) {
+        return addAdvancement(advancementOutput, existingFileHelper, parent, icon.get(), advancementId, type);
+    }
+    private Advancement addAdvancement(Consumer<Advancement> advancementOutput, ExistingFileHelper existingFileHelper,
+                                       ResourceLocation parent, ItemLike icon, String advancementId, FrameType type) {
         return addAdvancement(advancementOutput, existingFileHelper, parent, icon, advancementId, type, icon);
     }
-    private AdvancementHolder addAdvancement(Consumer<AdvancementHolder> advancementOutput, ExistingFileHelper existingFileHelper,
-                                             ResourceLocation parent, ItemLike icon, String advancementId, AdvancementType type,
-                                             ItemLike trigger) {
+    private Advancement addAdvancement(Consumer<Advancement> advancementOutput, ExistingFileHelper existingFileHelper,
+                                       ResourceLocation parent, RegistryObject<Item> icon, String advancementId, FrameType type,
+                                       RegistryObject<Item> trigger) {
+        return addAdvancement(advancementOutput, existingFileHelper, parent, icon.get(), advancementId, type, trigger.get());
+    }
+    private Advancement addAdvancement(Consumer<Advancement> advancementOutput, ExistingFileHelper existingFileHelper,
+                                       ResourceLocation parent, ItemLike icon, String advancementId, FrameType type,
+                                       ItemLike trigger) {
         return addAdvancement(advancementOutput, existingFileHelper, parent, new ItemStack(icon), advancementId, type,
                 InventoryChangeTrigger.TriggerInstance.hasItems(trigger));
     }
-    private AdvancementHolder addAdvancement(Consumer<AdvancementHolder> advancementOutput, ExistingFileHelper existingFileHelper,
-                                             ResourceLocation parent, ItemLike icon, String advancementId, AdvancementType type,
-                                             TagKey<Item> trigger) {
+    private Advancement addAdvancement(Consumer<Advancement> advancementOutput, ExistingFileHelper existingFileHelper,
+                                       ResourceLocation parent, RegistryObject<Item> icon, String advancementId, FrameType type,
+                                       TagKey<Item> trigger) {
+        return addAdvancement(advancementOutput, existingFileHelper, parent, icon.get(), advancementId, type, trigger);
+    }
+    private Advancement addAdvancement(Consumer<Advancement> advancementOutput, ExistingFileHelper existingFileHelper,
+                                       ResourceLocation parent, ItemLike icon, String advancementId, FrameType type,
+                                       TagKey<Item> trigger) {
         return addAdvancement(advancementOutput, existingFileHelper, parent, new ItemStack(icon), advancementId, type,
                 InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(
                         trigger
-                )));
+                ).build()));
     }
-    private AdvancementHolder addAdvancement(Consumer<AdvancementHolder> advancementOutput, ExistingFileHelper existingFileHelper,
-                                             ResourceLocation parent, ItemLike icon, String advancementId, AdvancementType type,
-                                             Criterion<?> trigger) {
+    private Advancement addAdvancement(Consumer<Advancement> advancementOutput, ExistingFileHelper existingFileHelper,
+                                       ResourceLocation parent, RegistryObject<Item> icon, String advancementId, FrameType type,
+                                       AbstractCriterionTriggerInstance trigger) {
+        return addAdvancement(advancementOutput, existingFileHelper, parent, icon.get(), advancementId, type, trigger);
+    }
+    private Advancement addAdvancement(Consumer<Advancement> advancementOutput, ExistingFileHelper existingFileHelper,
+                                       ResourceLocation parent, ItemLike icon, String advancementId, FrameType type,
+                                       AbstractCriterionTriggerInstance trigger) {
         return addAdvancement(advancementOutput, existingFileHelper, parent, new ItemStack(icon), advancementId, type, trigger);
     }
-    private AdvancementHolder addAdvancement(Consumer<AdvancementHolder> advancementOutput, ExistingFileHelper existingFileHelper,
-                                             ResourceLocation parent, ItemStack icon, String advancementId, AdvancementType type,
-                                             Criterion<?> trigger) {
+    private Advancement addAdvancement(Consumer<Advancement> advancementOutput, ExistingFileHelper existingFileHelper,
+                                             ResourceLocation parent, ItemStack icon, String advancementId, FrameType type,
+                                             AbstractCriterionTriggerInstance trigger) {
         return Advancement.Builder.advancement().parent(AdvancementSubProvider.createPlaceholder(parent.toString())).
                 display(
                         icon,

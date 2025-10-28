@@ -1,6 +1,5 @@
 package me.jddev0.epfd.block;
 
-import com.mojang.serialization.MapCodec;
 import me.jddev0.epfd.block.entity.InductionStoveBlockEntity;
 import me.jddev0.epfd.block.entity.EPFDBlockEntities;
 import net.minecraft.ChatFormatting;
@@ -11,7 +10,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -22,15 +20,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class InductionStoveBlock extends AbstractStoveBlock {
-    public static final MapCodec<InductionStoveBlock> CODEC = simpleCodec(InductionStoveBlock::new);
-
     protected InductionStoveBlock(Properties props) {
         super(props);
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Nullable
@@ -51,7 +42,7 @@ public class InductionStoveBlock extends AbstractStoveBlock {
         }
 
         @Override
-        public void appendHoverText(ItemStack itemStack, TooltipContext context, List<Component> components, TooltipFlag flag) {
+        public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag flag) {
             if(Screen.hasShiftDown()) {
                 components.add(Component.translatable("tooltip.energizedpowerfd.stoves.txt.shift.1",
                         Component.translatable(getDescriptionId(itemStack)),

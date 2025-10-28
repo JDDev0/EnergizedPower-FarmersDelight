@@ -25,7 +25,7 @@ public abstract class SkilletBlockEntityMixin extends SyncedBlockEntity implemen
         super(tileEntityTypeIn, pos, state);
     }
 
-    @Inject(method = "cookAndOutputItems", at = @At("HEAD"))
+    @Inject(method = "cookAndOutputItems", at = @At("HEAD"), remap = false)
     private void cookAndOutputItems(ItemStack cookingStack, Level level, CallbackInfo ci) {
         if(level == null)
             return;

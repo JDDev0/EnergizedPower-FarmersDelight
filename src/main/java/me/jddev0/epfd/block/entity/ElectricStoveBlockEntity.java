@@ -8,7 +8,10 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ElectricStoveBlockEntity extends AbstractStoveBlockEntity {
@@ -34,7 +37,12 @@ public class ElectricStoveBlockEntity extends AbstractStoveBlockEntity {
         return new ElectricStoveMenu(id, inventory, this, upgradeModuleInventory, data);
     }
 
-    public @Nullable IEnergyStorage getEnergyStorageCapability(@Nullable Direction side) {
-        return energyStorage;
+    @Override
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if(cap == ForgeCapabilities.ENERGY) {
+            return lazyEnergyStorage.cast();
+        }
+
+        return super.getCapability(cap, side);
     }
 }

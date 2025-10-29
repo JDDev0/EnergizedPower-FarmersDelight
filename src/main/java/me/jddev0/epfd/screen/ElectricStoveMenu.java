@@ -5,13 +5,13 @@ import me.jddev0.epfd.block.EPFDBlocks;
 import me.jddev0.epfd.block.entity.ElectricStoveBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.util.math.BlockPos;
 
 public class ElectricStoveMenu extends AbstractStoveMenu<ElectricStoveBlockEntity> {
-    public ElectricStoveMenu(int id, PlayerInventory inv, BlockPos pos) {
+    public ElectricStoveMenu(int id, PlayerInventory inv, PacketByteBuf buf) {
         super(
-                id, inv, pos,
+                id, inv, buf,
 
                 EPFDMenuTypes.ELECTRIC_STOVE_MENU,
                 EPFDBlocks.ELECTRIC_STOVE

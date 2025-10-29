@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 import java.util.concurrent.CompletableFuture;
 
 public class ModBookPageContentProvider extends PageContentProvider {
-    private static final Style UNIFORM = Style.EMPTY.withFont(Identifier.ofVanilla("uniform"));
+    private static final Style UNIFORM = Style.EMPTY.withFont(new Identifier("uniform"));
     private static final Style DEFAULT_FONT = Style.EMPTY.withFont(Style.DEFAULT_FONT_ID);
 
     public ModBookPageContentProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> lookupProvider) {

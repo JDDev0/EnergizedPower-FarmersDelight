@@ -5,7 +5,9 @@
       "conditions": {
         "items": [
           {
-            "items": "energizedpowerfd:electric_stove"
+            "items": [
+              "energizedpowerfd:electric_stove"
+            ]
           }
         ]
       },
@@ -13,13 +15,16 @@
     }
   },
   "display": {
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.energizedpowerfd.electric_stove.description"
     },
+    "frame": "task",
+    "hidden": false,
     "icon": {
-      "count": 1,
-      "id": "energizedpowerfd:electric_stove"
+      "item": "energizedpowerfd:electric_stove"
     },
+    "show_toast": true,
     "title": {
       "translate": "advancements.energizedpowerfd.electric_stove.title"
     }

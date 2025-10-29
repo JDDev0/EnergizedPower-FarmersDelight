@@ -1,6 +1,10 @@
 package me.jddev0.epfd.datagen;
 
 import me.jddev0.ep.block.EPBlocks;
+import me.jddev0.ep.datagen.recipe.PlantGrowthChamberFinishedRecipe;
+import me.jddev0.ep.datagen.recipe.SawmillFinishedRecipe;
+import me.jddev0.ep.datagen.recipe.ShapedFinishedRecipe;
+import me.jddev0.ep.datagen.recipe.ShapelessFinishedRecipe;
 import me.jddev0.ep.item.EPItems;
 import me.jddev0.ep.registry.tags.CommonItemTags;
 import me.jddev0.epfd.EnergizedPowerFDMod;
@@ -8,22 +12,17 @@ import me.jddev0.ep.recipe.*;
 import me.jddev0.epfd.block.EPFDBlocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.advancement.Advancement;
-import net.minecraft.advancement.AdvancementCriterion;
-import net.minecraft.advancement.AdvancementRequirements;
 import net.minecraft.advancement.AdvancementRewards;
+import net.minecraft.advancement.CriterionMerger;
 import net.minecraft.advancement.criterion.InventoryChangedCriterion;
 import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
-import net.minecraft.data.server.recipe.RecipeExporter;
+import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RawShapedRecipe;
-import net.minecraft.recipe.ShapedRecipe;
-import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import vectorwing.farmersdelight.FarmersDelight;
@@ -34,29 +33,29 @@ import vectorwing.farmersdelight.common.tag.ModTags;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public class ModRecipeProvider extends FabricRecipeProvider {
     private static final String FARMERS_DELIGHT_MOD_ID = FarmersDelight.MODID;
     private static final String PATH_PREFIX = "compat/" + FARMERS_DELIGHT_MOD_ID + "/";
 
-    public ModRecipeProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> lookupProvider) {
-        super(output, lookupProvider);
+    public ModRecipeProvider(FabricDataOutput output) {
+        super(output);
     }
 
     @Override
-    public void generate(RecipeExporter output) {
+    public void generate(Consumer<RecipeJsonProvider> output) {
         buildCraftingRecipes(output);
         buildSawmillRecipes(output);
         buildPlantGrowthChamberRecipes(output);
     }
 
-    private void buildCraftingRecipes(RecipeExporter output) {
+    private void buildCraftingRecipes(Consumer<RecipeJsonProvider> output) {
         buildMachineCraftingRecipes(output);
     }
-    private void buildMachineCraftingRecipes(RecipeExporter output) {
+    private void buildMachineCraftingRecipes(Consumer<RecipeJsonProvider> output) {
         addShapedCraftingRecipe(output, conditionsFromItem(EPBlocks.BASIC_MACHINE_FRAME_ITEM), Map.of(
-                'I', Ingredient.fromTag(CommonItemTags.PLATES_IRON),
+                'I', Ingredient.fromTag(CommonItemTags.IRON_PLATES),
                 'R', Ingredient.fromTag(ConventionalItemTags.REDSTONE_DUSTS),
                 'B', Ingredient.ofItems(EPBlocks.BASIC_MACHINE_FRAME_ITEM),
                 'S', Ingredient.ofItems(ModBlocks.STOVE.get())
@@ -67,7 +66,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         }, new ItemStack(EPFDBlocks.ELECTRIC_STOVE_ITEM), CraftingRecipeCategory.MISC);
 
         addShapedCraftingRecipe(output, conditionsFromItem(EPBlocks.HARDENED_MACHINE_FRAME_ITEM), Map.of(
-                'S', Ingredient.fromTag(CommonItemTags.INGOTS_STEEL),
+                'S', Ingredient.fromTag(CommonItemTags.STEEL_INGOTS),
                 'B', Ingredient.ofItems(EPItems.BASIC_CIRCUIT),
                 'H', Ingredient.ofItems(EPBlocks.HARDENED_MACHINE_FRAME_ITEM),
                 'E', Ingredient.ofItems(EPFDBlocks.ELECTRIC_STOVE_ITEM)
@@ -78,7 +77,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         }, new ItemStack(EPFDBlocks.INDUCTION_STOVE_ITEM), CraftingRecipeCategory.MISC);
     }
 
-    private void buildSawmillRecipes(RecipeExporter output) {
+    private void buildSawmillRecipes(Consumer<RecipeJsonProvider> output) {
         addSawmillRecipe(output, Ingredient.ofItems(ModItems.CUTTING_BOARD.get()), new ItemStack(Items.OAK_PLANKS, 4),
                 2, "oak_planks", "cutting_board");
 
@@ -86,7 +85,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 3, "sticks", "cabinets");
     }
 
-    private void buildPlantGrowthChamberRecipes(RecipeExporter output) {
+    private void buildPlantGrowthChamberRecipes(Consumer<RecipeJsonProvider> output) {
         addPlantGrowthChamberRecipe(output, Ingredient.ofItems(ModItems.TOMATO_SEEDS.get()), new OutputItemStackWithPercentages[] {
                 new OutputItemStackWithPercentages(new ItemStack(ModItems.TOMATO_SEEDS.get()), new double[] {
                         1.
@@ -114,84 +113,100 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 })
         }, 16000, "cabbage", "cabbage_seeds");
     }
-    private static void addShapedCraftingRecipe(RecipeExporter output, AdvancementCriterion<InventoryChangedCriterion.Conditions> hasIngredientTrigger,
+    private static void addShapedCraftingRecipe(Consumer<RecipeJsonProvider> output, InventoryChangedCriterion.Conditions hasIngredientTrigger,
                                                 Map<Character, Ingredient> key, String[] pattern,
                                                 ItemStack result, CraftingRecipeCategory category) {
         addShapedCraftingRecipe(output, hasIngredientTrigger, key, pattern, result, category, "");
     }
-    private static void addShapedCraftingRecipe(RecipeExporter output, AdvancementCriterion<InventoryChangedCriterion.Conditions> hasIngredientTrigger,
+    private static void addShapedCraftingRecipe(Consumer<RecipeJsonProvider> output, InventoryChangedCriterion.Conditions hasIngredientTrigger,
                                                 Map<Character, Ingredient> key, String[] pattern,
                                                 ItemStack result, CraftingRecipeCategory category,
                                                 String group) {
         addShapedCraftingRecipe(output, hasIngredientTrigger, key, pattern, result, category, group, "");
     }
-    private static void addShapedCraftingRecipe(RecipeExporter output, AdvancementCriterion<InventoryChangedCriterion.Conditions> hasIngredientTrigger,
+    private static void addShapedCraftingRecipe(Consumer<RecipeJsonProvider> output, InventoryChangedCriterion.Conditions hasIngredientTrigger,
                                                 Map<Character, Ingredient> key, String[] pattern,
                                                 ItemStack result, CraftingRecipeCategory category,
                                                 String group, String recipeIdSuffix) {
         addShapedCraftingRecipe(output, hasIngredientTrigger, key, pattern, result, category, group, recipeIdSuffix, "");
     }
-    private static void addShapedCraftingRecipe(RecipeExporter output, AdvancementCriterion<InventoryChangedCriterion.Conditions> hasIngredientTrigger,
+    private static void addShapedCraftingRecipe(Consumer<RecipeJsonProvider> output, InventoryChangedCriterion.Conditions hasIngredientTrigger,
                                                 Map<Character, Ingredient> key, String[] pattern,
                                                 ItemStack result, CraftingRecipeCategory category,
                                                 String group, String recipeIdSuffix, String recipeIdPrefix) {
         Identifier recipeId = Identifier.of(EnergizedPowerFDMod.MODID, PATH_PREFIX + "crafting/" +
                 recipeIdPrefix + getItemPath(result.getItem()) + recipeIdSuffix);
 
-        Advancement.Builder advancementBuilder = output.getAdvancementBuilder()
+        Advancement.Builder advancementBuilder = Advancement.Builder.create()
                 .criterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
                 .criterion("has_the_ingredient", hasIngredientTrigger)
                 .rewards(AdvancementRewards.Builder.recipe(recipeId))
-                .criteriaMerger(AdvancementRequirements.CriterionMerger.OR);
-        ShapedRecipe recipe = new ShapedRecipe(Objects.requireNonNullElse(group, ""),
-                category, RawShapedRecipe.create(key, pattern), result);
-        output.accept(recipeId, recipe, advancementBuilder.build(recipeId.withPrefixedPath("recipes/")));
+                .criteriaMerger(CriterionMerger.OR);
+        ShapedFinishedRecipe recipe = new ShapedFinishedRecipe(
+                recipeId,
+                Objects.requireNonNullElse(group, ""),
+                category, key, pattern, result,
+                advancementBuilder,
+                recipeId.withPrefixedPath("recipes/")
+        );
+        output.accept(recipe);
     }
-    private static void addShapelessCraftingRecipe(RecipeExporter output, AdvancementCriterion<InventoryChangedCriterion.Conditions> hasIngredientTrigger,
+    private static void addShapelessCraftingRecipe(Consumer<RecipeJsonProvider> output, InventoryChangedCriterion.Conditions hasIngredientTrigger,
                                                    List<Ingredient> inputs, ItemStack result, CraftingRecipeCategory category) {
         addShapelessCraftingRecipe(output, hasIngredientTrigger, inputs, result, category, "");
     }
-    private static void addShapelessCraftingRecipe(RecipeExporter output, AdvancementCriterion<InventoryChangedCriterion.Conditions> hasIngredientTrigger,
+    private static void addShapelessCraftingRecipe(Consumer<RecipeJsonProvider> output, InventoryChangedCriterion.Conditions hasIngredientTrigger,
                                                    List<Ingredient> inputs, ItemStack result, CraftingRecipeCategory category,
                                                    String group) {
         addShapelessCraftingRecipe(output, hasIngredientTrigger, inputs, result, category, group, "");
     }
-    private static void addShapelessCraftingRecipe(RecipeExporter output, AdvancementCriterion<InventoryChangedCriterion.Conditions> hasIngredientTrigger,
+    private static void addShapelessCraftingRecipe(Consumer<RecipeJsonProvider> output, InventoryChangedCriterion.Conditions hasIngredientTrigger,
                                                    List<Ingredient> inputs, ItemStack result, CraftingRecipeCategory category,
                                                    String group, String recipeIdSuffix) {
         addShapelessCraftingRecipe(output, hasIngredientTrigger, inputs, result, category, group, recipeIdSuffix, "");
     }
-    private static void addShapelessCraftingRecipe(RecipeExporter output, AdvancementCriterion<InventoryChangedCriterion.Conditions> hasIngredientTrigger,
+    private static void addShapelessCraftingRecipe(Consumer<RecipeJsonProvider> output, InventoryChangedCriterion.Conditions hasIngredientTrigger,
                                                    List<Ingredient> inputs, ItemStack result, CraftingRecipeCategory category,
                                                    String group, String recipeIdSuffix, String recipeIdPrefix) {
         Identifier recipeId = Identifier.of(EnergizedPowerFDMod.MODID, PATH_PREFIX + "crafting/" +
                 recipeIdPrefix + getItemPath(result.getItem()) + recipeIdSuffix);
 
-        Advancement.Builder advancementBuilder = output.getAdvancementBuilder()
+        Advancement.Builder advancementBuilder = Advancement.Builder.create()
                 .criterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
                 .criterion("has_the_ingredient", hasIngredientTrigger)
                 .rewards(AdvancementRewards.Builder.recipe(recipeId))
-                .criteriaMerger(AdvancementRequirements.CriterionMerger.OR);
-        ShapelessRecipe recipe = new ShapelessRecipe(Objects.requireNonNullElse(group, ""), category, result,
-                DefaultedList.copyOf(Ingredient.EMPTY, inputs.toArray(Ingredient[]::new)));
-        output.accept(recipeId, recipe, advancementBuilder.build(recipeId.withPrefixedPath("recipes/")));
+                .criteriaMerger(CriterionMerger.OR);
+        ShapelessFinishedRecipe recipe = new ShapelessFinishedRecipe(
+                recipeId,
+                Objects.requireNonNullElse(group, ""), category, result,
+                DefaultedList.copyOf(Ingredient.EMPTY, inputs.toArray(Ingredient[]::new)),
+                advancementBuilder,
+                recipeId.withPrefixedPath("recipes/")
+        );
+        output.accept(recipe);
     }
-    private static void addSawmillRecipe(RecipeExporter RecipeExporter, Ingredient input, ItemStack output,
+    private static void addSawmillRecipe(Consumer<RecipeJsonProvider> recipeOutput, Ingredient input, ItemStack output,
                                          int sawdustAmount, String outputName, String recipeIngredientName) {
         Identifier recipeId = Identifier.of(EnergizedPowerFDMod.MODID, PATH_PREFIX + "sawmill/" +
                 outputName + "_from_sawing_" + recipeIngredientName);
 
-        SawmillRecipe recipe = new SawmillRecipe(output, input, sawdustAmount);
-        RecipeExporter.accept(recipeId, recipe, null);
+        SawmillFinishedRecipe recipe = new SawmillFinishedRecipe(
+                recipeId,
+                output, input, sawdustAmount
+        );
+        recipeOutput.accept(recipe);
     }
 
-    private static void addPlantGrowthChamberRecipe(RecipeExporter RecipeExporter, Ingredient input,
+    private static void addPlantGrowthChamberRecipe(Consumer<RecipeJsonProvider> recipeOutput, Ingredient input,
                                                     OutputItemStackWithPercentages[] outputs, int ticks,
                                                     String outputName, String recipeIngredientName) {
         Identifier recipeId = Identifier.of(EnergizedPowerFDMod.MODID, PATH_PREFIX + "growing/" +
                 outputName + "_from_growing_" + recipeIngredientName);
 
-        PlantGrowthChamberRecipe recipe = new PlantGrowthChamberRecipe(outputs, input, ticks);
-        RecipeExporter.accept(recipeId, recipe, null);
+        PlantGrowthChamberFinishedRecipe recipe = new PlantGrowthChamberFinishedRecipe(
+                recipeId,
+                outputs, input, ticks
+        );
+        recipeOutput.accept(recipe);
     }
 }

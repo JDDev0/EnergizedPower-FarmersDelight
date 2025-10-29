@@ -1,9 +1,9 @@
-// 1.21.1	2025-10-27T16:59:16.664226273	Energized Power - Farmer's Delight/Model Definitions
+// 1.20.1	2025-10-29T09:11:25.675823261	Energized Power - Farmer's Delight/Model Definitions
 4df178d8f6541b9be81a2ae558822ace60b0baea assets/energizedpowerfd/models/block/electric_stove.json
 fc0ff9a162aca7c4f5178935f62ddd3121af1b60 assets/energizedpowerfd/models/item/induction_stove.json
 dac4aee9c41a884f796ce62175340197d9f3ff9c assets/energizedpowerfd/models/item/electric_stove.json
-8d3efa2455312ff3677ab283669f4830efd2d2db assets/energizedpowerfd/models/block/electric_stove_on.json
 cf013b93e1645a9a1ba2241f909d1407050c01da assets/energizedpowerfd/blockstates/induction_stove.json
+8d3efa2455312ff3677ab283669f4830efd2d2db assets/energizedpowerfd/models/block/electric_stove_on.json
 82c8dbc445e26ab855c1f5ecdebf7955064e202f assets/energizedpowerfd/models/block/induction_stove.json
 815f455aa6c8b1f66eb802d8b48827e84b21e6d4 assets/energizedpowerfd/blockstates/electric_stove.json
 435595de72e69588b63b2c21cb714dcb411559d7 assets/energizedpowerfd/models/block/induction_stove_on.json

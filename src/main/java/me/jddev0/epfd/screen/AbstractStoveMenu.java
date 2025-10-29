@@ -13,20 +13,20 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.math.BlockPos;
 
 public abstract class AbstractStoveMenu<T extends AbstractStoveBlockEntity> extends UpgradableEnergyStorageMenu<T>
         implements IConfigurableMenu {
     protected final PropertyDelegate data;
 
-    public AbstractStoveMenu(int id, PlayerInventory inv, BlockPos pos,
+    public AbstractStoveMenu(int id, PlayerInventory inv, PacketByteBuf buf,
                              ScreenHandlerType<?> menuType, Block block) {
         this(
-                id, inv.player.getWorld().getBlockEntity(pos), inv,
+                id, inv.player.getWorld().getBlockEntity(buf.readBlockPos()), inv,
                 menuType, block, new UpgradeModuleInventory(
                         UpgradeModuleModifier.ENERGY_CONSUMPTION,
                         UpgradeModuleModifier.ENERGY_CAPACITY

@@ -2,6 +2,7 @@ package me.jddev0.epfd.block.entity;
 
 import me.jddev0.epfd.EnergizedPowerFDMod;
 import me.jddev0.epfd.block.EPFDBlocks;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -29,9 +30,9 @@ public final class EPFDBlockEntities {
 
     @SuppressWarnings("unchecked")
     private static <T extends BlockEntity> BlockEntityType<T> createBlockEntity(String name, Block block,
-                                                                                BlockEntityType.BlockEntityFactory<? extends T> factory) {
+                                                                                FabricBlockEntityTypeBuilder.Factory<? extends T> factory) {
         return (BlockEntityType<T>)Registry.register(Registries.BLOCK_ENTITY_TYPE, Identifier.of(EnergizedPowerFDMod.MODID, name),
-                BlockEntityType.Builder.create(factory, block).build(null));
+                FabricBlockEntityTypeBuilder.create(factory, block).build(null));
     }
 
     private static <T extends BlockEntity> BlockEntityType<T> registerEnergyStorage(BlockEntityType<T> blockEntityType,

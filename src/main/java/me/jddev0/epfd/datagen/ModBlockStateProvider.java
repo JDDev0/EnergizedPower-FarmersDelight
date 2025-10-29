@@ -3,10 +3,13 @@ package me.jddev0.epfd.datagen;
 import me.jddev0.epfd.block.ElectricStoveBlock;
 import me.jddev0.epfd.block.EPFDBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.data.client.*;
+import net.minecraft.client.data.*;
+import net.minecraft.client.render.model.json.ModelVariant;
+import net.minecraft.client.render.model.json.WeightedVariant;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.Pool;
 import net.minecraft.util.math.Direction;
 
 class ModBlockStateProvider {
@@ -48,32 +51,17 @@ class ModBlockStateProvider {
 
     private void activatableOrientableBlockWithItem(Block block, Identifier modelNormal,
                                                     Identifier modelActive, BooleanProperty isActiveProperty) {
-        generator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block).
-                coordinate(BlockStateVariantMap.create(Properties.HORIZONTAL_FACING, isActiveProperty).
-                        register(Direction.NORTH, false, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelNormal)).
-                        register(Direction.NORTH, true, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelActive)).
-                        register(Direction.SOUTH, false, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelNormal).
-                                put(VariantSettings.Y, VariantSettings.Rotation.R180)).
-                        register(Direction.SOUTH, true, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelActive).
-                                put(VariantSettings.Y, VariantSettings.Rotation.R180)).
-                        register(Direction.EAST, false, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelNormal).
-                                put(VariantSettings.Y, VariantSettings.Rotation.R90)).
-                        register(Direction.EAST, true, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelActive).
-                                put(VariantSettings.Y, VariantSettings.Rotation.R90)).
-                        register(Direction.WEST, false, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelNormal).
-                                put(VariantSettings.Y, VariantSettings.Rotation.R270)).
-                        register(Direction.WEST, true, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelActive).
-                                put(VariantSettings.Y, VariantSettings.Rotation.R270))
+        generator.blockStateCollector.accept(VariantsBlockModelDefinitionCreator.of(block).
+                with(BlockStateVariantMap.models(isActiveProperty).
+                        register(false, new WeightedVariant(Pool.of(new ModelVariant(modelNormal)))).
+                        register(true, new WeightedVariant(Pool.of(new ModelVariant(modelActive))))).
+                coordinate(BlockStateVariantMap.operations(Properties.HORIZONTAL_FACING).
+                        register(Direction.NORTH, BlockStateModelGenerator.NO_OP).
+                        register(Direction.SOUTH, BlockStateModelGenerator.ROTATE_Y_180).
+                        register(Direction.EAST, BlockStateModelGenerator.ROTATE_Y_90).
+                        register(Direction.WEST, BlockStateModelGenerator.ROTATE_Y_270)
                 ));
 
-        generator.registerParentedItemModel(block.asItem(), modelNormal);
+        generator.registerParentedItemModel(block, modelNormal);
     }
 }

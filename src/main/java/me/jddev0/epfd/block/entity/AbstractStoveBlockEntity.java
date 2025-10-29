@@ -116,7 +116,7 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
     }
 
     public static void tick(World level, BlockPos blockPos, BlockState state, AbstractStoveBlockEntity blockEntity) {
-        if(level.isClient)
+        if(level.isClient())
             return;
 
         if(blockEntity.timeoutOffState > 0) {

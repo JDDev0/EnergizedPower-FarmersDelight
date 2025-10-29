@@ -1,29 +1,29 @@
 {
   "type": "energizedpower:plant_growth_chamber",
-  "ingredient": {
-    "item": "farmersdelight:cabbage_seeds"
-  },
-  "outputs": [
+  "ingredient": "farmersdelight:cabbage_seeds",
+  "results": [
     {
-      "output": {
-        "item": "farmersdelight:cabbage_seeds"
-      },
       "percentages": [
         1.0,
         0.33,
         0.33
-      ]
+      ],
+      "result": {
+        "count": 1,
+        "id": "farmersdelight:cabbage_seeds"
+      }
     },
     {
-      "output": {
-        "item": "farmersdelight:cabbage"
-      },
       "percentages": [
         1.0,
         0.75,
         0.25,
         0.25
-      ]
+      ],
+      "result": {
+        "count": 1,
+        "id": "farmersdelight:cabbage"
+      }
     }
   ],
   "ticks": 16000

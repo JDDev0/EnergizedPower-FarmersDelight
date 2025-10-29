@@ -8,6 +8,7 @@ import me.jddev0.ep.screen.base.IEnergyStorageMenu;
 import me.jddev0.ep.screen.base.UpgradableEnergyStorageContainerScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
@@ -61,9 +62,9 @@ public abstract class ConfigurableRedstoneModeOnlyUpgradableEnergyStorageContain
         int ordinal = redstoneMode.ordinal();
 
         if(isPointWithinBounds(-22, 26, 20, 20, mouseX, mouseY)) {
-            drawContext.drawTexture(CONFIGURATION_ICONS_TEXTURE, x - 22, y + 26, 20 * ordinal, 20, 20, 20);
+            drawContext.drawTexture(RenderPipelines.GUI_TEXTURED, CONFIGURATION_ICONS_TEXTURE, x - 22, y + 26, 20 * ordinal, 20, 20, 20, 256, 256);
         }else {
-            drawContext.drawTexture(CONFIGURATION_ICONS_TEXTURE, x - 22, y + 26, 20 * ordinal, 0, 20, 20);
+            drawContext.drawTexture(RenderPipelines.GUI_TEXTURED, CONFIGURATION_ICONS_TEXTURE, x - 22, y + 26, 20 * ordinal, 0, 20, 20, 256, 256);
         }
     }
 

@@ -16,20 +16,20 @@ public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup lookupProvider) {
-        getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE).
+        valueLookupBuilder(BlockTags.PICKAXE_MINEABLE).
                 add(
                         EPFDBlocks.ELECTRIC_STOVE,
                         EPFDBlocks.INDUCTION_STOVE
                 );
 
-        getOrCreateTagBuilder(BlockTags.NEEDS_STONE_TOOL).
+        valueLookupBuilder(BlockTags.NEEDS_STONE_TOOL).
                 add(
                         EPFDBlocks.ELECTRIC_STOVE,
                         EPFDBlocks.INDUCTION_STOVE
                 );
 
 
-        getOrCreateTagBuilder(ModTags.HEAT_SOURCES).
+        valueLookupBuilder(ModTags.HEAT_SOURCES).
                 add(EPFDBlocks.ELECTRIC_STOVE,
                         EPFDBlocks.INDUCTION_STOVE);
     }

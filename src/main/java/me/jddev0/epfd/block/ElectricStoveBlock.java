@@ -9,7 +9,8 @@ import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.component.type.TooltipDisplayComponent;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
@@ -19,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public class ElectricStoveBlock extends AbstractStoveBlock {
     public static final MapCodec<ElectricStoveBlock> CODEC = createCodec(ElectricStoveBlock::new);
@@ -51,13 +52,13 @@ public class ElectricStoveBlock extends AbstractStoveBlock {
         }
 
         @Override
-        public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-            if(Screen.hasShiftDown()) {
-                tooltip.add(Text.translatable("tooltip.energizedpowerfd.stoves.txt.shift.1",
-                        Text.translatable(getTranslationKey(stack)),
+        public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> tooltip, TooltipType type) {
+            if(MinecraftClient.getInstance().isShiftPressed()) {
+                tooltip.accept(Text.translatable("tooltip.energizedpowerfd.stoves.txt.shift.1",
+                        stack.getName(),
                         ElectricStoveBlockEntity.RECIPE_DURATION_MULTIPLIER).formatted(Formatting.GRAY));
             }else {
-                tooltip.add(Text.translatable("tooltip.energizedpower.shift_details.txt").formatted(Formatting.YELLOW));
+                tooltip.accept(Text.translatable("tooltip.energizedpower.shift_details.txt").formatted(Formatting.YELLOW));
             }
         }
     }

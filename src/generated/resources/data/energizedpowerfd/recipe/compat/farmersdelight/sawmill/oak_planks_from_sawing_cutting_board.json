@@ -1,11 +1,9 @@
 {
   "type": "energizedpower:sawmill",
-  "ingredient": {
-    "item": "farmersdelight:cutting_board"
-  },
-  "output": {
+  "ingredient": "farmersdelight:cutting_board",
+  "result": {
     "count": 4,
-    "item": "minecraft:oak_planks"
+    "id": "minecraft:oak_planks"
   },
   "sawdustAmount": 2
 }

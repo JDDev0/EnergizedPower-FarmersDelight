@@ -1,35 +1,36 @@
 {
   "type": "energizedpower:plant_growth_chamber",
-  "ingredient": {
-    "item": "farmersdelight:tomato_seeds"
-  },
-  "outputs": [
+  "ingredient": "farmersdelight:tomato_seeds",
+  "results": [
     {
-      "output": {
-        "item": "farmersdelight:tomato_seeds"
-      },
       "percentages": [
         1.0
-      ]
+      ],
+      "result": {
+        "count": 1,
+        "id": "farmersdelight:tomato_seeds"
+      }
     },
     {
-      "output": {
-        "item": "farmersdelight:tomato"
-      },
       "percentages": [
         1.0,
         0.75,
         0.5,
         0.25
-      ]
+      ],
+      "result": {
+        "count": 1,
+        "id": "farmersdelight:tomato"
+      }
     },
     {
-      "output": {
-        "item": "farmersdelight:rotten_tomato"
-      },
       "percentages": [
         0.05
-      ]
+      ],
+      "result": {
+        "count": 1,
+        "id": "farmersdelight:rotten_tomato"
+      }
     }
   ],
   "ticks": 16000

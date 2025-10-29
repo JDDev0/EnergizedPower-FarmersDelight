@@ -26,7 +26,7 @@ public abstract class AbstractStoveMenu<T extends AbstractStoveBlockEntity> exte
     public AbstractStoveMenu(int id, PlayerInventory inv, BlockPos pos,
                              ScreenHandlerType<?> menuType, Block block) {
         this(
-                id, inv.player.getWorld().getBlockEntity(pos), inv,
+                id, inv.player.getEntityWorld().getBlockEntity(pos), inv,
                 menuType, block, new UpgradeModuleInventory(
                         UpgradeModuleModifier.ENERGY_CONSUMPTION,
                         UpgradeModuleModifier.ENERGY_CAPACITY

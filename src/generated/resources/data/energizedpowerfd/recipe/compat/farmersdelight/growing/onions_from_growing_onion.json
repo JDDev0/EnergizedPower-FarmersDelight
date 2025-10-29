@@ -1,19 +1,18 @@
 {
   "type": "energizedpower:plant_growth_chamber",
-  "ingredient": {
-    "item": "farmersdelight:onion"
-  },
-  "outputs": [
+  "ingredient": "farmersdelight:onion",
+  "results": [
     {
-      "output": {
-        "item": "farmersdelight:onion"
-      },
       "percentages": [
         1.0,
         0.75,
         0.25,
         0.25
-      ]
+      ],
+      "result": {
+        "count": 1,
+        "id": "farmersdelight:onion"
+      }
     }
   ],
   "ticks": 16000

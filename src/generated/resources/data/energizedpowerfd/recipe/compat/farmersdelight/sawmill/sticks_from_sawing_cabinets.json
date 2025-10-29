@@ -1,11 +1,9 @@
 {
   "type": "energizedpower:sawmill",
-  "ingredient": {
-    "tag": "farmersdelight:cabinets/wooden"
-  },
-  "output": {
+  "ingredient": "#farmersdelight:cabinets/wooden",
+  "result": {
     "count": 10,
-    "item": "minecraft:stick"
+    "id": "minecraft:stick"
   },
   "sawdustAmount": 3
 }

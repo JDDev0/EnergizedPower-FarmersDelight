@@ -8,24 +8,28 @@ import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.minecraft.world.block.WireOrientation;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.ToIntFunction;
 
 public abstract class AbstractStoveBlock extends BlockWithEntity {
     public static final BooleanProperty POWERED = Properties.POWERED;
     public static final BooleanProperty LIT = Properties.LIT;
-    public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = Properties.HORIZONTAL_FACING;
 
     public static final ToIntFunction<BlockState> LIGHT_EMISSION =
             (state) -> state.get(LIT)?15:0;
@@ -47,26 +51,17 @@ public abstract class AbstractStoveBlock extends BlockWithEntity {
     }
 
     @Override
-    public int getComparatorOutput(BlockState state, World level, BlockPos blockPos) {
+    protected int getComparatorOutput(BlockState state, World level, BlockPos blockPos, Direction direction) {
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         if(!(blockEntity instanceof AbstractStoveBlockEntity abstractStoveBlockEntity))
-            return super.getComparatorOutput(state, level, blockPos);
+            return super.getComparatorOutput(state, level, blockPos, direction);
 
         return abstractStoveBlockEntity.getRedstoneOutput();
     }
 
     @Override
-    public void onStateReplaced(BlockState state, World level, BlockPos blockPos, BlockState newState, boolean isMoving) {
-        if(state.getBlock() == newState.getBlock())
-            return;
-
-        BlockEntity blockEntity = level.getBlockEntity(blockPos);
-        if(!(blockEntity instanceof AbstractStoveBlockEntity))
-            return;
-
-        ((AbstractStoveBlockEntity)blockEntity).drops(level, blockPos);
-
-        super.onStateReplaced(state, level, blockPos, newState, isMoving);
+    protected void onStateReplaced(BlockState state, ServerWorld level, BlockPos blockPos, boolean moved) {
+        ItemScatterer.onStateReplaced(state, level, blockPos);
     }
 
     @Override
@@ -84,8 +79,8 @@ public abstract class AbstractStoveBlock extends BlockWithEntity {
     }
 
     @Override
-    public void neighborUpdate(BlockState selfState, World level, BlockPos selfPos, Block fromBlock, BlockPos fromPos, boolean isMoving) {
-        super.neighborUpdate(selfState, level, selfPos, fromBlock, fromPos, isMoving);
+    public void neighborUpdate(BlockState selfState, World level, BlockPos selfPos, Block fromBlock, @Nullable WireOrientation wireOrientation, boolean isMoving) {
+        super.neighborUpdate(selfState, level, selfPos, fromBlock, wireOrientation, isMoving);
 
         if(level.isClient())
             return;

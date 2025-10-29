@@ -76,7 +76,7 @@ public abstract class AbstractStoveMenu<T extends AbstractStoveBlockEntity> exte
 
         if(index < 4 * 9) {
             //Player inventory slot -> Merge into upgrade module inventory
-            if(!insertItem(sourceItem, 4 * 9, 4 * 9 + 2, false)) {
+            if(!insertMaxCount1Item(sourceItem, 4 * 9, 4 * 9 + 2, false)) {
                 return ItemStack.EMPTY;
             }
         }else if(index < 4 * 9 + 2) {

@@ -55,7 +55,7 @@ class ModBlockStateProvider {
                 with(BlockStateVariantMap.models(isActiveProperty).
                         register(false, new WeightedVariant(Pool.of(new ModelVariant(modelNormal)))).
                         register(true, new WeightedVariant(Pool.of(new ModelVariant(modelActive))))).
-                coordinate(BlockStateVariantMap.operations(Properties.HORIZONTAL_FACING).
+                apply(BlockStateVariantMap.operations(Properties.HORIZONTAL_FACING).
                         register(Direction.NORTH, BlockStateModelGenerator.NO_OP).
                         register(Direction.SOUTH, BlockStateModelGenerator.ROTATE_Y_180).
                         register(Direction.EAST, BlockStateModelGenerator.ROTATE_Y_90).

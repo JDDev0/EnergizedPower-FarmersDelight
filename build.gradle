@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.11-SNAPSHOT'
+    id 'fabric-loom' version '1.14-SNAPSHOT'
     id 'maven-publish'
     id "me.shedaniel.unified-publishing" version "0.1.+"
 }
@@ -95,18 +95,19 @@ dependencies {
     }
 
     // Energized Power dependency
-    modCompileOnly "curse.maven:energized-power-782147:7078194"
+    modCompileOnly "curse.maven:energized-power-782147:7366701"
 
-    modLocalRuntime "curse.maven:energized-power-782147:7078194"
+    modLocalRuntime "curse.maven:energized-power-782147:7366701"
 
     // Farmer's Delight Refabricated integration
-    modCompileOnly "vectorwing:FarmersDelight:1.21.10-3.3.3+refabricated"
+    modCompileOnly "vectorwing:FarmersDelight:1.21.11-3.4.2+refabricated"
 
-    modLocalRuntime "vectorwing:FarmersDelight:1.21.10-3.3.3+refabricated"
+    modLocalRuntime "vectorwing:FarmersDelight:1.21.11-3.4.2+refabricated"
 
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    //TODO enable after JEI Plugin is fixed in Farmers Delight: modLocalRuntime "curse.maven:jei-238222:7369636"
     //modLocalRuntime "dev.emi:emi-fabric:1.1.13+1.21.1"
 }
 

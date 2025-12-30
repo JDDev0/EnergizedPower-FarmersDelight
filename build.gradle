@@ -107,7 +107,7 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    //TODO enable after JEI Plugin is fixed in Farmers Delight: modLocalRuntime "curse.maven:jei-238222:7369636"
+    modLocalRuntime "curse.maven:jei-238222:7369636"
     //modLocalRuntime "dev.emi:emi-fabric:1.1.13+1.21.1"
 }
 

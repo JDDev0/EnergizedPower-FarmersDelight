@@ -2,7 +2,7 @@ package me.jddev0.epfd.datagen;
 
 import me.jddev0.ep.datagen.generators.PageContentProvider;
 import me.jddev0.epfd.block.EPFDBlocks;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
@@ -18,7 +18,7 @@ public class ModBookPageContentProvider extends PageContentProvider {
     private static final Style UNIFORM = Style.EMPTY.withFont(new FontDescription.Resource(Identifier.withDefaultNamespace("uniform")));
     private static final Style DEFAULT_FONT = Style.EMPTY.withFont(FontDescription.DEFAULT);
 
-    public ModBookPageContentProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+    public ModBookPageContentProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider);
     }
 

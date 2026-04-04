@@ -8,7 +8,7 @@ import me.jddev0.ep.screen.base.IEnergyStorageMenu;
 import me.jddev0.ep.screen.base.UpgradableEnergyStorageContainerScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -54,7 +54,7 @@ public abstract class ConfigurableRedstoneModeOnlyUpgradableEnergyStorageContain
     }
 
     @Override
-    protected void renderConfiguration(GuiGraphics drawContext, int x, int y, int mouseX, int mouseY) {
+    protected void renderConfiguration(GuiGraphicsExtractor drawContext, int x, int y, int mouseX, int mouseY) {
         super.renderConfiguration(drawContext, x, y, mouseX, mouseY);
 
         RedstoneMode redstoneMode = menu.getRedstoneMode();
@@ -68,8 +68,8 @@ public abstract class ConfigurableRedstoneModeOnlyUpgradableEnergyStorageContain
     }
 
     @Override
-    protected void renderTooltipConfiguration(GuiGraphics drawContext, int mouseX, int mouseY) {
-        super.renderTooltipConfiguration(drawContext, mouseX, mouseY);
+    protected void extractLabelsConfiguration(GuiGraphicsExtractor drawContext, int mouseX, int mouseY) {
+        super.extractLabelsConfiguration(drawContext, mouseX, mouseY);
 
         if(isHovering(-22, 26, 20, 20, mouseX, mouseY)) {
             //Redstone Mode

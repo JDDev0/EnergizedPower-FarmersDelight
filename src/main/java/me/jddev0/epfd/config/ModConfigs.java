@@ -4,7 +4,8 @@ import com.mojang.logging.LogUtils;
 import me.jddev0.ep.config.Config;
 import me.jddev0.ep.config.ConfigValidationException;
 import me.jddev0.ep.config.ConfigValue;
-import me.jddev0.ep.config.value.*;
+import me.jddev0.ep.config.value.IntegerConfigValue;
+import me.jddev0.ep.config.value.LongConfigValue;
 import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 

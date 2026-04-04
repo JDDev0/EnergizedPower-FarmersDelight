@@ -5,14 +5,14 @@ import me.jddev0.epfd.screen.EPFDMenuTypes;
 import me.jddev0.epfd.screen.ElectricStoveScreen;
 import me.jddev0.epfd.screen.InductionStoveScreen;
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.client.gui.screens.MenuScreens;
 
 public class EnergizedPowerFDModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ModConfigs.registerConfigs(false);
 
-        HandledScreens.register(EPFDMenuTypes.ELECTRIC_STOVE_MENU, ElectricStoveScreen::new);
-        HandledScreens.register(EPFDMenuTypes.INDUCTION_STOVE_MENU, InductionStoveScreen::new);
+        MenuScreens.register(EPFDMenuTypes.ELECTRIC_STOVE_MENU, ElectricStoveScreen::new);
+        MenuScreens.register(EPFDMenuTypes.INDUCTION_STOVE_MENU, InductionStoveScreen::new);
     }
 }

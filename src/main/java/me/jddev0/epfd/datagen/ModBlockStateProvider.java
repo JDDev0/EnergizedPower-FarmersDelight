@@ -1,21 +1,27 @@
 package me.jddev0.epfd.datagen;
 
-import me.jddev0.epfd.block.ElectricStoveBlock;
 import me.jddev0.epfd.block.EPFDBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.client.data.*;
-import net.minecraft.client.render.model.json.ModelVariant;
-import net.minecraft.client.render.model.json.WeightedVariant;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.Pool;
-import net.minecraft.util.math.Direction;
+import me.jddev0.epfd.block.ElectricStoveBlock;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.MultiVariant;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.blockstates.PropertyDispatch;
+import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.data.models.model.TexturedModel;
+import net.minecraft.client.renderer.block.model.Variant;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.random.WeightedList;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 class ModBlockStateProvider {
-    private final BlockStateModelGenerator generator;
+    private final BlockModelGenerators generator;
 
-    ModBlockStateProvider(BlockStateModelGenerator generator) {
+    ModBlockStateProvider(BlockModelGenerators generator) {
         this.generator = generator;
     }
 
@@ -40,28 +46,28 @@ class ModBlockStateProvider {
 
     private Identifier orientableBlockModel(Block block, String fileSuffix, String topSuffix,
                                             String bottomSuffix, String frontSuffix, String sideSuffix) {
-        return TexturedModel.makeFactory(unused -> new TextureMap().
-                        put(TextureKey.TOP, TextureMap.getSubId(block, topSuffix)).
-                        put(TextureKey.BOTTOM, TextureMap.getSubId(block, bottomSuffix)).
-                        put(TextureKey.FRONT, TextureMap.getSubId(block, frontSuffix)).
-                        put(TextureKey.SIDE, TextureMap.getSubId(block, sideSuffix)).
-                        copy(TextureKey.TOP, TextureKey.PARTICLE),
-                Models.ORIENTABLE_WITH_BOTTOM).get(block).upload(block, fileSuffix, generator.modelCollector);
+        return TexturedModel.createDefault(unused -> new TextureMapping().
+                        put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, topSuffix)).
+                        put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(block, bottomSuffix)).
+                        put(TextureSlot.FRONT, TextureMapping.getBlockTexture(block, frontSuffix)).
+                        put(TextureSlot.SIDE, TextureMapping.getBlockTexture(block, sideSuffix)).
+                        copySlot(TextureSlot.TOP, TextureSlot.PARTICLE),
+                ModelTemplates.CUBE_ORIENTABLE_TOP_BOTTOM).get(block).createWithSuffix(block, fileSuffix, generator.modelOutput);
     }
 
     private void activatableOrientableBlockWithItem(Block block, Identifier modelNormal,
                                                     Identifier modelActive, BooleanProperty isActiveProperty) {
-        generator.blockStateCollector.accept(VariantsBlockModelDefinitionCreator.of(block).
-                with(BlockStateVariantMap.models(isActiveProperty).
-                        register(false, new WeightedVariant(Pool.of(new ModelVariant(modelNormal)))).
-                        register(true, new WeightedVariant(Pool.of(new ModelVariant(modelActive))))).
-                apply(BlockStateVariantMap.operations(Properties.HORIZONTAL_FACING).
-                        register(Direction.NORTH, BlockStateModelGenerator.NO_OP).
-                        register(Direction.SOUTH, BlockStateModelGenerator.ROTATE_Y_180).
-                        register(Direction.EAST, BlockStateModelGenerator.ROTATE_Y_90).
-                        register(Direction.WEST, BlockStateModelGenerator.ROTATE_Y_270)
+        generator.blockStateOutput.accept(MultiVariantGenerator.dispatch(block).
+                with(PropertyDispatch.initial(isActiveProperty).
+                        select(false, new MultiVariant(WeightedList.of(new Variant(modelNormal)))).
+                        select(true, new MultiVariant(WeightedList.of(new Variant(modelActive))))).
+                with(PropertyDispatch.modify(BlockStateProperties.HORIZONTAL_FACING).
+                        select(Direction.NORTH, BlockModelGenerators.NOP).
+                        select(Direction.SOUTH, BlockModelGenerators.Y_ROT_180).
+                        select(Direction.EAST, BlockModelGenerators.Y_ROT_90).
+                        select(Direction.WEST, BlockModelGenerators.Y_ROT_270)
                 ));
 
-        generator.registerParentedItemModel(block, modelNormal);
+        generator.registerSimpleItemModel(block, modelNormal);
     }
 }

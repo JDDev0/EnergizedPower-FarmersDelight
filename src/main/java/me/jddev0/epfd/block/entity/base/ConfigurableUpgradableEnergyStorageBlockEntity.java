@@ -6,11 +6,11 @@ import me.jddev0.ep.machine.configuration.IRedstoneModeHandler;
 import me.jddev0.ep.machine.configuration.RedstoneMode;
 import me.jddev0.ep.machine.configuration.RedstoneModeUpdate;
 import me.jddev0.ep.machine.upgrade.UpgradeModuleModifier;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ConfigurableUpgradableEnergyStorageBlockEntity
@@ -28,23 +28,23 @@ public abstract class ConfigurableUpgradableEnergyStorageBlockEntity
     }
 
     @Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
+    protected void saveAdditional(ValueOutput view) {
+        super.saveAdditional(view);
 
         view.putInt("configuration.redstone_mode", redstoneMode.ordinal());
     }
 
     @Override
-    protected void readData(ReadView view) {
-        super.readData(view);
+    protected void loadAdditional(ValueInput view) {
+        super.loadAdditional(view);
 
-        redstoneMode = RedstoneMode.fromIndex(view.getInt("configuration.redstone_mode", 0));
+        redstoneMode = RedstoneMode.fromIndex(view.getIntOr("configuration.redstone_mode", 0));
     }
 
     @Override
     public void setNextRedstoneMode() {
         redstoneMode = RedstoneMode.fromIndex(redstoneMode.ordinal() + 1);
-        markDirty();
+        setChanged();
     }
 
     @Override
@@ -62,7 +62,7 @@ public abstract class ConfigurableUpgradableEnergyStorageBlockEntity
     @Override
     public boolean setRedstoneMode(@NotNull RedstoneMode redstoneMode) {
         this.redstoneMode = redstoneMode;
-        markDirty();
+        setChanged();
 
         return true;
     }

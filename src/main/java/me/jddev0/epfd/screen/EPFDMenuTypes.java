@@ -2,23 +2,23 @@ package me.jddev0.epfd.screen;
 
 import me.jddev0.epfd.EnergizedPowerFDMod;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 
 public final class EPFDMenuTypes {
     private EPFDMenuTypes() {}
 
-    public static final ScreenHandlerType<ElectricStoveMenu> ELECTRIC_STOVE_MENU = createScreenHandlerType("electric_stove",
-            new ExtendedScreenHandlerType<>(ElectricStoveMenu::new, BlockPos.PACKET_CODEC.cast()));
-    public static final ScreenHandlerType<InductionStoveMenu> INDUCTION_STOVE_MENU = createScreenHandlerType("induction_stove",
-            new ExtendedScreenHandlerType<>(InductionStoveMenu::new, BlockPos.PACKET_CODEC.cast()));
+    public static final MenuType<ElectricStoveMenu> ELECTRIC_STOVE_MENU = createScreenHandlerType("electric_stove",
+            new ExtendedScreenHandlerType<>(ElectricStoveMenu::new, BlockPos.STREAM_CODEC.cast()));
+    public static final MenuType<InductionStoveMenu> INDUCTION_STOVE_MENU = createScreenHandlerType("induction_stove",
+            new ExtendedScreenHandlerType<>(InductionStoveMenu::new, BlockPos.STREAM_CODEC.cast()));
 
-    private static <T extends ScreenHandler> ScreenHandlerType<T> createScreenHandlerType(String name, ScreenHandlerType<T> screenHandlerType) {
-        return Registry.register(Registries.SCREEN_HANDLER, Identifier.of(EnergizedPowerFDMod.MODID, name), screenHandlerType);
+    private static <T extends AbstractContainerMenu> MenuType<T> createScreenHandlerType(String name, MenuType<T> screenHandlerType) {
+        return Registry.register(BuiltInRegistries.MENU, Identifier.fromNamespaceAndPath(EnergizedPowerFDMod.MODID, name), screenHandlerType);
     }
 
     public static void register() {

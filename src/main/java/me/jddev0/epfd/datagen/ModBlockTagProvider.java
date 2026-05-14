@@ -29,7 +29,7 @@ public class ModBlockTagProvider extends FabricTagsProvider.BlockTagsProvider {
                 );
 
 
-        valueLookupBuilder(ModTags.HEAT_SOURCES).
+        valueLookupBuilder(ModTags.Blocks.HEAT_SOURCES).
                 add(EPFDBlocks.ELECTRIC_STOVE,
                         EPFDBlocks.INDUCTION_STOVE);
     }

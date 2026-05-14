@@ -80,7 +80,7 @@ public class ModRecipeGenerator extends RecipeProvider {
         addSawmillRecipe(Ingredient.of(ModItems.CUTTING_BOARD.get()), new ItemStackTemplate(Items.OAK_PLANKS, 4),
                 2, "oak_planks", "cutting_board");
 
-        addSawmillRecipe(tag(ModTags.WOODEN_CABINETS), new ItemStackTemplate(Items.STICK, 10),
+        addSawmillRecipe(tag(ModTags.Items.CABINETS_WOODEN), new ItemStackTemplate(Items.STICK, 10),
                 3, "sticks", "cabinets");
     }
 

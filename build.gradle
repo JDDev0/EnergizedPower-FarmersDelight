@@ -1,5 +1,5 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom' version '1.16-SNAPSHOT'
     id 'maven-publish'
     id "me.shedaniel.unified-publishing" version "0.1.+"
 }
@@ -37,11 +37,6 @@ repositories {
         content {
             excludeGroup "io.github.fabricators_of_create"
         }
-    }
-
-    maven {
-        name "OctoStudios"
-        url "https://maven.octo-studios.com/releases"
     }
 
     maven {
@@ -99,9 +94,9 @@ dependencies {
     localRuntime "curse.maven:energized-power-782147:7852394"
 
     // Farmer's Delight Refabricated integration
-    compileOnly "curse.maven:farmers-delight-refabricated-993166:7844606"
+    compileOnly "curse.maven:farmers-delight-refabricated-993166:8016410"
 
-    localRuntime "curse.maven:farmers-delight-refabricated-993166:7844606"
+    localRuntime "curse.maven:farmers-delight-refabricated-993166:8016410"
 
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html

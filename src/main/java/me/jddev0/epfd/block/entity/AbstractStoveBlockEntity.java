@@ -158,7 +158,7 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
         BlockPos testPos = worldPosition.above();
         BlockState testState = level.getBlockState(testPos);
 
-        if(testState.is(ModTags.HEAT_CONDUCTORS)) {
+        if(testState.is(ModTags.Blocks.HEAT_CONDUCTORS)) {
             testPos = testPos.above();
             testState = level.getBlockState(testPos);
         }

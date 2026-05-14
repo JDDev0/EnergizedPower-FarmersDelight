@@ -79,7 +79,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         addSawmillRecipe(output, Ingredient.of(ModItems.CUTTING_BOARD.get()), new ItemStack(Items.OAK_PLANKS, 4),
                 2, "oak_planks", "cutting_board");
 
-        addSawmillRecipe(output, Ingredient.of(ModTags.WOODEN_CABINETS), new ItemStack(Items.STICK, 10),
+        addSawmillRecipe(output, Ingredient.of(ModTags.Items.CABINETS_WOODEN), new ItemStack(Items.STICK, 10),
                 3, "sticks", "cabinets");
     }
 

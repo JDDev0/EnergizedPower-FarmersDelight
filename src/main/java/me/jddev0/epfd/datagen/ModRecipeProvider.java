@@ -82,7 +82,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         addSawmillRecipe(output, Ingredient.ofItems(ModItems.CUTTING_BOARD.get()), new ItemStack(Items.OAK_PLANKS, 4),
                 2, "oak_planks", "cutting_board");
 
-        addSawmillRecipe(output, Ingredient.fromTag(ModTags.WOODEN_CABINETS), new ItemStack(Items.STICK, 10),
+        addSawmillRecipe(output, Ingredient.fromTag(ModTags.Items.CABINETS_WOODEN), new ItemStack(Items.STICK, 10),
                 3, "sticks", "cabinets");
     }
 

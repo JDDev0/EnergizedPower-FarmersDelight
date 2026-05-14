@@ -33,8 +33,8 @@ public abstract class SkilletBlockEntityMixin extends SyncedBlockEntity implemen
         BlockPos heatSourcePos = pos.down();
         BlockState heatSourceState = level.getBlockState(heatSourcePos);
 
-        if(!requiresDirectHeat() && !heatSourceState.isIn(ModTags.HEAT_SOURCES) &&
-                heatSourceState.isIn(ModTags.HEAT_CONDUCTORS)) {
+        if(!requiresDirectHeat() && !heatSourceState.isIn(ModTags.Blocks.HEAT_SOURCES) &&
+                heatSourceState.isIn(ModTags.Blocks.HEAT_CONDUCTORS)) {
             heatSourcePos = heatSourcePos.down();
             heatSourceState = level.getBlockState(heatSourcePos);
         }

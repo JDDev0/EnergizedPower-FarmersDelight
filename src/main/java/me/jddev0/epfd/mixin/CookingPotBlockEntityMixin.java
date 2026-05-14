@@ -34,8 +34,8 @@ public abstract class CookingPotBlockEntityMixin extends SyncedBlockEntity imple
         BlockPos heatSourcePos = pos.down();
         BlockState heatSourceState = world.getBlockState(heatSourcePos);
 
-        if(!requiresDirectHeat() && !heatSourceState.isIn(ModTags.HEAT_SOURCES) &&
-                heatSourceState.isIn(ModTags.HEAT_CONDUCTORS)) {
+        if(!requiresDirectHeat() && !heatSourceState.isIn(ModTags.Blocks.HEAT_SOURCES) &&
+                heatSourceState.isIn(ModTags.Blocks.HEAT_CONDUCTORS)) {
             heatSourcePos = heatSourcePos.down();
             heatSourceState = world.getBlockState(heatSourcePos);
         }

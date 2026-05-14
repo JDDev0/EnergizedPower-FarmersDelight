@@ -34,7 +34,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 );
 
         
-        tag(ModTags.HEAT_SOURCES).
+        tag(ModTags.Blocks.HEAT_SOURCES).
                 add(EPFDBlocks.ELECTRIC_STOVE.get(),
                         EPFDBlocks.INDUCTION_STOVE.get());
     }

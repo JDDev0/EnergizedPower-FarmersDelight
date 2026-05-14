@@ -6,7 +6,7 @@ plugins {
     id "me.shedaniel.unified-publishing" version "0.1.+"
 }
 
-version = '1.20.1-1.0.1-forge'
+version = '1.20.1-1.0.2-forge'
 group = 'me.jddev0.energizedpowerfd' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'energizedpowerfd'
 
@@ -192,9 +192,9 @@ dependencies {
     localRuntime fg.deobf("curse.maven:energized-power-782147:7046211")
 
     // Farmer's Delight integration
-    compileOnly fg.deobf("curse.maven:farmers-delight-398521:6917255")
+    compileOnly fg.deobf("curse.maven:farmers-delight-398521:8083474")
 
-    localRuntime fg.deobf("curse.maven:farmers-delight-398521:6917255")
+    localRuntime fg.deobf("curse.maven:farmers-delight-398521:8083474")
 
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html

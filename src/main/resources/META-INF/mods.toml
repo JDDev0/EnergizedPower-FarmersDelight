@@ -17,7 +17,7 @@ issueTrackerURL="https://github.com/JDDev0/EnergizedPower-FarmersDelight/issues"
 # The modid of the mod
 modId="energizedpowerfd" #mandatory
 # The version number of the mod
-version="1.20.1-1.0.1-forge" #mandatory
+version="1.20.1-1.0.2-forge" #mandatory
 # A display name for the mod
 displayName="Energized Power - Farmer's Delight" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/

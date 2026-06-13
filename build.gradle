@@ -87,6 +87,18 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
+    // REI integration
+    modCompileOnlyApi "me.shedaniel.cloth:basic-math:0.6.1"
+    modCompileOnlyApi "dev.architectury:architectury-fabric:13.0.1"
+    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-fabric:16.0.729"
+    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:16.0.729"
+
+    //JEI integration
+    modCompileOnly "curse.maven:jei-238222:7129284"
+
+    // EMI integration
+    modCompileOnly "dev.emi:emi-fabric:1.1.8+1.21:api"
+
     // Energized Power dependency
     modCompileOnly "curse.maven:energized-power-782147:8238845"
 
@@ -100,7 +112,9 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    modLocalRuntime "dev.emi:emi-fabric:1.1.13+1.21.1"
+    modLocalRuntime "dev.emi:emi-fabric:1.1.8+1.21"
+    //modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:16.0.729"
+    //modLocalRuntime "curse.maven:jei-238222:7129284"
 }
 
 processResources {

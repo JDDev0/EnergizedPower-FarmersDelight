@@ -1,0 +1,10 @@
+{
+  "type": "energizedpower:plant_growth_chamber_soil",
+  "energyConsumptionMultiplier": 0.75,
+  "fluidConsumptionMultiplier": 1.0,
+  "ingredient": {
+    "item": "farmersdelight:rich_soil"
+  },
+  "soilType": "energizedpower:dirt",
+  "speedMultiplier": 1.75
+}

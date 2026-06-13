@@ -7,6 +7,7 @@ import me.jddev0.epfd.block.EPFDBlocks;
 import me.jddev0.epfd.block.entity.EPFDBlockEntities;
 import me.jddev0.epfd.config.ModConfigs;
 import me.jddev0.epfd.item.EPFDItems;
+import me.jddev0.epfd.recipe.EPFDRecipes;
 import me.jddev0.epfd.screen.EPFDMenuTypes;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
@@ -27,6 +28,7 @@ public class EnergizedPowerFDMod implements ModInitializer {
         EPFDItems.register();
         EPFDBlocks.register();
         EPFDBlockEntities.register();
+        EPFDRecipes.register();
         EPFDMenuTypes.register();
 
         addCreativeTab();

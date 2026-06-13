@@ -1,0 +1,26 @@
+{
+  "type": "energizedpower:plant_growth_chamber",
+  "fluid": "minecraft:water",
+  "fluidConsumption": 0.125,
+  "ingredient": "farmersdelight:rice",
+  "results": [
+    {
+      "percentages": [
+        1.0
+      ],
+      "result": {
+        "id": "farmersdelight:rice"
+      }
+    },
+    {
+      "percentages": [
+        1.0
+      ],
+      "result": {
+        "id": "farmersdelight:rice_panicle"
+      }
+    }
+  ],
+  "soilType": "#energizedpower:water_crops",
+  "ticks": 4000
+}

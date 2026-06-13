@@ -6,6 +6,8 @@ import me.jddev0.ep.recipe.OutputItemStackTemplateWithPercentages;
 import me.jddev0.ep.recipe.PlantGrowthChamberRecipe;
 import me.jddev0.ep.recipe.SawmillRecipe;
 import me.jddev0.ep.registry.tags.CommonItemTags;
+import me.jddev0.ep.soil.EPSoilTypeTags;
+import me.jddev0.ep.soil.SoilType;
 import me.jddev0.epfd.EnergizedPowerFDMod;
 import me.jddev0.epfd.block.EPFDBlocks;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
@@ -22,9 +24,14 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import vectorwing.farmersdelight.FarmersDelight;
 import vectorwing.farmersdelight.common.registry.ModBlocks;
 import vectorwing.farmersdelight.common.registry.ModItems;
@@ -95,13 +102,13 @@ public class ModRecipeGenerator extends RecipeProvider {
                 new OutputItemStackTemplateWithPercentages(new ItemStackTemplate(ModItems.ROTTEN_TOMATO.get()), new double[] {
                         .05
                 })
-        }, 16000, "tomatoes", "tomato_seeds");
+        }, EPSoilTypeTags.FLOWERS, Fluids.WATER, 0.0625, 4000, "tomatoes", "tomato_seeds");
 
         addPlantGrowthChamberRecipe(Ingredient.of(ModItems.ONION.get()), new OutputItemStackTemplateWithPercentages[] {
                 new OutputItemStackTemplateWithPercentages(new ItemStackTemplate(ModItems.ONION.get()), new double[] {
                         1., .75, .25, .25
                 })
-        }, 16000, "onions", "onion");
+        }, EPSoilTypeTags.FLOWERS, Fluids.WATER, 0.0625, 4000, "onions", "onion");
 
         addPlantGrowthChamberRecipe(Ingredient.of(ModItems.CABBAGE_SEEDS.get()), new OutputItemStackTemplateWithPercentages[] {
                 new OutputItemStackTemplateWithPercentages(new ItemStackTemplate(ModItems.CABBAGE_SEEDS.get()), new double[] {
@@ -110,7 +117,7 @@ public class ModRecipeGenerator extends RecipeProvider {
                 new OutputItemStackTemplateWithPercentages(new ItemStackTemplate(ModItems.CABBAGE.get()), new double[] {
                         1., .75, .25, .25
                 })
-        }, 16000, "cabbage", "cabbage_seeds");
+        }, EPSoilTypeTags.FLOWERS, Fluids.WATER, 0.0625, 4000, "cabbage", "cabbage_seeds");
     }
     private void addShapedCraftingRecipe(Criterion<InventoryChangeTrigger.TriggerInstance> hasIngredientTrigger,
                                          Map<Character, Ingredient> key, String[] pattern,
@@ -185,13 +192,35 @@ public class ModRecipeGenerator extends RecipeProvider {
         this.output.accept(getKey(recipeId), recipe, null);
     }
 
-    private void addPlantGrowthChamberRecipe(Ingredient input, OutputItemStackTemplateWithPercentages[] outputs, int ticks,
+    private void addPlantGrowthChamberRecipe(Ingredient input,
+                                             OutputItemStackTemplateWithPercentages[] outputs,
+                                             TagKey<SoilType> soilType,
+                                             Fluid fluid, double fluidConsumption, int ticks,
+                                             String outputName, String recipeIngredientName) {
+        addPlantGrowthChamberRecipe(input, outputs, soilType, new Fluid[] {fluid}, fluidConsumption, ticks, outputName, recipeIngredientName);
+    }
+    private void addPlantGrowthChamberRecipe(Ingredient input,
+                                             OutputItemStackTemplateWithPercentages[] outputs,
+                                             TagKey<SoilType> soilType,
+                                             Fluid[] fluid, double fluidConsumption, int ticks,
                                              String outputName, String recipeIngredientName) {
         Identifier recipeId = Identifier.fromNamespaceAndPath(EnergizedPowerFDMod.MODID, PATH_PREFIX + "growing/" +
                 outputName + "_from_growing_" + recipeIngredientName);
 
-        PlantGrowthChamberRecipe recipe = new PlantGrowthChamberRecipe(outputs, input, ticks);
+        PlantGrowthChamberRecipe recipe = new PlantGrowthChamberRecipe(outputs, input, soilType, fluid, fluidConsumption, ticks);
         this.output.accept(getKey(recipeId), recipe, null);
+    }
+
+    private Ingredient ingredientOf(ItemLike item) {
+        return Ingredient.of(item);
+    }
+
+    private Ingredient ingredientOf(ItemLike... items) {
+        return Ingredient.of(items);
+    }
+
+    private Ingredient ingredientOf(TagKey<Item> tagKey) {
+        return Ingredient.of(registries.lookupOrThrow(Registries.ITEM).getOrThrow(tagKey));
     }
 
     private ResourceKey<Recipe<?>> getKey(Identifier recipeId) {

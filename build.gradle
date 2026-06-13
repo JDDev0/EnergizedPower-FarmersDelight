@@ -148,6 +148,19 @@ dependencies {
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation "net.neoforged:neoforge:${neo_version}"
 
+    // REI integration
+    compileOnly 'me.shedaniel.cloth:basic-math:0.6.1'
+    compileOnly "dev.architectury:architectury-neoforge:13.0.6"
+    compileOnly 'me.shedaniel:RoughlyEnoughItems-neoforge:16.0.783'
+    compileOnly "me.shedaniel:REIPluginCompatibilities-forge-annotations:12.+"
+
+    // JEI integration
+    compileOnly "mezz.jei:jei-1.21.1-common-api:19.21.0.246"
+    compileOnly "mezz.jei:jei-1.21.1-neoforge-api:19.21.0.246"
+
+    // EMI integration
+    compileOnly "dev.emi:emi-neoforge:1.1.15+1.21.1:api"
+
     // Energized Power dependency
     compileOnly "curse.maven:energized-power-782147:8238851"
 
@@ -161,7 +174,9 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    localRuntime "mezz.jei:jei-1.21.1-neoforge:19.21.0.247"
+    localRuntime "dev.emi:emi-neoforge:1.1.13+1.21.1"
+    //localRuntime "me.shedaniel:RoughlyEnoughItems-neoforge:16.0.799"
+    //localRuntime "mezz.jei:jei-1.21.1-neoforge:19.21.0.246"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

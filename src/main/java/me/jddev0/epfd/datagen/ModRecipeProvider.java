@@ -2,12 +2,17 @@ package me.jddev0.epfd.datagen;
 
 import me.jddev0.ep.block.EPBlocks;
 import me.jddev0.ep.item.EPItems;
+import me.jddev0.ep.recipe.OutputItemStackWithPercentages;
+import me.jddev0.ep.recipe.PlantGrowthChamberRecipe;
+import me.jddev0.ep.recipe.PlantGrowthChamberSoilRecipe;
+import me.jddev0.ep.recipe.SawmillRecipe;
 import me.jddev0.ep.registry.tags.CommonItemTags;
 import me.jddev0.ep.soil.EPSoilTypeTags;
+import me.jddev0.ep.soil.EPSoilTypes;
 import me.jddev0.ep.soil.SoilType;
 import me.jddev0.epfd.EnergizedPowerFDMod;
-import me.jddev0.ep.recipe.*;
 import me.jddev0.epfd.block.EPFDBlocks;
+import me.jddev0.epfd.recipe.RichSoilFarmlandCraftingRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
@@ -19,6 +24,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -39,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 public class ModRecipeProvider extends RecipeProvider implements IConditionBuilder {
     private static final String FARMERS_DELIGHT_MOD_ID = FarmersDelight.MODID;
@@ -53,10 +60,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildCraftingRecipes(output);
         buildSawmillRecipes(output);
         buildPlantGrowthChamberRecipes(output);
+        buildPlantGrowthChamberSoilRecipes(output);
     }
 
     private void buildCraftingRecipes(RecipeOutput output) {
         buildMachineCraftingRecipes(output);
+        buildCustomCraftingRecipes(output);
     }
     private void buildMachineCraftingRecipes(RecipeOutput output) {
         addShapedCraftingRecipe(output, has(EPBlocks.BASIC_MACHINE_FRAME_ITEM), Map.of(
@@ -80,6 +89,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 "BHB",
                 "SES"
         }, new ItemStack(EPFDBlocks.INDUCTION_STOVE_ITEM.get()), CraftingBookCategory.MISC);
+    }
+    private void buildCustomCraftingRecipes(RecipeOutput output) {
+        addCustomCraftingRecipe(output, RichSoilFarmlandCraftingRecipe::new, CraftingBookCategory.MISC,
+                "rich_soil_farmland");
     }
 
     private void buildSawmillRecipes(RecipeOutput output) {
@@ -117,7 +130,24 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                         1., .75, .25, .25
                 })
         }, EPSoilTypeTags.FLOWERS, Fluids.WATER, 0.0625, 4000, "cabbage", "cabbage_seeds");
+
+        addPlantGrowthChamberRecipe(output, ingredientOf(ModItems.RICE.get()), new OutputItemStackWithPercentages[] {
+                new OutputItemStackWithPercentages(new ItemStack(ModItems.RICE.get()), new double[] {
+                        1.
+                }),
+                new OutputItemStackWithPercentages(new ItemStack(ModItems.RICE_PANICLE.get()), new double[] {
+                        1.
+                })
+        }, EPSoilTypeTags.WATER_CROPS, Fluids.WATER, 0.125, 4000, "rice", "rice");
     }
+
+    private void buildPlantGrowthChamberSoilRecipes(RecipeOutput output) {
+        addPlantGrowthChamberSoilRecipe(output, ingredientOf(ModItems.RICH_SOIL_FARMLAND.get()),
+                EPSoilTypes.FARMLAND, 2.0, 0.75, 0.5, "rich_soil_farmland");
+        addPlantGrowthChamberSoilRecipe(output, ingredientOf(ModItems.RICH_SOIL.get()),
+                EPSoilTypes.DIRT, 1.75, 1.0, 0.75, "rich_soil");
+    }
+
     private static void addShapedCraftingRecipe(RecipeOutput output, Criterion<InventoryChangeTrigger.TriggerInstance> hasIngredientTrigger,
                                                 Map<Character, Ingredient> key, String[] pattern,
                                                 ItemStack result, CraftingBookCategory category) {
@@ -180,6 +210,15 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 NonNullList.of(Ingredient.EMPTY, inputs.toArray(Ingredient[]::new)));
         output.accept(recipeId, recipe, advancementBuilder.build(recipeId.withPrefix("recipes/")));
     }
+    private void addCustomCraftingRecipe(RecipeOutput recipeOutput, Function<CraftingBookCategory, ? extends CustomRecipe> customRecipeFactory,
+                                         CraftingBookCategory category, String recipeIdString) {
+        ResourceLocation recipeId = ResourceLocation.fromNamespaceAndPath(EnergizedPowerFDMod.MODID, PATH_PREFIX + "crafting/" +
+                recipeIdString);
+
+        CustomRecipe recipe = customRecipeFactory.apply(category);
+        recipeOutput.accept(recipeId, recipe, null);
+    }
+
     private void addSawmillRecipe(RecipeOutput recipeOutput, Ingredient input, ItemStack output,
                                          int sawdustAmount, String outputName, String recipeIngredientName) {
         ResourceLocation recipeId = ResourceLocation.fromNamespaceAndPath(EnergizedPowerFDMod.MODID, PATH_PREFIX + "sawmill/" +
@@ -206,6 +245,19 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         PlantGrowthChamberRecipe recipe = new PlantGrowthChamberRecipe(outputs, input, soilType, fluid, fluidConsumption, ticks);
         recipeExporter.accept(recipeId, recipe, null);
+    }
+
+    private void addPlantGrowthChamberSoilRecipe(RecipeOutput recipeOutput, Ingredient input,
+                                                 ResourceKey<SoilType> soilType,
+                                                 double speedMultiplier,
+                                                 double fluidConsumptionMultiplier, double energyConsumptionMultiplier,
+                                                 String recipeIngredientName) {
+        ResourceLocation recipeId = ResourceLocation.fromNamespaceAndPath(EnergizedPowerFDMod.MODID, PATH_PREFIX + "growing/soil/" +
+                recipeIngredientName);
+
+        PlantGrowthChamberSoilRecipe recipe = new PlantGrowthChamberSoilRecipe(input, soilType,
+                speedMultiplier, fluidConsumptionMultiplier, energyConsumptionMultiplier);
+        recipeOutput.accept(recipeId, recipe, null);
     }
 
     private Ingredient ingredientOf(ItemLike item) {

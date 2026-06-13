@@ -6,6 +6,7 @@ import me.jddev0.epfd.block.EPFDBlocks;
 import me.jddev0.epfd.block.entity.EPFDBlockEntities;
 import me.jddev0.epfd.config.ModConfigs;
 import me.jddev0.epfd.item.EPFDItems;
+import me.jddev0.epfd.recipe.EPFDRecipes;
 import me.jddev0.epfd.screen.ElectricStoveScreen;
 import me.jddev0.epfd.screen.InductionStoveScreen;
 import me.jddev0.epfd.screen.EPFDMenuTypes;
@@ -31,6 +32,7 @@ public class EnergizedPowerFDMod {
         EPFDItems.register(modEventBus);
         EPFDBlocks.register(modEventBus);
         EPFDBlockEntities.register(modEventBus);
+        EPFDRecipes.register(modEventBus);
         EPFDMenuTypes.register(modEventBus);
 
         modEventBus.addListener(this::addCreativeTab);

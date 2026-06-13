@@ -88,6 +88,20 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
+    // REI integration
+    //TODO re-enable
+    //compileOnlyApi "me.shedaniel.cloth:basic-math:0.6.1"
+    //compileOnlyApi "dev.architectury:architectury-fabric:19.0.1"
+    //compileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-fabric:21.11.814"
+    //compileOnlyApi "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:21.11.814"
+
+    //JEI integration
+    compileOnly "mezz.jei:jei-26.1.2-common-api:29.5.0.28"
+
+    // EMI integration
+    //TODO re-enable
+    //compileOnly "dev.emi:emi-fabric:1.1.8+1.21:api"
+
     // Energized Power dependency
     compileOnlyApi "curse.maven:energized-power-782147:8238849"
 
@@ -101,8 +115,9 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    localRuntime "mezz.jei:jei-26.1-fabric:29.2.0.20"
-    //localRuntime "dev.emi:emi-fabric:1.1.13+1.21.1"
+    //modLocalRuntime "dev.emi:emi-fabric:1.1.8+1.21"
+    //modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:16.0.729"
+    localRuntime "mezz.jei:jei-26.1.2-fabric:29.6.2.31"
 }
 
 processResources {

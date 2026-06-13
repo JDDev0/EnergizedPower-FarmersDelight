@@ -8,30 +8,29 @@ import me.jddev0.ep.screen.base.IEnergyStorageMenu;
 import me.jddev0.ep.screen.base.UpgradableEnergyStorageContainerScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 public abstract class ConfigurableRedstoneModeOnlyUpgradableEnergyStorageContainerScreen
-        <T extends ScreenHandler & IEnergyStorageMenu & IConfigurableMenu>
+        <T extends AbstractContainerMenu & IEnergyStorageMenu & IConfigurableMenu>
         extends UpgradableEnergyStorageContainerScreen<T> {
-    public ConfigurableRedstoneModeOnlyUpgradableEnergyStorageContainerScreen(T menu, PlayerInventory inventory, Text titleComponent,
-                                                                              Identifier texture,
-                                                                              Identifier upgradeViewTexture) {
+    public ConfigurableRedstoneModeOnlyUpgradableEnergyStorageContainerScreen(T menu, Inventory inventory, Component titleComponent,
+                                                                              ResourceLocation texture,
+                                                                              ResourceLocation upgradeViewTexture) {
         super(menu, inventory, titleComponent, texture, upgradeViewTexture);
     }
 
-    public ConfigurableRedstoneModeOnlyUpgradableEnergyStorageContainerScreen(T menu, PlayerInventory inventory, Text titleComponent,
+    public ConfigurableRedstoneModeOnlyUpgradableEnergyStorageContainerScreen(T menu, Inventory inventory, Component titleComponent,
                                                                               String energyIndicatorBarTooltipComponentID,
-                                                                              Identifier texture,
-                                                                              Identifier upgradeViewTexture) {
+                                                                              ResourceLocation texture,
+                                                                              ResourceLocation upgradeViewTexture) {
         super(menu, inventory, titleComponent, energyIndicatorBarTooltipComponentID, texture,
                 upgradeViewTexture);
     }
@@ -42,10 +41,10 @@ public abstract class ConfigurableRedstoneModeOnlyUpgradableEnergyStorageContain
             return true;
 
         if(mouseButton == 0) {
-            if(isPointWithinBounds(-22, 26, 20, 20, mouseX, mouseY)) {
+            if(isHovering(-22, 26, 20, 20, mouseX, mouseY)) {
                 //Redstone Mode
 
-                ModMessages.sendClientPacketToServer(new ChangeRedstoneModeC2SPacket(handler.getBlockEntity().getPos()));
+                ModMessages.sendClientPacketToServer(new ChangeRedstoneModeC2SPacket(menu.getBlockEntity().getBlockPos()));
                 return true;
             }
         }
@@ -54,32 +53,32 @@ public abstract class ConfigurableRedstoneModeOnlyUpgradableEnergyStorageContain
     }
 
     @Override
-    protected void renderConfiguration(DrawContext drawContext, int x, int y, int mouseX, int mouseY) {
+    protected void renderConfiguration(GuiGraphics drawContext, int x, int y, int mouseX, int mouseY) {
         super.renderConfiguration(drawContext, x, y, mouseX, mouseY);
 
-        RedstoneMode redstoneMode = handler.getRedstoneMode();
+        RedstoneMode redstoneMode = menu.getRedstoneMode();
         int ordinal = redstoneMode.ordinal();
 
-        if(isPointWithinBounds(-22, 26, 20, 20, mouseX, mouseY)) {
-            drawContext.drawTexture(CONFIGURATION_ICONS_TEXTURE, x - 22, y + 26, 20 * ordinal, 20, 20, 20);
+        if(isHovering(-22, 26, 20, 20, mouseX, mouseY)) {
+            drawContext.blit(CONFIGURATION_ICONS_TEXTURE, x - 22, y + 26, 20 * ordinal, 20, 20, 20);
         }else {
-            drawContext.drawTexture(CONFIGURATION_ICONS_TEXTURE, x - 22, y + 26, 20 * ordinal, 0, 20, 20);
+            drawContext.blit(CONFIGURATION_ICONS_TEXTURE, x - 22, y + 26, 20 * ordinal, 0, 20, 20);
         }
     }
 
     @Override
-    protected void renderTooltipConfiguration(DrawContext drawContext, int mouseX, int mouseY) {
+    protected void renderTooltipConfiguration(GuiGraphics drawContext, int mouseX, int mouseY) {
         super.renderTooltipConfiguration(drawContext, mouseX, mouseY);
 
-        if(isPointWithinBounds(-22, 26, 20, 20, mouseX, mouseY)) {
+        if(isHovering(-22, 26, 20, 20, mouseX, mouseY)) {
             //Redstone Mode
 
-            RedstoneMode redstoneMode = handler.getRedstoneMode();
+            RedstoneMode redstoneMode = menu.getRedstoneMode();
 
-            List<Text> components = new ArrayList<>(2);
-            components.add(Text.translatable("tooltip.energizedpower.machine_configuration.redstone_mode." + redstoneMode.asString()));
+            List<Component> components = new ArrayList<>(2);
+            components.add(Component.translatable("tooltip.energizedpower.machine_configuration.redstone_mode." + redstoneMode.getSerializedName()));
 
-            drawContext.drawTooltip(textRenderer, components, Optional.empty(), mouseX, mouseY);
+            drawContext.renderTooltip(font, components, Optional.empty(), mouseX, mouseY);
         }
     }
 }

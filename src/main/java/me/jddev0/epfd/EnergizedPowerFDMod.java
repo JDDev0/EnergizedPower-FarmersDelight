@@ -10,8 +10,8 @@ import me.jddev0.epfd.item.EPFDItems;
 import me.jddev0.epfd.screen.EPFDMenuTypes;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
 import org.slf4j.Logger;
 
 import java.util.function.Consumer;
@@ -39,7 +39,7 @@ public class EnergizedPowerFDMod implements ModInitializer {
         });
     }
 
-    private void addCreativeTabFor(RegistryKey<ItemGroup> groupKey,
+    private void addCreativeTabFor(ResourceKey<CreativeModeTab> groupKey,
                                    Consumer<CreativeTabEntriesHelper> consumer) {
         ItemGroupEvents.modifyEntriesEvent(groupKey).
                 register(entries -> consumer.accept(new CreativeTabEntriesHelper(entries)));

@@ -1,11 +1,11 @@
 package me.jddev0.epfd.mixin;
 
 import me.jddev0.epfd.utils.CookingUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,16 +26,16 @@ public abstract class SkilletBlockEntityMixin extends SyncedBlockEntity implemen
     }
 
     @Inject(method = "cookAndOutputItems", at = @At("HEAD"))
-    private void cookAndOutputItems(ItemStack cookingStack, World level, CallbackInfo ci) {
+    private void cookAndOutputItems(ItemStack cookingStack, Level level, CallbackInfo ci) {
         if(level == null)
             return;
 
-        BlockPos heatSourcePos = pos.down();
+        BlockPos heatSourcePos = worldPosition.below();
         BlockState heatSourceState = level.getBlockState(heatSourcePos);
 
-        if(!requiresDirectHeat() && !heatSourceState.isIn(ModTags.Blocks.HEAT_SOURCES) &&
-                heatSourceState.isIn(ModTags.Blocks.HEAT_CONDUCTORS)) {
-            heatSourcePos = heatSourcePos.down();
+        if(!requiresDirectHeat() && !heatSourceState.is(ModTags.Blocks.HEAT_SOURCES) &&
+                heatSourceState.is(ModTags.Blocks.HEAT_CONDUCTORS)) {
+            heatSourcePos = heatSourcePos.below();
             heatSourceState = level.getBlockState(heatSourcePos);
         }
 

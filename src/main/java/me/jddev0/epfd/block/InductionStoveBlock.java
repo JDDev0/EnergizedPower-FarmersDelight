@@ -1,63 +1,63 @@
 package me.jddev0.epfd.block;
 
 import com.mojang.serialization.MapCodec;
-import me.jddev0.epfd.block.entity.InductionStoveBlockEntity;
 import me.jddev0.epfd.block.entity.EPFDBlockEntities;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import me.jddev0.epfd.block.entity.InductionStoveBlockEntity;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class InductionStoveBlock extends AbstractStoveBlock {
-    public static final MapCodec<InductionStoveBlock> CODEC = createCodec(InductionStoveBlock::new);
+    public static final MapCodec<InductionStoveBlock> CODEC = simpleCodec(InductionStoveBlock::new);
 
-    protected InductionStoveBlock(Settings props) {
+    protected InductionStoveBlock(Properties props) {
         super(props);
     }
 
     @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
+    protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
 
     @Nullable
     @Override
-    public BlockEntity createBlockEntity(BlockPos blockPos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState state) {
         return new InductionStoveBlockEntity(blockPos, state);
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World level, BlockState state, BlockEntityType<T> type) {
-        return validateTicker(type, EPFDBlockEntities.INDUCTION_STOVE_ENTITY, InductionStoveBlockEntity::tick);
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return createTickerHelper(type, EPFDBlockEntities.INDUCTION_STOVE_ENTITY, InductionStoveBlockEntity::tick);
     }
 
     public static class Item extends BlockItem {
-        public Item(Block block, Settings props) {
+        public Item(Block block, net.minecraft.world.item.Item.Properties props) {
             super(block, props);
         }
 
         @Override
-        public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag type) {
             if(Screen.hasShiftDown()) {
-                tooltip.add(Text.translatable("tooltip.energizedpowerfd.stoves.txt.shift.1",
-                        Text.translatable(getTranslationKey(stack)),
-                        InductionStoveBlockEntity.RECIPE_DURATION_MULTIPLIER).formatted(Formatting.GRAY));
+                tooltip.add(Component.translatable("tooltip.energizedpowerfd.stoves.txt.shift.1",
+                        Component.translatable(getDescriptionId(stack)),
+                        InductionStoveBlockEntity.RECIPE_DURATION_MULTIPLIER).withStyle(ChatFormatting.GRAY));
             }else {
-                tooltip.add(Text.translatable("tooltip.energizedpower.shift_details.txt").formatted(Formatting.YELLOW));
+                tooltip.add(Component.translatable("tooltip.energizedpower.shift_details.txt").withStyle(ChatFormatting.YELLOW));
             }
         }
     }

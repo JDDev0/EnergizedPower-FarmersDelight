@@ -3,13 +3,13 @@ package me.jddev0.epfd.screen;
 import me.jddev0.ep.inventory.upgrade.UpgradeModuleInventory;
 import me.jddev0.epfd.block.EPFDBlocks;
 import me.jddev0.epfd.block.entity.ElectricStoveBlockEntity;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class ElectricStoveMenu extends AbstractStoveMenu<ElectricStoveBlockEntity> {
-    public ElectricStoveMenu(int id, PlayerInventory inv, BlockPos pos) {
+    public ElectricStoveMenu(int id, Inventory inv, BlockPos pos) {
         super(
                 id, inv, pos,
 
@@ -18,8 +18,8 @@ public class ElectricStoveMenu extends AbstractStoveMenu<ElectricStoveBlockEntit
         );
     }
 
-    public ElectricStoveMenu(int id, BlockEntity blockEntity, PlayerInventory playerInventory, UpgradeModuleInventory upgradeModuleInventory,
-                             PropertyDelegate data) {
+    public ElectricStoveMenu(int id, BlockEntity blockEntity, Inventory playerInventory, UpgradeModuleInventory upgradeModuleInventory,
+                             ContainerData data) {
         super(
                 id, blockEntity, playerInventory,
 

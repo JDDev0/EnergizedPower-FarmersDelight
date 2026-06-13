@@ -1,18 +1,26 @@
 package me.jddev0.epfd.datagen;
 
-import me.jddev0.epfd.block.ElectricStoveBlock;
 import me.jddev0.epfd.block.EPFDBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.data.client.*;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
+import me.jddev0.epfd.block.ElectricStoveBlock;
+import net.minecraft.core.Direction;
+import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.data.models.blockstates.PropertyDispatch;
+import net.minecraft.data.models.blockstates.Variant;
+import net.minecraft.data.models.blockstates.VariantProperties;
+import net.minecraft.data.models.model.ModelTemplates;
+import net.minecraft.data.models.model.TextureMapping;
+import net.minecraft.data.models.model.TextureSlot;
+import net.minecraft.data.models.model.TexturedModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 class ModBlockStateProvider {
-    private final BlockStateModelGenerator generator;
+    private final BlockModelGenerators generator;
 
-    ModBlockStateProvider(BlockStateModelGenerator generator) {
+    ModBlockStateProvider(BlockModelGenerators generator) {
         this.generator = generator;
     }
 
@@ -30,50 +38,50 @@ class ModBlockStateProvider {
                 ElectricStoveBlock.LIT);
     }
 
-    private Identifier orientableBlockModel(Block block, boolean uniqueBottomTexture) {
+    private ResourceLocation orientableBlockModel(Block block, boolean uniqueBottomTexture) {
         return orientableBlockModel(block, "", "_top", uniqueBottomTexture?"_bottom":"_top",
                 "_front", "_side");
     }
 
-    private Identifier orientableBlockModel(Block block, String fileSuffix, String topSuffix,
+    private ResourceLocation orientableBlockModel(Block block, String fileSuffix, String topSuffix,
                                             String bottomSuffix, String frontSuffix, String sideSuffix) {
-        return TexturedModel.makeFactory(unused -> new TextureMap().
-                        put(TextureKey.TOP, TextureMap.getSubId(block, topSuffix)).
-                        put(TextureKey.BOTTOM, TextureMap.getSubId(block, bottomSuffix)).
-                        put(TextureKey.FRONT, TextureMap.getSubId(block, frontSuffix)).
-                        put(TextureKey.SIDE, TextureMap.getSubId(block, sideSuffix)).
-                        copy(TextureKey.TOP, TextureKey.PARTICLE),
-                Models.ORIENTABLE_WITH_BOTTOM).get(block).upload(block, fileSuffix, generator.modelCollector);
+        return TexturedModel.createDefault(unused -> new TextureMapping().
+                        put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, topSuffix)).
+                        put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(block, bottomSuffix)).
+                        put(TextureSlot.FRONT, TextureMapping.getBlockTexture(block, frontSuffix)).
+                        put(TextureSlot.SIDE, TextureMapping.getBlockTexture(block, sideSuffix)).
+                        copySlot(TextureSlot.TOP, TextureSlot.PARTICLE),
+                ModelTemplates.CUBE_ORIENTABLE_TOP_BOTTOM).get(block).createWithSuffix(block, fileSuffix, generator.modelOutput);
     }
 
-    private void activatableOrientableBlockWithItem(Block block, Identifier modelNormal,
-                                                    Identifier modelActive, BooleanProperty isActiveProperty) {
-        generator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block).
-                coordinate(BlockStateVariantMap.create(Properties.HORIZONTAL_FACING, isActiveProperty).
-                        register(Direction.NORTH, false, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelNormal)).
-                        register(Direction.NORTH, true, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelActive)).
-                        register(Direction.SOUTH, false, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelNormal).
-                                put(VariantSettings.Y, VariantSettings.Rotation.R180)).
-                        register(Direction.SOUTH, true, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelActive).
-                                put(VariantSettings.Y, VariantSettings.Rotation.R180)).
-                        register(Direction.EAST, false, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelNormal).
-                                put(VariantSettings.Y, VariantSettings.Rotation.R90)).
-                        register(Direction.EAST, true, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelActive).
-                                put(VariantSettings.Y, VariantSettings.Rotation.R90)).
-                        register(Direction.WEST, false, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelNormal).
-                                put(VariantSettings.Y, VariantSettings.Rotation.R270)).
-                        register(Direction.WEST, true, BlockStateVariant.create().
-                                put(VariantSettings.MODEL, modelActive).
-                                put(VariantSettings.Y, VariantSettings.Rotation.R270))
+    private void activatableOrientableBlockWithItem(Block block, ResourceLocation modelNormal,
+                                                    ResourceLocation modelActive, BooleanProperty isActiveProperty) {
+        generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).
+                with(PropertyDispatch.properties(BlockStateProperties.HORIZONTAL_FACING, isActiveProperty).
+                        select(Direction.NORTH, false, Variant.variant().
+                                with(VariantProperties.MODEL, modelNormal)).
+                        select(Direction.NORTH, true, Variant.variant().
+                                with(VariantProperties.MODEL, modelActive)).
+                        select(Direction.SOUTH, false, Variant.variant().
+                                with(VariantProperties.MODEL, modelNormal).
+                                with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)).
+                        select(Direction.SOUTH, true, Variant.variant().
+                                with(VariantProperties.MODEL, modelActive).
+                                with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180)).
+                        select(Direction.EAST, false, Variant.variant().
+                                with(VariantProperties.MODEL, modelNormal).
+                                with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)).
+                        select(Direction.EAST, true, Variant.variant().
+                                with(VariantProperties.MODEL, modelActive).
+                                with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)).
+                        select(Direction.WEST, false, Variant.variant().
+                                with(VariantProperties.MODEL, modelNormal).
+                                with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)).
+                        select(Direction.WEST, true, Variant.variant().
+                                with(VariantProperties.MODEL, modelActive).
+                                with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270))
                 ));
 
-        generator.registerParentedItemModel(block.asItem(), modelNormal);
+        generator.delegateItemModel(block.asItem(), modelNormal);
     }
 }

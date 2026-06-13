@@ -8,13 +8,13 @@ import me.jddev0.ep.machine.upgrade.UpgradeModuleModifier;
 import me.jddev0.ep.util.EnergyUtils;
 import me.jddev0.epfd.block.entity.base.ConfigurableUpgradableEnergyStorageBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import vectorwing.farmersdelight.common.registry.ModBlocks;
 import vectorwing.farmersdelight.common.tag.ModTags;
 
@@ -51,7 +51,7 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
 
             @Override
             protected void onFinalCommit() {
-                markDirty();
+                setChanged();
                 syncEnergyToPlayers(32);
             }
         };
@@ -69,8 +69,8 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
     }
 
     @Override
-    protected PropertyDelegate initContainerData() {
-        return new PropertyDelegate() {
+    protected ContainerData initContainerData() {
+        return new ContainerData() {
             @Override
             public int get(int index) {
                 return switch(index) {
@@ -87,14 +87,14 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
             }
 
             @Override
-            public int size() {
+            public int getCount() {
                 return 1;
             }
         };
     }
 
-    public Text getDisplayName() {
-        return Text.translatable("container.energizedpowerfd." + this.machineName);
+    public Component getDisplayName() {
+        return Component.translatable("container.energizedpowerfd." + this.machineName);
     }
 
     public int getRedstoneOutput() {
@@ -102,21 +102,21 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
     }
 
     protected void litBlock() {
-        if(world.getBlockState(getPos()).contains(Properties.LIT) &&
-                !world.getBlockState(getPos()).get(Properties.LIT)) {
-            world.setBlockState(getPos(), getCachedState().with(Properties.LIT, true), 3);
+        if(level.getBlockState(getBlockPos()).hasProperty(BlockStateProperties.LIT) &&
+                !level.getBlockState(getBlockPos()).getValue(BlockStateProperties.LIT)) {
+            level.setBlock(getBlockPos(), getBlockState().setValue(BlockStateProperties.LIT, true), 3);
         }
     }
 
     protected void unlitBlock() {
-        if(world.getBlockState(getPos()).contains(Properties.LIT) &&
-                world.getBlockState(getPos()).get(Properties.LIT)) {
-            world.setBlockState(getPos(), getCachedState().with(Properties.LIT, false), 3);
+        if(level.getBlockState(getBlockPos()).hasProperty(BlockStateProperties.LIT) &&
+                level.getBlockState(getBlockPos()).getValue(BlockStateProperties.LIT)) {
+            level.setBlock(getBlockPos(), getBlockState().setValue(BlockStateProperties.LIT, false), 3);
         }
     }
 
-    public static void tick(World level, BlockPos blockPos, BlockState state, AbstractStoveBlockEntity blockEntity) {
-        if(level.isClient)
+    public static void tick(Level level, BlockPos blockPos, BlockState state, AbstractStoveBlockEntity blockEntity) {
+        if(level.isClientSide)
             return;
 
         if(blockEntity.timeoutOffState > 0) {
@@ -124,11 +124,11 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
 
             if(blockEntity.timeoutOffState == 0) {
                 blockEntity.unlitBlock();
-                markDirty(level, blockPos, state);
+                setChanged(level, blockPos, state);
             }
         }
 
-        if(!blockEntity.redstoneMode.isActive(state.get(Properties.POWERED))) {
+        if(!blockEntity.redstoneMode.isActive(state.getValue(BlockStateProperties.POWERED))) {
             blockEntity.unlitBlock();
 
             return;
@@ -148,31 +148,31 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
                     transaction.commit();
                 }
 
-                markDirty(level, blockPos, state);
+                setChanged(level, blockPos, state);
             }else {
                 blockEntity.hasEnoughEnergy = false;
                 if(blockEntity.timeoutOffState == 0) {
                     blockEntity.timeoutOffState = ModConfigs.COMMON_OFF_STATE_TIMEOUT.getValue();
                 }
-                markDirty(level, blockPos, state);
+                setChanged(level, blockPos, state);
             }
         }else {
             if(blockEntity.timeoutOffState == 0) {
                 blockEntity.timeoutOffState = ModConfigs.COMMON_OFF_STATE_TIMEOUT.getValue();
             }
-            markDirty(level, blockPos, state);
+            setChanged(level, blockPos, state);
         }
     }
 
     private boolean hasSkilletOrCookingPot() {
-        BlockPos testPos = pos.up();
-        BlockState testState = world.getBlockState(testPos);
+        BlockPos testPos = worldPosition.above();
+        BlockState testState = level.getBlockState(testPos);
 
-        if(testState.isIn(ModTags.Blocks.HEAT_CONDUCTORS)) {
-            testPos = testPos.up();
-            testState = world.getBlockState(testPos);
+        if(testState.is(ModTags.Blocks.HEAT_CONDUCTORS)) {
+            testPos = testPos.above();
+            testState = level.getBlockState(testPos);
         }
 
-        return testState.isOf(ModBlocks.SKILLET.get()) || testState.isOf(ModBlocks.COOKING_POT.get());
+        return testState.is(ModBlocks.SKILLET.get()) || testState.is(ModBlocks.COOKING_POT.get());
     }
 }

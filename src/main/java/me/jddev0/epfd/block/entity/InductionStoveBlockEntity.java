@@ -2,11 +2,11 @@ package me.jddev0.epfd.block.entity;
 
 import me.jddev0.epfd.config.ModConfigs;
 import me.jddev0.epfd.screen.InductionStoveMenu;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class InductionStoveBlockEntity extends AbstractStoveBlockEntity {
@@ -26,7 +26,7 @@ public class InductionStoveBlockEntity extends AbstractStoveBlockEntity {
 
     @Nullable
     @Override
-    public ScreenHandler createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         syncEnergyToPlayer(player);
 
         return new InductionStoveMenu(id, this, inventory, upgradeModuleInventory, data);

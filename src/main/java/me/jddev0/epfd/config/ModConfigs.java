@@ -14,10 +14,15 @@ import java.io.IOException;
 public final class ModConfigs {
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    private static final String CONFIG_VERSION = "3.0.0-beta.2";
+
     private ModConfigs() {}
 
     public static final Config COMMON_CONFIG = new Config(getRelativeConfigFile("common_addon_farmers_delight.conf"),
             "Energized Power - Farmer's Delight Common Config (IMPORTANT: Not all values are synced from the server to the client.)");
+
+    //Version
+    private static final VersionConfigValue COMMON_CONFIG_VERSION = COMMON_CONFIG.register(new VersionConfigValue("config_version", CONFIG_VERSION));
 
     //Blocks
     public static final ConfigValue<Integer> COMMON_ELECTRIC_STOVE_CAPACITY = registerEnergyCapacityConfigValue(
@@ -89,9 +94,9 @@ public final class ModConfigs {
             try {
                 COMMON_CONFIG.read();
 
-                LOGGER.info("Energized Power common config was successfully loaded");
+                LOGGER.info("Energized Power - Farmer's Delight common config was successfully loaded");
             }catch(IOException | ConfigValidationException e) {
-                LOGGER.error("Energized Power common config could not be read", e);
+                LOGGER.error("Energized Power - Farmer's Delight common config could not be read", e);
             }
         }
     }

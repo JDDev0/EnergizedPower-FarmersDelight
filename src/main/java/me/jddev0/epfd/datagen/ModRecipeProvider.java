@@ -2,17 +2,13 @@ package me.jddev0.epfd.datagen;
 
 import me.jddev0.ep.block.EPBlocks;
 import me.jddev0.ep.item.EPItems;
-import me.jddev0.ep.recipe.OutputItemStackWithPercentages;
-import me.jddev0.ep.recipe.PlantGrowthChamberRecipe;
-import me.jddev0.ep.recipe.PlantGrowthChamberSoilRecipe;
-import me.jddev0.ep.recipe.SawmillRecipe;
+import me.jddev0.ep.recipe.*;
 import me.jddev0.ep.registry.tags.CommonItemTags;
 import me.jddev0.ep.soil.EPSoilTypeTags;
 import me.jddev0.ep.soil.EPSoilTypes;
 import me.jddev0.ep.soil.SoilType;
 import me.jddev0.epfd.EnergizedPowerFDMod;
 import me.jddev0.epfd.block.EPFDBlocks;
-import me.jddev0.epfd.recipe.RichSoilFarmlandCraftingRecipe;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
@@ -90,7 +86,8 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         }, new ItemStack(EPFDBlocks.INDUCTION_STOVE_ITEM), CraftingBookCategory.MISC);
     }
     private void buildCustomCraftingRecipes(RecipeOutput output) {
-        addCustomCraftingRecipe(output, RichSoilFarmlandCraftingRecipe::new, CraftingBookCategory.MISC,
+        addCustomCraftingRecipe(output,
+                new FarmlandCraftingRecipe(ingredientOf(ModItems.RICH_SOIL.get()), new ItemStack(ModItems.RICH_SOIL_FARMLAND.get())),
                 "rich_soil_farmland");
     }
 
@@ -209,13 +206,11 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 NonNullList.of(Ingredient.EMPTY, inputs.toArray(Ingredient[]::new)));
         output.accept(recipeId, recipe, advancementBuilder.build(recipeId.withPrefix("recipes/")));
     }
-    private void addCustomCraftingRecipe(RecipeOutput recipeOutput, Function<CraftingBookCategory, ? extends CustomRecipe> customRecipeFactory,
-                                         CraftingBookCategory category, String recipeIdString) {
+    private void addCustomCraftingRecipe(RecipeOutput recipeOutput, CustomRecipe customRecipe, String recipeIdString) {
         ResourceLocation recipeId = ResourceLocation.fromNamespaceAndPath(EnergizedPowerFDMod.MODID, PATH_PREFIX + "crafting/" +
                 recipeIdString);
 
-        CustomRecipe recipe = customRecipeFactory.apply(category);
-        recipeOutput.accept(recipeId, recipe, null);
+        recipeOutput.accept(recipeId, customRecipe, null);
     }
 
     private static void addSawmillRecipe(RecipeOutput RecipeExporter, Ingredient input, ItemStack output,

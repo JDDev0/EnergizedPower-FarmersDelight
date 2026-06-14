@@ -148,23 +148,10 @@ dependencies {
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation "net.neoforged:neoforge:${neo_version}"
 
-    // REI integration
-    compileOnly 'me.shedaniel.cloth:basic-math:0.6.1'
-    compileOnly "dev.architectury:architectury-neoforge:13.0.6"
-    compileOnly 'me.shedaniel:RoughlyEnoughItems-neoforge:16.0.783'
-    compileOnly "me.shedaniel:REIPluginCompatibilities-forge-annotations:12.+"
-
-    // JEI integration
-    compileOnly "mezz.jei:jei-1.21.1-common-api:19.21.0.246"
-    compileOnly "mezz.jei:jei-1.21.1-neoforge-api:19.21.0.246"
-
-    // EMI integration
-    compileOnly "dev.emi:emi-neoforge:1.1.15+1.21.1:api"
-
     // Energized Power dependency
-    compileOnly "curse.maven:energized-power-782147:8238851"
+    compileOnly "curse.maven:energized-power-782147:8247704"
 
-    localRuntime "curse.maven:energized-power-782147:8238851"
+    localRuntime "curse.maven:energized-power-782147:8247704"
 
     // Farmer's Delight integration
     compileOnly "curse.maven:farmers-delight-398521:8083481"

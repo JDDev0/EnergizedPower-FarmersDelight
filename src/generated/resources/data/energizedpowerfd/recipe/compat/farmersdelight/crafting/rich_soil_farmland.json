@@ -1,4 +1,10 @@
 {
-  "type": "energizedpowerfd:rich_soil_farmland_crafting",
-  "category": "misc"
+  "type": "energizedpower:farmland_crafting",
+  "dirt": {
+    "item": "farmersdelight:rich_soil"
+  },
+  "farmland": {
+    "count": 1,
+    "id": "farmersdelight:rich_soil_farmland"
+  }
 }

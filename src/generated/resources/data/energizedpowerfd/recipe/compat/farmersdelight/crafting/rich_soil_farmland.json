@@ -1,3 +1,7 @@
 {
-  "type": "energizedpowerfd:rich_soil_farmland_crafting"
+  "type": "energizedpower:farmland_crafting",
+  "dirt": "farmersdelight:rich_soil",
+  "farmland": {
+    "id": "farmersdelight:rich_soil_farmland"
+  }
 }

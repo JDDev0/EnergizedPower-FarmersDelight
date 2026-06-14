@@ -25,15 +25,6 @@
     ],
     "client": [
       "me.jddev0.epfd.EnergizedPowerFDModClient"
-    ],
-    "rei_client": [
-      "me.jddev0.epfd.integration.rei.EnergizedPowerFDREIPlugin"
-    ],
-    "jei_mod_plugin": [
-      "me.jddev0.epfd.integration.jei.EnergizedPowerFDJEIPlugin"
-    ],
-    "emi": [
-      "me.jddev0.epfd.integration.emi.EnergizedPowerFDEMIPlugin"
     ]
   },
   "mixins": [
@@ -45,7 +36,7 @@
     "java": ">=25",
     "fabric-api": "*",
 
-    "energizedpower": ">=3.0.0-beta.2",
+    "energizedpower": ">=3.0.0-beta.3",
 
     "farmersdelight": "*"
   },

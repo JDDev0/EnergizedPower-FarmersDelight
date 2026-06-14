@@ -1,19 +1,15 @@
 package me.jddev0.epfd;
 
 import com.mojang.logging.LogUtils;
-import me.jddev0.ep.integration.jei.EnergizedPowerJEIUtils;
 import me.jddev0.ep.item.CreativeTabEntriesHelper;
 import me.jddev0.ep.item.EPCreativeModeTab;
 import me.jddev0.epfd.block.EPFDBlocks;
 import me.jddev0.epfd.block.entity.EPFDBlockEntities;
 import me.jddev0.epfd.config.ModConfigs;
 import me.jddev0.epfd.item.EPFDItems;
-import me.jddev0.epfd.recipe.EPFDRecipes;
-import me.jddev0.epfd.recipe.RichSoilFarmlandCraftingRecipe;
 import me.jddev0.epfd.screen.EPFDMenuTypes;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
-import net.fabricmc.fabric.api.recipe.v1.sync.RecipeSynchronization;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import org.slf4j.Logger;
@@ -31,15 +27,9 @@ public class EnergizedPowerFDMod implements ModInitializer {
         EPFDItems.register();
         EPFDBlocks.register();
         EPFDBlockEntities.register();
-        EPFDRecipes.register();
         EPFDMenuTypes.register();
 
         addCreativeTab();
-
-        if(EnergizedPowerJEIUtils.isJEIAvailable()) {
-            //Special crafting recipes must be synced manually in Fabric
-            RecipeSynchronization.synchronizeRecipeSerializer(RichSoilFarmlandCraftingRecipe.SERIALIZER);
-        }
     }
 
     private void addCreativeTab() {

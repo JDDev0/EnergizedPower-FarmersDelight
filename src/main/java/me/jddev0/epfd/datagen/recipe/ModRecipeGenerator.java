@@ -2,17 +2,13 @@ package me.jddev0.epfd.datagen.recipe;
 
 import me.jddev0.ep.block.EPBlocks;
 import me.jddev0.ep.item.EPItems;
-import me.jddev0.ep.recipe.OutputItemStackTemplateWithPercentages;
-import me.jddev0.ep.recipe.PlantGrowthChamberRecipe;
-import me.jddev0.ep.recipe.PlantGrowthChamberSoilRecipe;
-import me.jddev0.ep.recipe.SawmillRecipe;
+import me.jddev0.ep.recipe.*;
 import me.jddev0.ep.registry.tags.CommonItemTags;
 import me.jddev0.ep.soil.EPSoilTypeTags;
 import me.jddev0.ep.soil.EPSoilTypes;
 import me.jddev0.ep.soil.SoilType;
 import me.jddev0.epfd.EnergizedPowerFDMod;
 import me.jddev0.epfd.block.EPFDBlocks;
-import me.jddev0.epfd.recipe.RichSoilFarmlandCraftingRecipe;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
@@ -89,7 +85,9 @@ public class ModRecipeGenerator extends RecipeProvider {
         }, new ItemStackTemplate(EPFDBlocks.INDUCTION_STOVE_ITEM), CraftingBookCategory.MISC);
     }
     private void buildCustomCraftingRecipes() {
-        addCustomCraftingRecipe(RichSoilFarmlandCraftingRecipe::new, "rich_soil_farmland");
+        addCustomCraftingRecipe(() -> new FarmlandCraftingRecipe(ingredientOf(ModItems.RICH_SOIL.get()),
+                        new ItemStackTemplate(ModItems.RICH_SOIL_FARMLAND.get())),
+                "rich_soil_farmland");
     }
 
     private void buildSawmillRecipes() {

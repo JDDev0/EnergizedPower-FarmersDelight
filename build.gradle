@@ -88,24 +88,10 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    // REI integration
-    //TODO re-enable
-    //compileOnlyApi "me.shedaniel.cloth:basic-math:0.6.1"
-    //compileOnlyApi "dev.architectury:architectury-fabric:19.0.1"
-    //compileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-fabric:21.11.814"
-    //compileOnlyApi "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:21.11.814"
-
-    //JEI integration
-    compileOnly "mezz.jei:jei-26.1.2-common-api:29.5.0.28"
-
-    // EMI integration
-    //TODO re-enable
-    //compileOnly "dev.emi:emi-fabric:1.1.8+1.21:api"
-
     // Energized Power dependency
-    compileOnlyApi "curse.maven:energized-power-782147:8238849"
+    compileOnlyApi "curse.maven:energized-power-782147:8247691"
 
-    localRuntime "curse.maven:energized-power-782147:8238849"
+    localRuntime "curse.maven:energized-power-782147:8247691"
 
     // Farmer's Delight Refabricated integration
     compileOnly "curse.maven:farmers-delight-refabricated-993166:8016410"

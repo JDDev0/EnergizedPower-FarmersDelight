@@ -89,9 +89,9 @@ dependencies {
     }
 
     // Energized Power dependency
-    compileOnlyApi "curse.maven:energized-power-782147:8247691"
+    compileOnlyApi "curse.maven:energized-power-782147:8254928"
 
-    localRuntime "curse.maven:energized-power-782147:8247691"
+    localRuntime "curse.maven:energized-power-782147:8254928"
 
     // Farmer's Delight Refabricated integration
     compileOnly "curse.maven:farmers-delight-refabricated-993166:8016410"

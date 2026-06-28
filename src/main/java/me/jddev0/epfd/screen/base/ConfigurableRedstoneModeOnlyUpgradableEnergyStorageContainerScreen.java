@@ -44,7 +44,7 @@ public abstract class ConfigurableRedstoneModeOnlyUpgradableEnergyStorageContain
             if(isHovering(-22, 26, 20, 20, mouseX, mouseY)) {
                 //Redstone Mode
 
-                ModMessages.sendClientPacketToServer(new ChangeRedstoneModeC2SPacket(menu.getBlockEntity().getBlockPos()));
+                ModMessages.sendToServer(new ChangeRedstoneModeC2SPacket(menu.getBlockEntity().getBlockPos()));
                 return true;
             }
         }

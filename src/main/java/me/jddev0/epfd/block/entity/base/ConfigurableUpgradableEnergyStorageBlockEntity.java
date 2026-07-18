@@ -1,7 +1,10 @@
 package me.jddev0.epfd.block.entity.base;
 
+import me.jddev0.ep.block.entity.MachineConfiguratorConfigurable;
 import me.jddev0.ep.block.entity.base.UpgradableEnergyStorageBlockEntity;
+import me.jddev0.ep.component.MachineConfigurationComponent;
 import me.jddev0.ep.energy.IEnergizedPowerEnergyStorage;
+import me.jddev0.ep.machine.configuration.ComparatorMode;
 import me.jddev0.ep.machine.configuration.IRedstoneModeHandler;
 import me.jddev0.ep.machine.configuration.RedstoneMode;
 import me.jddev0.ep.machine.configuration.RedstoneModeUpdate;
@@ -13,10 +16,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.Map;
+
 public abstract class ConfigurableUpgradableEnergyStorageBlockEntity
         <E extends IEnergizedPowerEnergyStorage>
         extends UpgradableEnergyStorageBlockEntity<E>
-        implements RedstoneModeUpdate, IRedstoneModeHandler {
+        implements RedstoneModeUpdate, IRedstoneModeHandler,
+        MachineConfiguratorConfigurable {
     protected @NotNull RedstoneMode redstoneMode = RedstoneMode.IGNORE;
 
     public ConfigurableUpgradableEnergyStorageBlockEntity(BlockEntityType<?> type, BlockPos blockPos, BlockState blockState,
@@ -65,5 +72,27 @@ public abstract class ConfigurableUpgradableEnergyStorageBlockEntity
         setChanged();
 
         return true;
+    }
+
+    public boolean onApplyMachineConfiguration(@NotNull MachineConfigurationComponent machineConfiguration) {
+        if(Arrays.stream(this.getAvailableRedstoneModes()).noneMatch((redstoneMode) -> redstoneMode == machineConfiguration.getRedstoneMode())) {
+            return false;
+        }else if (machineConfiguration.getComparatorMode() != ComparatorMode.ENERGY) {
+            return false;
+        }else if (!machineConfiguration.getIOConfigurations().isEmpty()) {
+            return false;
+        }else {
+            boolean configChanged = this.redstoneMode != machineConfiguration.getRedstoneMode();
+            if(configChanged) {
+                this.redstoneMode = machineConfiguration.getRedstoneMode();
+                this.setChanged();
+            }
+
+            return true;
+        }
+    }
+
+    public @NotNull MachineConfigurationComponent onStoreMachineConfiguration() {
+        return new MachineConfigurationComponent(this.redstoneMode, ComparatorMode.ENERGY, Map.of());
     }
 }

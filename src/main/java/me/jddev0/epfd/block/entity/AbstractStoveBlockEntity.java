@@ -1,7 +1,8 @@
 package me.jddev0.epfd.block.entity;
 
 import me.jddev0.ep.config.ModConfigs;
-import me.jddev0.ep.energy.ReceiveOnlyEnergyStorage;
+import me.jddev0.ep.energy.EnergizedPowerEnergyStorage;
+import me.jddev0.ep.energy.EnergizedPowerLimitingEnergyStorage;
 import me.jddev0.ep.machine.configuration.RedstoneMode;
 import me.jddev0.ep.machine.upgrade.UpgradeModuleModifier;
 import me.jddev0.ep.util.EnergyUtils;
@@ -16,7 +17,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import vectorwing.farmersdelight.common.registry.ModBlocks;
 import vectorwing.farmersdelight.common.tag.ModTags;
 
-public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEnergyStorageBlockEntity<ReceiveOnlyEnergyStorage> {
+public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEnergyStorageBlockEntity<EnergizedPowerEnergyStorage> {
     protected final int baseEnergyConsumptionPerTick;
     protected boolean hasEnoughEnergy;
 
@@ -39,8 +40,8 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
     }
 
     @Override
-    protected ReceiveOnlyEnergyStorage initEnergyStorage() {
-        return new ReceiveOnlyEnergyStorage(0, baseEnergyCapacity, baseEnergyTransferRate) {
+    protected EnergizedPowerEnergyStorage initEnergyStorage() {
+        return new EnergizedPowerEnergyStorage(baseEnergyCapacity) {
             @Override
             public int getCapacity() {
                 return Math.max(1, (int)Math.ceil(capacity * upgradeModuleInventory.getModifierEffectProduct(
@@ -48,15 +49,20 @@ public abstract class AbstractStoveBlockEntity extends ConfigurableUpgradableEne
             }
 
             @Override
-            public int getMaxReceive() {
-                return Math.max(1, (int)Math.ceil(maxReceive * upgradeModuleInventory.getModifierEffectProduct(
-                        UpgradeModuleModifier.ENERGY_TRANSFER_RATE)));
-            }
-
-            @Override
-            protected void onChange() {
+            protected void onFinalCommit() {
                 setChanged();
                 syncEnergyToPlayers(32);
+            }
+        };
+    }
+
+    @Override
+    protected EnergizedPowerLimitingEnergyStorage initLimitingEnergyStorage() {
+        return new EnergizedPowerLimitingEnergyStorage(energyStorage, baseEnergyTransferRate, 0) {
+            @Override
+            public int getMaxInsert() {
+                return Math.max(1, (int)Math.ceil(maxInsert * upgradeModuleInventory.getModifierEffectProduct(
+                        UpgradeModuleModifier.ENERGY_TRANSFER_RATE)));
             }
         };
     }

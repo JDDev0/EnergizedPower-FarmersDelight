@@ -88,9 +88,9 @@ dependencies {
     }
 
     // Energized Power dependency
-    modCompileOnly "curse.maven:energized-power-782147:8335096"
+    modCompileOnly "curse.maven:energized-power-782147:8458788"
 
-    modLocalRuntime "curse.maven:energized-power-782147:8335096"
+    modLocalRuntime "curse.maven:energized-power-782147:8458788"
 
     // Farmer's Delight Refabricated integration
     modCompileOnly "vectorwing:FarmersDelight:1.21.1-3.3.2+refabricated"

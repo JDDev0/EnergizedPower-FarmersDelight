@@ -36,7 +36,7 @@
     "java": ">=21",
     "fabric-api": "*",
 
-    "energizedpower": ">=3.0.0-beta.6",
+    "energizedpower": ">=3.0.0-beta.8",
 
     "farmersdelight": "*"
   },

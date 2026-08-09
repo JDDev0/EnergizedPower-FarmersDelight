@@ -88,9 +88,9 @@ dependencies {
     }
 
     // Energized Power dependency
-    modCompileOnly "curse.maven:energized-power-782147:8458788"
+    modCompileOnly "curse.maven:energized-power-782147:8610422"
 
-    modLocalRuntime "curse.maven:energized-power-782147:8458788"
+    modLocalRuntime "curse.maven:energized-power-782147:8610422"
 
     // Farmer's Delight Refabricated integration
     modCompileOnly "vectorwing:FarmersDelight:1.21.1-3.3.2+refabricated"
@@ -154,7 +154,7 @@ publishing {
 publishMods {
     displayName = "Energized Power - FD - " + "1.21.1" + " - v" + project.mod_version.split("\\+")[0] + " [Fabric]"
     changelog = new File("CHANGELOG.md").exists()?new File("CHANGELOG.md").getText("UTF-8"):""
-    type = BETA //TODO change to STABLE if v3.0.0 is no longer in beta
+    type = STABLE
     file = remapJar.archiveFile
     modLoaders.add("fabric")
 

@@ -237,7 +237,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         ResourceLocation recipeId = ResourceLocation.fromNamespaceAndPath(EnergizedPowerFDMod.MODID, PATH_PREFIX + "growing/" +
                 outputName + "_from_growing_" + recipeIngredientName);
 
-        PlantGrowthChamberRecipe recipe = new PlantGrowthChamberRecipe(outputs, input, soilType, fluid, fluidConsumption, ticks);
+        PlantGrowthChamberRecipe recipe = new PlantGrowthChamberRecipe(outputs, input, SoilTypeIngredient.of(soilType), FluidIngredient.of(fluid), fluidConsumption, ticks);
         recipeExporter.accept(recipeId, recipe, null);
     }
 

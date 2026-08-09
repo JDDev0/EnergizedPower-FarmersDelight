@@ -16,11 +16,6 @@ repositories {
     maven { url "https://repo.sleeping.town/" }
 
     maven {
-        name "OctoStudios"
-        url "https://maven.octo-studios.com/releases"
-    }
-
-    maven {
         url "https://maven.squiddev.cc/"
         content {
             includeGroup("cc.tweaked")
@@ -149,9 +144,9 @@ dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
     // Energized Power dependency
-    compileOnly "curse.maven:energized-power-782147:8459005"
+    compileOnly "curse.maven:energized-power-782147:8610510"
 
-    localRuntime "curse.maven:energized-power-782147:8459005"
+    localRuntime "curse.maven:energized-power-782147:8610510"
 
     // Farmer's Delight integration
     compileOnly "curse.maven:farmers-delight-398521:8083481"
@@ -220,7 +215,7 @@ tasks.withType(JavaCompile).configureEach {
 publishMods {
     displayName = "Energized Power - FD - " + "1.21.1" + " - v" + project.mod_version.split("\\+")[0] + " [NeoForge]"
     changelog = new File("CHANGELOG.md").exists()?new File("CHANGELOG.md").getText("UTF-8"):""
-    type = BETA //TODO change to STABLE if v3.0.0 is no longer in beta
+    type = STABLE
     file = jar.archiveFile
     modLoaders.add("neoforge")
 

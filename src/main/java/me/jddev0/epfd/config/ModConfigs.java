@@ -14,7 +14,7 @@ import java.io.IOException;
 public final class ModConfigs {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final String CONFIG_VERSION = "3.0.0-beta.2";
+    private static final String CONFIG_VERSION = "3.0.0";
 
     private ModConfigs() {}
 

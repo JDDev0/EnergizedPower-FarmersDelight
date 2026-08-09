@@ -239,7 +239,7 @@ public class ModRecipeGenerator extends RecipeProvider {
         Identifier recipeId = Identifier.fromNamespaceAndPath(EnergizedPowerFDMod.MODID, PATH_PREFIX + "growing/" +
                 outputName + "_from_growing_" + recipeIngredientName);
 
-        PlantGrowthChamberRecipe recipe = new PlantGrowthChamberRecipe(outputs, input, soilType, fluid, fluidConsumption, ticks);
+        PlantGrowthChamberRecipe recipe = new PlantGrowthChamberRecipe(outputs, input, SoilTypeIngredient.of(soilType), FluidIngredient.of(fluid), fluidConsumption, ticks);
         this.output.accept(getKey(recipeId), recipe, null);
     }
 

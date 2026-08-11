@@ -238,7 +238,7 @@ publishMods {
             requires("energized-power", "farmers-delight")
             client = true
             server = true
-            javaVersions.add(JavaVersion.VERSION_21)
+            javaVersions.add(JavaVersion.VERSION_25)
         }
     }
 }

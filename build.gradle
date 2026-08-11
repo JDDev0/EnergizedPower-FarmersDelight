@@ -185,7 +185,7 @@ publishMods {
             requires("fabric-api", "energized-power", "farmers-delight-refabricated")
             client = true
             server = true
-            javaVersions.add(JavaVersion.VERSION_21)
+            javaVersions.add(JavaVersion.VERSION_25)
         }
     }
 }

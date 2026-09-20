@@ -19,8 +19,8 @@ import net.minecraft.advancements.triggers.RecipeUnlockedTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
@@ -42,11 +42,15 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public class ModRecipeGenerator extends RecipeProvider {
+    private final HolderLookup.Provider registries;
+
     private final String FARMERS_DELIGHT_MOD_ID = FarmersDelight.MODID;
     private final String PATH_PREFIX = "compat/" + FARMERS_DELIGHT_MOD_ID + "/";
 
-    public ModRecipeGenerator(HolderLookup.Provider registries, RecipeOutput exporter) {
-        super(registries, exporter);
+    public ModRecipeGenerator(HolderLookup.Provider registries, BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+        this.registries = registries;
+
+        super(recipes, advancements);
     }
 
     @Override
@@ -167,7 +171,7 @@ public class ModRecipeGenerator extends RecipeProvider {
                 recipeIdPrefix + getItemName(result.item().value()) + recipeIdSuffix);
 
         Advancement.Builder advancementBuilder = output.advancement()
-                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(getKey(recipeId)))
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(output.lookup(Registries.RECIPE).getOrThrow(getKey(recipeId))))
                 .addCriterion("has_the_ingredient", hasIngredientTrigger)
                 .rewards(AdvancementRewards.Builder.recipe(getKey(recipeId)))
                 .requirements(AdvancementRequirements.Strategy.OR);
@@ -197,7 +201,7 @@ public class ModRecipeGenerator extends RecipeProvider {
                 recipeIdPrefix + getItemName(result.item().value()) + recipeIdSuffix);
 
         Advancement.Builder advancementBuilder = output.advancement()
-                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(getKey(recipeId)))
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(output.lookup(Registries.RECIPE).getOrThrow(getKey(recipeId))))
                 .addCriterion("has_the_ingredient", hasIngredientTrigger)
                 .rewards(AdvancementRewards.Builder.recipe(getKey(recipeId)))
                 .requirements(AdvancementRequirements.Strategy.OR);

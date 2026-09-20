@@ -76,12 +76,12 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
-    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
     // Uncomment the following line to enable the deprecated Fabric API modules.
     // These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
-    // modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
+    // modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_api_version}"
 
     // Team Reborn: Fabric energy
     include api('teamreborn:energy:5.0.0') {
@@ -89,21 +89,21 @@ dependencies {
     }
 
     // Energized Power dependency
-    compileOnlyApi "curse.maven:energized-power-782147:8610482"
+    compileOnlyApi "curse.maven:energized-power-782147:8932456"
 
-    localRuntime "curse.maven:energized-power-782147:8610482"
+    localRuntime "curse.maven:energized-power-782147:8932456"
 
     // Farmer's Delight Refabricated integration
-    compileOnly "curse.maven:farmers-delight-refabricated-993166:8276159"
+    compileOnly "curse.maven:farmers-delight-refabricated-993166:8921003"
 
-    localRuntime "curse.maven:farmers-delight-refabricated-993166:8276159"
+    localRuntime "curse.maven:farmers-delight-refabricated-993166:8921003"
 
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     //modLocalRuntime "dev.emi:emi-fabric:1.1.8+1.21"
     //modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:16.0.729"
-    localRuntime "mezz.jei:jei-26.2-fabric:30.0.0.1"
+    localRuntime "mezz.jei:jei-26.3-fabric:31.1.0.13"
 }
 
 processResources {
@@ -160,7 +160,7 @@ publishing {
 }
 
 publishMods {
-    displayName = "Energized Power - FD - " + "26.2.x" + " - v" + project.mod_version.split("\\+")[0] + " [Fabric]"
+    displayName = "Energized Power - FD - " + "26.3.x" + " - v" + project.mod_version.split("\\+")[0] + " [Fabric]"
     changelog = new File("CHANGELOG.md").exists()?new File("CHANGELOG.md").getText("UTF-8"):""
     type = STABLE
     file = jar.archiveFile
@@ -172,7 +172,7 @@ publishMods {
         modrinth {
             accessToken = getProperty('MODRINTH_TOKEN') as String
             projectId = "tfNnSImQ"
-            minecraftVersionList("26.2")
+            minecraftVersionList("26.3")
             requires("fabric-api", "energized-power", "farmers-delight-refabricated")
         }
     }
@@ -181,7 +181,7 @@ publishMods {
         curseforge {
             accessToken = getProperty('CURSEFORGE_TOKEN') as String
             projectId = "1373281"
-            minecraftVersionList("26.2")
+            minecraftVersionList("26.3")
             requires("fabric-api", "energized-power", "farmers-delight-refabricated")
             client = true
             server = true

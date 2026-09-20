@@ -67,19 +67,18 @@ public class ModBasicsAdvancements extends FabricAdvancementProvider {
     private AdvancementHolder addAdvancement(Consumer<AdvancementHolder> advancementOutput, Identifier parent,
                                              ItemStackTemplate icon, String advancementId, AdvancementType type,
                                              Criterion<?> trigger) {
-        return Advancement.Builder.advancement().parent(AdvancementSubProvider.createPlaceholder(parent.toString())).
+        return Advancement.Builder.advancement().parent(parent).
                 display(
                         icon,
                         Component.translatable("advancements.energizedpowerfd." + advancementId + ".title"),
                         Component.translatable("advancements.energizedpowerfd." + advancementId + ".description"),
-                        null,
                         type,
                         true,
                         true,
                         false
                 ).
                 addCriterion("has_the_item", trigger).
-                save(advancementOutput, "energizedpowerfd:main/basics/" + advancementId);
+                save(advancementOutput, Identifier.fromNamespaceAndPath("energizedpowerfd", "main/basics/" + advancementId));
     }
 
     @Override

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "energizedpowerfd:compat/farmersdelight/crafting/induction_stove"
+        "recipes": "energizedpowerfd:compat/farmersdelight/crafting/induction_stove"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

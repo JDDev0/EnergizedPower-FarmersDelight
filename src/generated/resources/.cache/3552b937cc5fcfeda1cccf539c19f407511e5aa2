@@ -1,6 +1,6 @@
-// 26.2	-999999999-01-01T00:00:00	Energized Power - Farmer's Delight/Recipes
-44f4e31b87a76a5025bbe71131de666ca231e70d data/energizedpowerfd/advancement/recipes/compat/farmersdelight/crafting/electric_stove.json
-4e112fe71dd53e40d1e13c3881107ff793546380 data/energizedpowerfd/advancement/recipes/compat/farmersdelight/crafting/induction_stove.json
+// 26.3	-999999999-01-01T00:00:00	Energized Power - Farmer's Delight/Recipes
+14b47832bf9c798daa9956011154846f585eb19e data/energizedpowerfd/advancement/recipes/compat/farmersdelight/crafting/electric_stove.json
+1f855510292e7aa44710bf62f55828c5f3ac9d60 data/energizedpowerfd/advancement/recipes/compat/farmersdelight/crafting/induction_stove.json
 7685fbae000873763f7092ee05c3416046078d8c data/energizedpowerfd/recipe/compat/farmersdelight/crafting/electric_stove.json
 bdb8b5a43bed5df7cbd5c832e7897cdbed8979ad data/energizedpowerfd/recipe/compat/farmersdelight/crafting/induction_stove.json
 7fd068b46f49e8494fe4bb49c8eef8c3ecccb6c2 data/energizedpowerfd/recipe/compat/farmersdelight/crafting/rich_soil_farmland.json

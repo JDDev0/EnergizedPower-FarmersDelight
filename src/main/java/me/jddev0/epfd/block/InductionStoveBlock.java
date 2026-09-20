@@ -1,6 +1,5 @@
 package me.jddev0.epfd.block;
 
-import com.mojang.serialization.MapCodec;
 import me.jddev0.epfd.block.entity.EPFDBlockEntities;
 import me.jddev0.epfd.block.entity.InductionStoveBlockEntity;
 import net.minecraft.ChatFormatting;
@@ -12,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -23,15 +21,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 public class InductionStoveBlock extends AbstractStoveBlock {
-    public static final MapCodec<InductionStoveBlock> CODEC = simpleCodec(InductionStoveBlock::new);
-
     protected InductionStoveBlock(Properties props) {
         super(props);
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Nullable

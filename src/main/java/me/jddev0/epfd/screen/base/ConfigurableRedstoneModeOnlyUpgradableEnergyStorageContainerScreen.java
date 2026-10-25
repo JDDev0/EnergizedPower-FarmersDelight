@@ -1,5 +1,6 @@
 package me.jddev0.epfd.screen.base;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import me.jddev0.ep.machine.configuration.RedstoneMode;
 import me.jddev0.ep.networking.ModMessages;
 import me.jddev0.ep.networking.packet.ChangeRedstoneModeC2SPacket;
@@ -41,7 +42,7 @@ public abstract class ConfigurableRedstoneModeOnlyUpgradableEnergyStorageContain
         if(super.mouseClickedConfiguration(mouseX, mouseY, mouseButton))
             return true;
 
-        if(mouseButton == 0) {
+        if(mouseButton == InputConstants.MOUSE_BUTTON_LEFT) {
             if(isHovering(-22, 26, 20, 20, mouseX, mouseY)) {
                 //Redstone Mode
 

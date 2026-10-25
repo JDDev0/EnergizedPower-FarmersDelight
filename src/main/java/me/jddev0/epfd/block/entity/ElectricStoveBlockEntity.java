@@ -3,6 +3,7 @@ package me.jddev0.epfd.block.entity;
 import me.jddev0.epfd.config.ModConfigs;
 import me.jddev0.epfd.screen.ElectricStoveMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -27,7 +28,7 @@ public class ElectricStoveBlockEntity extends AbstractStoveBlockEntity {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-        syncEnergyToPlayer(player);
+        onPlayerStartTracking((ServerPlayer)player);
 
         return new ElectricStoveMenu(id, this, inventory, upgradeModuleInventory, data);
     }

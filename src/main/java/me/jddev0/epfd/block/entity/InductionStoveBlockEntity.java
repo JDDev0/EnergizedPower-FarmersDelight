@@ -36,6 +36,6 @@ public class InductionStoveBlockEntity extends AbstractStoveBlockEntity {
     }
 
     public @Nullable IEnergyStorage getEnergyStorageCapability(@Nullable Direction side) {
-        return energyStorage;
+        return limitingEnergyStorage;
     }
 }
